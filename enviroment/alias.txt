@@ -1,0 +1,4 @@
+ros2() {
+  mkdir -p ros_ws
+  docker run -it --rm --privileged -v /home/$USER/ros_ws:/ros_ws --network host uahr-ros2
+}
