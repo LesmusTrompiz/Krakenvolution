@@ -2,7 +2,7 @@ FROM ros:foxy-ros-core
 
 RUN apt update
 # Basic tools
-RUN apt install -y vim iputils-ping screen iproute2 x11-apps
+RUN apt install -y vim iputils-ping screen iproute2 x11-apps build-essential
 # Configure packages
 RUN echo "defshell -bash" >> /etc/screenrc
 # Install opencv
