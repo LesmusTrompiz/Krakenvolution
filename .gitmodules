@@ -1,0 +1,3 @@
+[submodule "Shared/UAHRProtocol"]
+	path = Shared/UAHRProtocol
+	url = git@github.com:DiegoMoralesRoman/UAHRProtocol.git
