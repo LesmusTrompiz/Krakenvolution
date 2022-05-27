@@ -1,0 +1,95 @@
+{
+  "main": {
+    "id": "bbe71840d248c019",
+    "type": "split",
+    "children": [
+      {
+        "id": "919412bf10d3fca3",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Standards/Folder structure.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a76dc4fcec5bdffb",
+    "type": "split",
+    "children": [
+      {
+        "id": "1c4aa2cb0bd5886c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ce2695baa5c4a372",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "ed9bc2e4a1a5c0fc",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "82dca5a950182a55",
+    "type": "split",
+    "children": [
+      {
+        "id": "6ce2c7ead57db692",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d15e4527a6e74234",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Standards/Folder structure.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "919412bf10d3fca3",
+  "lastOpenFiles": [
+    "Standards/Folder structure.md",
+    "Standards/Code standards.md"
+  ]
+}
