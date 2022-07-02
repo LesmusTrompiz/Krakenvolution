@@ -8,7 +8,7 @@ RUN echo "defshell -bash" >> /etc/screenrc
 # Install opencv
 RUN apt install -y libopencv-dev python3-opencv
 # Install ros utils
-RUN apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action 
+RUN apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action ros-foxy-ros-testing
 
 # Display configuration
 ENV DISPLAY=:0
