@@ -1,0 +1,5 @@
+string  id
+int32   arg
+---
+---
+bool    sent
