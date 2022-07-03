@@ -1,5 +1,5 @@
 uint16  id
-uint16  arg
+int16   arg
 uint16  time_stamp
 ---
 ---
