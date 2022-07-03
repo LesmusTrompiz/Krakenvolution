@@ -1,5 +1,6 @@
-string  id
-int32   arg
+uint16  id
+uint16  arg
+uint16  time_stamp
 ---
 ---
 bool    sent

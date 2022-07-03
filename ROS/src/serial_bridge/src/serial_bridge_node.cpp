@@ -83,6 +83,8 @@ void SerialBridgeNode::handle_accepted(const
   const auto goal = goal_handle->get_goal();
   const auto id   = goal->id;
   const auto arg  = goal->arg;
+  const auto time_stamp = goal->time_stamp;
+
 
   //goal_handle->succeed();
 }
