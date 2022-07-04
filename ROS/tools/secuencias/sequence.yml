@@ -1,0 +1,9 @@
+main:
+  - avanzar: 10
+  - loop:
+    - times: 10
+    - call: "fun"
+
+fun:
+  - girar: 10
+  - girar: 20
