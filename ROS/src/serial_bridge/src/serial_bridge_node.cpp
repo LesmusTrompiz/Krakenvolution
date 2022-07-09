@@ -2,6 +2,8 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <iostream>
+
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -65,6 +67,9 @@ rclcpp_action::GoalResponse SerialBridgeNode::handle_goal(
   const rclcpp_action::GoalUUID & uuid,
   std::shared_ptr<const Order::Goal> goal)
 {
+  // Debug Info
+  RCLCPP_INFO(this->get_logger(), "Order received");
+
   // Accept all request
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
@@ -84,9 +89,9 @@ void SerialBridgeNode::handle_accepted(const
   const auto id   = goal->id;
   const auto arg  = goal->arg;
   const auto time_stamp = goal->time_stamp;
-
-
-  //goal_handle->succeed();
+  RCLCPP_INFO(this->get_logger(), "Handling order: Id %u, Arg %d, TimeStamp %u", id, arg, time_stamp );
+  auto result = std::make_shared<Order::Result>();
+  goal_handle->succeed(result);
 }
 
 
