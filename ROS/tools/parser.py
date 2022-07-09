@@ -1,5 +1,6 @@
 import load
 import compiler
+import termutils
 
 BANNER ='\
     ____ \n\
@@ -19,7 +20,7 @@ KEYWORDS = [
 ]
 
 if __name__ == '__main__':
-    print(BANNER + '\n\n')
+    termutils.ok(f'{BANNER}\n\n')
     files = load.load_files()
 
     functions = {} 
@@ -33,35 +34,41 @@ if __name__ == '__main__':
                 else:
                     constants[token.replace('$', '')] = file[token]
 
-    print('\nSe han encontrado las siguientes funciones: \n')
+    termutils.info('\nSe han encontrado las siguientes funciones\n')
     for fun in functions:
         print('\t' + fun)
+    
+    if len(constants) != 0:
+        termutils.info('\nSe han encontrado las siguientes constantes\n')
+        for const in constants:
+            print(f'\t{const}: {constants[const]}')
 
-    print('\nSe han encontrado las siguientes constantes: \n')
-    for const in constants:
-        print('\t' + const + ': ' + str(constants[const]))
+    termutils.ok('\n\n == INICIANDO COMPILACIÓN == \n')
 
-    print('\n\n == INICIANDO COMPILACIÓN == \n')
-
-    print('Comprobando sintaxis...')
+    termutils.info('Comprobando sinaxis...')
     for function in functions:
         for index, ins in enumerate(functions[function]):
             opcode = list(ins.keys())[0]
             if not opcode in KEYWORDS and opcode[0] != '$':
-                print(opcode + ' no es una palabra definida...')
-                print('Error en: ' + function + ' instrucción ' + str(index))
-                exit(1)
+                termutils.error(f'{opcode} no es una palabra del lenguaje\nError en {function}:{index}')
 
-
-    print('Expandiendo bucles...')
+    termutils.ok('OK')
+    
+    termutils.info('Expandiendo bucles...')
     functions = compiler.expand_loops(functions)
-    print('Expandiendo macros...')
+    termutils.ok('OK')
+    termutils.info('Expandiendo macros...')
     expanded = compiler.expand_macros(functions)
+    # Simplify structure
+    expanded = dict([(fun, [(list(e.keys())[0], e[list(e.keys())[0]]) for e in expanded[fun]]) for fun in expanded])
 
+    termutils.ok('OK')
+
+    termutils.info('Pasando a binario...\n')
     compiled = {}
     for fun in expanded:
         # Prepare function for compiling process
-        compiled[fun] = compiler.compile(expanded[fun])
+        compiled[fun] = compiler.compile(fun, expanded[fun])
 
-    print('\n == COMPILACIÓN TERMINADA ==')
-    print('Escribiendo en archivo...')
+    termutils.ok('\n == COMPILACIÓN TERMINADA ==')
+    termutils.info('Escribiendo en archivo...')

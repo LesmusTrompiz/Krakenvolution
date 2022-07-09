@@ -1,4 +1,4 @@
-from fileinput import filelineno
+import termutils
 import os
 import yaml
 
@@ -15,11 +15,11 @@ def load_files():
                     files_list.append(yaml.safe_load(open(file.path)))
                 except Exception as e:
                     print(e)
-                    print('No se ha podido abrir el archivo ' + file.path + ' saliendo...')
-                    exit(1)
+                    
+                    termutils.error(f'No se ha podido abrir el archivo {file.path}')
         return files_list
 
-    print('Se han encontrado los siguientes archivos:\n')
+    termutils.info('Se han encontrado los siguientes archivos:\n')
     return recursive('./secuencias', [])
     
 

@@ -1,11 +1,23 @@
-from copyreg import constructor
-from subprocess import call
+import termutils
+
+from time import sleep
+import sys
+def compile(name, fun):
+    progress = ['/', '-', '\\', '|']
+
+    print(f'Compilando {name}')
+    binary = bytearray()
+    print('')
+    for i, ins in enumerate(fun):
+        opcode = ins[0]
+        arg = ins[1]
+        # Convert to binary
+        print(f'\033[2K\033[G{progress[i % len(progress)]}\t{opcode}: {arg}', end='')
+        sys.stdout.flush()
+        sleep(0.01)
+    termutils.ok('\033[2K\033[G\033[AOK')
 
 
-def compile(fun):
-    print(fun)
-    for ins in fun:
-        print(ins)
 
 def expand_loops(functions):
     def recursive(function):
@@ -22,7 +34,8 @@ def expand_loops(functions):
                     instructions.append(ins)
 
         if times == 0:
-            print('No se ha especificado el tamaño para el bucle ' + str(function) + ' por defecto será 0')
+            termutils.light_error(f'No se ha especificado el tamaño para el bucle con el contenido {function} por defecto será 0\n\
+            para especificar un tamaño añade la etiqueta "times"')
         
         return instructions * times
                 
@@ -47,14 +60,12 @@ def expand_macros(functions):
                 called = ins['call']
                 # Check if function exists
                 if not called in functions:
-                    print(f'No se ha encontrado la función {ins["call"]} referenciada en {fun}')
-                    exit(1)
+                    termutils.error(f'No se ha encontrado la función {called}\nEn la función {name}')
                 else:
                     # Detect circular reference
                     in_iter.add(called)
                     if name in d:
-                        print('Se ha detectado una referencia circular')
-                        exit(1)
+                        termutils.error(f'Se ha detectado una referencia circular en la función {name}\nStack: {in_iter}')
                     else:
                         recursive(name, functions[called], in_iter)
         return in_iter
@@ -75,7 +86,6 @@ def expand_macros(functions):
         generators[fun] = lambda fun=fun, functions=functions: generator(fun, functions)
     
     for gen in generators:
-        print(gen)
         generators[gen] = generators[gen]()
     return generators
         
