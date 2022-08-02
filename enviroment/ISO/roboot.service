@@ -1,0 +1,12 @@
+[Unit]
+Description= Checks for a good config file, and launches the system!
+After=NetworkManager.service
+[Service]
+#User=ubuntu 
+#Can be the path to an executable or code itself
+#WorkingDirectory=/home/tromp/workspaces/noetic_ws/src/bring_up_pkg/scripts
+ExecStart=/bin/bash /etc/eurobot/startup.sh
+
+Type=simple
+[Install]
+WantedBy=multi-user.target
