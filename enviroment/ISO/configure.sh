@@ -37,3 +37,6 @@ cp ./startup.sh /etc/eurobot
 systemctl daemon-reload
 systemctl enable roboot.service
 systemctl start roboot.service
+
+# Enable root user
+echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
