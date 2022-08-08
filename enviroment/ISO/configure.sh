@@ -40,3 +40,11 @@ systemctl start roboot.service
 
 # Enable root user
 echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
+
+# Enables root login in ssh 
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Enables ssh conection
+sudo apt install openssh-server
+sudo systemctl enable ssh
+sudo systemctl start ssh
