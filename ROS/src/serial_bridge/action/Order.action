@@ -1,4 +1,4 @@
-uint16  id
+string  id
 int16   arg
 uint16  time_stamp
 ---
