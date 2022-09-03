@@ -29,13 +29,21 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/Order.action"
 )
 
-set(PROTOCOL_PATH "./include/UAHRProtocol")
+
+
+
+set(PROTOCOL_PATH "./include/SharedKrakenUART")
 FILE(GLOB PROTOCOL_SRC 
-  "${PROTOCOL_PATH}/*.cpp"
+  "${PROTOCOL_PATH}/sources/*.cpp"
 )
 
+FILE(GLOB PROTOCOL_HEADERS
+  "${PROTOCOL_PATH}/headers/*.hpp"
+)
+
+
 include_directories(
-  ${PROTOCOL_PATH}
+  "${PROTOCOL_PATH}/headers/"
 )
 
 add_executable(serial src/serial_bridge_node.cpp ${PROTOCOL_SRC})
@@ -60,9 +68,9 @@ if(BUILD_TESTING)
   # solo unitarios
   #ament_lint_auto_find_test_dependencies()
 
-  ament_add_gtest(some_test tests/test0.cpp ${PROTOCOL_SRC})
+  #ament_add_gtest(some_test tests/test0.cpp ${PROTOCOL_SRC})
   
-  target_include_directories(some_test PUBLIC tests/) 
+  #target_include_directories(some_test PUBLIC tests/) 
 
 
 endif()
