@@ -1,3 +1,7 @@
-[submodule "Shared/UAHRProtocol"]
-	path = Shared/UAHRProtocol
-	url = git@github.com:DiegoMoralesRoman/UAHRProtocol.git
+
+[submodule "ROS/src/uahrk_lidar"]
+	path = ROS/src/uahrk_lidar
+	url = https://github.com/LesmusTrompiz/uahrkrakens_lidar.git
+[submodule "Shared/KrakenUART"]
+	path = Shared/KrakenUART
+	url = https://github.com/DiegoMoralesRoman/KrakenUART.git
