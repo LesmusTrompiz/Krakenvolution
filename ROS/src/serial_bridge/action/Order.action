@@ -1,6 +1,6 @@
 string  id
 int16   arg
-uint16  time_stamp
 ---
+int16   ret
 ---
 bool    sent
