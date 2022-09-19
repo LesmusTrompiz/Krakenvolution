@@ -1,6 +1,10 @@
 #pragma once
 
 #include "motor_driver.hpp"
+#include "encoder_driver.hpp"
+#include "control_fns.hpp"
+
+
 
 class TraccionDriver{
 
@@ -18,11 +22,17 @@ class TraccionDriver{
         float x;
         float y;
         float o;
-        MotorDriver motor_derecho;
-        MotorDriver motor_izquierdo;
-        void set_duty_cycle(int duty_cycle);
+        MotorDriver     motor_derecho;
+        MotorDriver     motor_izquierdo;
+        EncoderDriver   encoder_derecho;
+        EncoderDriver   encoder_izquierdo;
+        CinematicParams cinematic_params;
+        ConsignaMotor   consigna_derecha;
+        ConsignaMotor   consigna_izquierda;
+        ErrorMotor      error_derecha;
+        ErrorMotor      error_izquierda;
 
-
+        
 };
 
 
