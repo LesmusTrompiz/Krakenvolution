@@ -21,7 +21,7 @@ MotorDriver::MotorDriver(register8           pwm_register,
 	pinMode(en_pin,  OUTPUT);
 }
 
-MotorDriver::MotorDriver(register8            pwm_register, 
+MotorDriver::MotorDriver(register8           pwm_register, 
 						 uint8_t             pwm_pin,
 						 uint8_t             dir_pin,
 						 uint8_t             en_pin,
@@ -33,7 +33,7 @@ MotorDriver::MotorDriver(register8            pwm_register,
     Pdir       = dir_pin;
     Rpwm       = pwm_register;
 	Portenable = en_port;
-	config_timer(CLMODE1, cl_mask, WGMMODE1, PSMODE1);
+	config_timer(CLEAR_PIN_AT_MATCH, cl_mask, FAST_PWM , PRSCL_64);
 	pinMode(pwm_pin, OUTPUT);					//Enable output
 	pinMode(dir_pin, OUTPUT);
 	pinMode(en_pin,  OUTPUT);
@@ -54,7 +54,7 @@ void MotorDriver::config_timer(const clearing_mode       cl_mode,
 
 void MotorDriver::set_pwm(const float &duty_cycle){
     float temp_duty;
-	temp_duty= duty_cycle * 0.8	+	MIN_PWM;		//El duty se calcula como el 10% de m�nimo mas el valor absoluto de
+	temp_duty= duty_cycle * 0.8 + MIN_PWM;			//El duty se calcula como el 10% de m�nimo mas el valor absoluto de
 																		    //la velocidad entre mil. La funci�n fabs recibe y devuelve un double
 																			//y es por eso por lo que necesitamos las conversiones de tipo.
 	*Rpwm = temp_duty * 255;

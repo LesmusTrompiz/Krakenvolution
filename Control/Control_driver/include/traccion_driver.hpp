@@ -22,19 +22,28 @@ class TraccionDriver{
         float x;
         float y;
         float o;
-        MotorDriver     motor_derecho;
-        MotorDriver     motor_izquierdo;
-        EncoderDriver   encoder_derecho;
-        EncoderDriver   encoder_izquierdo;
-        CinematicParams cinematic_params;
-        ConsignaMotor   consigna_derecha;
-        ConsignaMotor   consigna_izquierda;
-        ErrorMotor      error_derecha;
-        ErrorMotor      error_izquierda;
-
-        
+        MotorDriver     &rmotor;
+        MotorDriver     &lmotor;
+        EncoderDriver   &rencoder;
+        EncoderDriver   &lencoder;
+        CinematicParams &cinematic_params;
+        ConsignaMotor   &consigna_derecha;
+        ConsignaMotor   &consigna_izquierda;
+        ErrorMotor      &error_derecha;
+        ErrorMotor      &error_izquierda;
 };
 
 
+
+
+void TraccionDriver::straight(int mm){
+
+    /*
+    calcula_parametros_recta(mm,cinematic_params,consigna);
+    rmotor.set_speed(consigna_derecha)
+    rmotor.set_speed(consigna_izquierda)
+    rmotor.set_speed(consigna_derecha)
+    */
+}
 
 

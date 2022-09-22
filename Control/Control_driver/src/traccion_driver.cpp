@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+/*
 ISR(TIMER1_COMPA_vect)    //This is the interrupt request
 {	
 	traccion_driver.calcular_error(&lazo_abierto, &maxon);
@@ -32,3 +33,4 @@ void calcula_error_rueda_izquierda_final (cinematica *variable, param_mecanicos 
 	variable->error_posicion_actual_izquierda_total = variable->distancia_total_rad - ( ( (cuadratura.contador_izquierdo_total) * 2 * PI ) /
 	( mecanica->pulsos_por_rev * mecanica->reductora ) );
 }
+*/

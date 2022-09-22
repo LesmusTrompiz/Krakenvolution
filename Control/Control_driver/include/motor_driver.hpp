@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "register_types.hpp"
 
-constexpr float MIN_PWM= 0.9999;
+constexpr float MIN_PWM = 0.09999;
 
 
 struct MotorDriver{
@@ -26,8 +26,8 @@ struct MotorDriver{
 					);
 
 		void set_speed(float duty_cycle);
-	private:
 	    void set_pwm(const float &duty_cycle);
+	private:
 		void inline set_direction(const bool direction);
 		void inline enable_motor();
 		void inline disable_motor();
@@ -37,5 +37,4 @@ struct MotorDriver{
         uint8_t   Penable;
         uint8_t   Portenable;
         uint8_t   Pdir;
-
 };
