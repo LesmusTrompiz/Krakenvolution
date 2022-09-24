@@ -41,8 +41,10 @@ void TraccionDriver::straight(int mm){
     /*
     calcula_parametros_recta(mm,cinematic_params,consigna);
     rmotor.set_speed(consigna_derecha)
-    rmotor.set_speed(consigna_izquierda)
-    rmotor.set_speed(consigna_derecha)
+    lmotor.set_speed(consigna_izquierda)
+    rmotor.enable()
+    lmotor.enable()
+
     */
 }
 

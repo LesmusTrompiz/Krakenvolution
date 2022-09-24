@@ -1,43 +1,60 @@
 #include "encoder_driver.hpp"
-extern volatile int counts_right;
-extern volatile int counts_left;
-
 
 extern volatile int right_odom;
 extern volatile int left_odom;
 
-void increment_right_odometry(void)
+
+void increment_right_odometry_chanel_a(void)
 {
-	++right_odom;
+	if(digitalRead(R_ENC_A) == digitalRead(R_ENC_B)) ++right_odom;
+	else --right_odom;
+	//Serial.print("R");
+  	//Serial.println(right_odom);
 	return;
 }
 
-void increment_left_odometry(void)
+void increment_right_odometry_chanel_b(void)
 {
-	++left_odom;
+	if(digitalRead(R_ENC_A)!=digitalRead(R_ENC_B)) ++right_odom;
+	else --right_odom;
 	return;
 }
 
+void increment_left_odometry_chanel_a(void)
+{
+	if(digitalRead(L_ENC_A) == digitalRead(L_ENC_B)) ++left_odom;
+	else --left_odom;
+	
+  	//Serial.print("L");
+  	//Serial.println(left_odom);
+	return;
+}
 
+void increment_left_odometry_chanel_b(void)
+{
+	if(digitalRead(L_ENC_A)!=digitalRead(L_ENC_B)) ++left_odom;
+	else --left_odom;
+	return;
+}
 
 
 EncoderDriver::EncoderDriver(
-					const uint8_t     encoder_pin,
-					const uint8_t     interrupt_pin,
-					uint16_t *    cnt,
+					const    uint8_t     chanel_A,
+					const    uint8_t     chanel_B,
+					volatile int16_t *        cnt,
 					void(*cb)(void)
 					)
 {
-	total_cnt      =  cnt;
-	*total_cnt = 0;
-	pinMode(encoder_pin,INPUT);
-	pinMode(interrupt_pin,INPUT);
+	total_cnt      = cnt;
+	*total_cnt     = 0;
+	pinMode(chanel_A,INPUT);
+	pinMode(chanel_B,INPUT);
 
-	attachPCINT(digitalPinToPCINT(interrupt_pin), cb, CHANGE);
+	attachPCINT(digitalPinToPCINT(chanel_A), cb, CHANGE);
 	return;
 }
 
-uint16_t EncoderDriver::read_pulses(){
+int16_t EncoderDriver::read_pulses(){
 	return *total_cnt;
 }
 
