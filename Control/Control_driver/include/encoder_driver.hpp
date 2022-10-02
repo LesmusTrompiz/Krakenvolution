@@ -9,10 +9,10 @@ void increment_right_odometry_chanel_b(void);
 void increment_left_odometry_chanel_a(void);
 void increment_left_odometry_chanel_b(void);
 
-constexpr uint8_t R_ENC_A   = 10;
-constexpr uint8_t R_ENC_B   = 10;
-constexpr uint8_t L_ENC_A   = 11;
-constexpr uint8_t L_ENC_B   = 12;
+constexpr uint8_t R_ENC_A   = 11;
+constexpr uint8_t R_ENC_B   = 12;
+constexpr uint8_t L_ENC_A   = 10;
+constexpr uint8_t L_ENC_B   = 3;
 
 struct EncoderDriver{
     public:

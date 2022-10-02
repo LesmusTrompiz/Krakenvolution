@@ -6,16 +6,14 @@ extern volatile int left_odom;
 
 void increment_right_odometry_chanel_a(void)
 {
-	if(digitalRead(R_ENC_A) == digitalRead(R_ENC_B)) ++right_odom;
+	if(((PINB >> PINB5) & 1) == ((PINB >> PINB6) & 1)) ++right_odom;
 	else --right_odom;
-	//Serial.print("R");
-  	//Serial.println(right_odom);
 	return;
 }
 
 void increment_right_odometry_chanel_b(void)
 {
-	if(digitalRead(R_ENC_A)!=digitalRead(R_ENC_B)) ++right_odom;
+	if((PINB & (1 << PINB6)) != (PINB & (1 << PINB5))) ++right_odom;
 	else --right_odom;
 	return;
 }
@@ -25,8 +23,8 @@ void increment_left_odometry_chanel_a(void)
 	if(digitalRead(L_ENC_A) == digitalRead(L_ENC_B)) ++left_odom;
 	else --left_odom;
 	
-  	//Serial.print("L");
-  	//Serial.println(left_odom);
+  	Serial.print("L");
+  	Serial.println(left_odom);
 	return;
 }
 
