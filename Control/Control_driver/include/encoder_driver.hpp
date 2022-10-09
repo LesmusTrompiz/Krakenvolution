@@ -3,8 +3,8 @@
 #include "PinChangeInterrupt.h"
 #include "register_types.hpp"
 
-void increment_right_odometry_chanel_a(void);
-void increment_right_odometry_chanel_b(void);
+void increment_right_odometry_channel_a(void);
+void increment_right_odometry_channel_b(void);
 
 void increment_left_odometry_chanel_a(void);
 void increment_left_odometry_chanel_b(void);
@@ -19,12 +19,13 @@ struct EncoderDriver{
 		EncoderDriver(
 					const uint8_t     chanel_A,
 					const uint8_t     chanel_B,
-					volatile int16_t *        cnt,
+					uint16_t          resolucion_encoder_,
+					volatile int16_t *cnt,
 					void(*cb)(void)
 					);
 	    int16_t read_pulses();
 	    void    reset_pulses();
-
+		uint16_t resolucion_encoder;
 	private:
 		volatile int16_t    *total_cnt;
 		register8  count_register;

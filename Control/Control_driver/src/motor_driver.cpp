@@ -1,4 +1,12 @@
 #include "motor_driver.hpp"
+#define RADS_TO_RPM(x) x * 60 / (2 * PI)
+
+constexpr int MAX_RPM = 8100;	// MAX_VEL_RECOMMENDED_BY_JQP_09_10_22
+
+inline float speed_to_duty_cycle(float speed){
+	return MIN_PWM + (RADS_TO_RPM(speed) * 0.8) / MAX_RPM;
+}
+
 
 MotorDriver::MotorDriver(register8           pwm_register, 
 						 uint8_t             pwm_pin,
@@ -53,11 +61,7 @@ void MotorDriver::config_timer(const clearing_mode       cl_mode,
 }
 
 void MotorDriver::set_pwm(const float &duty_cycle){
-    float temp_duty;
-	temp_duty= duty_cycle * 0.8 + MIN_PWM;			//El duty se calcula como el 10% de m�nimo mas el valor absoluto de
-																		    //la velocidad entre mil. La funci�n fabs recibe y devuelve un double
-																			//y es por eso por lo que necesitamos las conversiones de tipo.
-	*Rpwm = temp_duty * 255;
+	*Rpwm = duty_cycle * 255;
 	return;
 }
 
@@ -77,8 +81,11 @@ void inline MotorDriver::disable_motor(){
 }
 
 
-void MotorDriver::set_speed(float duty_cycle){
+
+void MotorDriver::set_speed(float speed){
 	bool dir = true;
+	float duty_cycle = 0;
+	duty_cycle = speed_to_duty_cycle(speed);
 	
 	if(duty_cycle < 0.0){
 		dir = false;

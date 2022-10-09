@@ -4,14 +4,17 @@ extern volatile int right_odom;
 extern volatile int left_odom;
 
 
-void increment_right_odometry_chanel_a(void)
+/** @todo:
+ * Los registros de las interrupciones estan prefijados
+*/
+void increment_right_odometry_channel_a(void)
 {
 	if(((PINB >> PINB5) & 1) == ((PINB >> PINB6) & 1)) ++right_odom;
 	else --right_odom;
 	return;
 }
 
-void increment_right_odometry_chanel_b(void)
+void increment_right_odometry_channel_b(void)
 {
 	if((PINB & (1 << PINB6)) != (PINB & (1 << PINB5))) ++right_odom;
 	else --right_odom;
@@ -22,9 +25,6 @@ void increment_left_odometry_chanel_a(void)
 {
 	if(digitalRead(L_ENC_A) == digitalRead(L_ENC_B)) ++left_odom;
 	else --left_odom;
-	
-  	Serial.print("L");
-  	Serial.println(left_odom);
 	return;
 }
 
@@ -37,14 +37,17 @@ void increment_left_odometry_chanel_b(void)
 
 
 EncoderDriver::EncoderDriver(
-					const    uint8_t     chanel_A,
-					const    uint8_t     chanel_B,
-					volatile int16_t *        cnt,
+					const uint8_t     chanel_A,
+					const uint8_t     chanel_B,
+					uint16_t          resolucion_encoder_,
+					volatile int16_t *cnt,
 					void(*cb)(void)
-					)
-{
+					):
+					resolucion_encoder{resolucion_encoder_}
+					{
 	total_cnt      = cnt;
 	*total_cnt     = 0;
+
 	pinMode(chanel_A,INPUT);
 	pinMode(chanel_B,INPUT);
 
