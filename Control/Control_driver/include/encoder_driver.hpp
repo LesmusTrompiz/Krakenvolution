@@ -20,13 +20,16 @@ struct EncoderDriver{
 					const uint8_t     chanel_A,
 					const uint8_t     chanel_B,
 					uint16_t          resolucion_encoder_,
+					uint16_t          reductora,
 					volatile int16_t *cnt,
 					void(*cb)(void)
 					);
 	    int16_t read_pulses();
+	    float   get_angle_increment();
 	    void    reset_pulses();
-		uint16_t resolucion_encoder;
 	private:
 		volatile int16_t    *total_cnt;
 		register8  count_register;
+		const uint16_t resolucion_encoder;
+		const float angle_per_count;
 };

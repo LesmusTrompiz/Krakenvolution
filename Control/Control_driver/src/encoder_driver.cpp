@@ -46,17 +46,19 @@ EncoderDriver::EncoderDriver(
 					const uint8_t     chanel_A,
 					const uint8_t     chanel_B,
 					uint16_t          resolucion_encoder_,
+					uint16_t          reductora,
 					volatile int16_t *cnt,
 					void(*cb)(void)
 					):
-					resolucion_encoder{resolucion_encoder_}
+					resolucion_encoder{resolucion_encoder_},
+					angle_per_count{2 * PI / (resolucion_encoder_ * reductora)}
 					{
 	total_cnt      = cnt;
 	*total_cnt     = 0;
 
 	pinMode(chanel_A,INPUT);
 	pinMode(chanel_B,INPUT);
-
+	
 	attachPCINT(digitalPinToPCINT(chanel_A), cb, CHANGE);
 	return;
 }
@@ -65,6 +67,9 @@ int16_t EncoderDriver::read_pulses(){
 	return *total_cnt;
 }
 
+float EncoderDriver::get_angle_increment(){
+	return *total_cnt * angle_per_count;
+}
 void EncoderDriver::reset_pulses(){
 	*total_cnt  = 0;
 	return;

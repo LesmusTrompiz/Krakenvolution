@@ -1,11 +1,16 @@
 #include <Arduino.h>
 #include "pose_controller.hpp"
 
-constexpr uint8_t Kx 	= 5;
-constexpr uint8_t Ky 	= 1;
-constexpr uint8_t Kalfa = 2;
+constexpr uint8_t Kx 	= 5;		// 1/s
+constexpr uint8_t Ky 	= 1;		
+constexpr uint8_t Kalfa = 2;		// rad/s
 constexpr uint8_t ERROR_MINIMO_MM  = 5;
 constexpr uint8_t ERROR_MINIMO_RAD = PI/1000; 
+
+#define RAD2DEG(X) X * 180 / PI
+#define DEG2RAD(X) X * PI  / 180
+
+
 
 extern PoseController robot;
 
@@ -73,11 +78,14 @@ bool PoseController::in_goal(){
 			fabs(alfa_error) < ERROR_MINIMO_RAD);
 }
 
-void PoseController::cuentas_to_odom(){
+
+/*
+void PoseController::cuentas_to_odom_2(){
 	float delta_d, delta_a, deltaX, deltaY = 0;
 	int rcounts, lcounts;
 
-	rcounts = rencoder->read_pulses();
+
+	rcounts = rencoder->read_pulses();			// Rads 
 	lcounts = rencoder->read_pulses();
 
 
@@ -99,6 +107,31 @@ void PoseController::cuentas_to_odom(){
 	robot_pose.x += deltaX;
 	robot_pose.y += deltaY;
 
+	return;
+}
+*/
+
+void PoseController::cuentas_to_odom(){
+	float delta_d, delta_a, deltaX, deltaY = 0;
+	float right_twist, left_twist;
+
+
+	right_twist = rencoder->get_angle_increment() * R;			// mm
+	left_twist  = lencoder->get_angle_increment() * R;			// mm
+
+
+	delta_d = ((right_twist + left_twist) / 2);					// Rads
+	delta_a = (right_twist - left_twist) / L;					// Rads
+
+	robot_pose.alfa += RAD2DEG(delta_a);						// Grados porque es como nos llega la referencia	
+
+	deltaX  =	delta_d*cos(DEG2RAD(robot_pose.alfa));
+	deltaY	=	delta_d*sin(DEG2RAD(robot_pose.alfa));
+
+	//Serial.print("X"); Serial.println(robot_pose.alfa);
+
+	robot_pose.x += deltaX;
+	robot_pose.y += deltaY;
 
 	return;
 }
@@ -113,12 +146,12 @@ void PoseController::ley_de_control(const int vd, const int wd){
     alfa_error = ref_pose.alfa - robot_pose.alfa;
 
 	// Calculo de error respecto a las coordenadas del robot_pose
-    x_error_r  =  cos(robot_pose.alfa) * x_error + sin(robot_pose.alfa) * y_error;
-    y_error_r  = -sin(robot_pose.alfa) * x_error + cos(robot_pose.alfa) * y_error;
+    x_error_r  =  cos(DEG2RAD(robot_pose.alfa)) * x_error + sin(DEG2RAD(robot_pose.alfa)) * y_error;
+    y_error_r  = -sin(DEG2RAD(robot_pose.alfa)) * x_error + cos(DEG2RAD(robot_pose.alfa)) * y_error;
 
     // Ley de control
-    cons.v = Kx    * x_error_r       + vd * cos(alfa_error);
-	cons.w = Kalfa * sin(alfa_error) + Ky * vd * y_error_r + wd;
+    cons.v = Kx    * x_error_r       + vd * cos(DEG2RAD(alfa_error));
+	cons.w = Kalfa * sin(DEG2RAD(alfa_error)) + Ky * vd * y_error_r + wd;
 	
 	return;
 }
@@ -131,21 +164,16 @@ void PoseController::ley_de_control(){
 	float x_error, y_error, alfa_error, x_error_r;
 	
 	// Calculo de error coordenadas iniciales
-    x_error    = ref_pose.x    - robot_pose.x;
-    y_error    = ref_pose.y    - robot_pose.y;
-    alfa_error = ref_pose.alfa - robot_pose.alfa;
+    x_error    = ref_pose.x    - robot_pose.x;					// mm
+    y_error    = ref_pose.y    - robot_pose.y;					// mm
+    alfa_error = ref_pose.alfa - robot_pose.alfa;				// mm
 
- 	// Serial.println(x_error);
 	// Calculo de error respecto a las coordenadas del robot_pose
-    x_error_r  =  cos(robot_pose.alfa) * x_error + sin(robot_pose.alfa) * y_error;
+    x_error_r  =  cos(DEG2RAD(robot_pose.alfa)) * x_error + sin(DEG2RAD(robot_pose.alfa)) * y_error;		// mm
 
     // Ley de control
-    cons.v = Kx    * x_error_r;
-	cons.w = Kalfa * sin(alfa_error);
-
-    // Serial.println("V1");
-    // Serial.println(cons.v);
-	// Serial.println(cons.w);
+    cons.v = Kx    * x_error_r;						// mm/s 
+	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
 
 	return;
 }
@@ -156,8 +184,8 @@ void PoseController::consigna_to_velocidad(){
     // Serial.println(cons.v);
 	// Serial.println(cons.w);
 
-	v_ruedas.r = REDUCTORA*(2*cons.v + cons.w * L)/(2 * R);
-	v_ruedas.l = REDUCTORA*(2*cons.v - cons.w * L)/(2 * R);
+	v_ruedas.r = (2*cons.v + cons.w * L)/(2 * R);
+	v_ruedas.l = (2*cons.v - cons.w * L)/(2 * R);
 
     // Serial.println("Vr");
     // Serial.println(v_ruedas.r);
