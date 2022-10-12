@@ -26,9 +26,11 @@ PoseController::PoseController(
 		EncoderDriver   &rencoder_,
 		EncoderDriver   &lencoder_,
 		uint16_t         L_,
-		uint16_t         R_):
+		uint16_t         R_,
+        uint16_t         reductora_):
 		L{L_},
-		R{R_}
+		R{R_},
+        REDUCTORA{reductora_}
 	{
 		rmotor = &rmotor_;
 		lmotor = &lmotor_;
@@ -79,16 +81,25 @@ void PoseController::cuentas_to_odom(){
 	lcounts = rencoder->read_pulses();
 
 
-	delta_d = (R * 2 * PI / rencoder->resolucion_encoder) * ((rcounts + lcounts) / 2);
-	delta_a = (180 / PI * rencoder->resolucion_encoder)   * ((rcounts - lcounts) / (L));
+	// delta_d = (R * 2 * PI / rencoder->resolucion_encoder*2) * ((rcounts + lcounts) / 2);
 	
-	robot_pose.alfa += delta_a;
+	delta_d = ((rcounts + lcounts) / 2)*((2*R*PI)/(rencoder->resolucion_encoder*REDUCTORA));
+	
+	// delta_a = (180 / PI * rencoder->resolucion_encoder*2)   * ((rcounts - lcounts) / (L));
+	
+	delta_a = (((rcounts - lcounts) / 2)*((2*R*PI)/(rencoder->resolucion_encoder*REDUCTORA)))/L;
 
-	deltaX  =	delta_d*cos((robot_pose.alfa)*PI/180);
-	deltaY	=	delta_d*sin((robot_pose.alfa)*PI/180);
+	robot_pose.alfa += delta_a * (180/PI);
+
+	deltaX  =	delta_d*cos((robot_pose.alfa)*(PI/180));
+	deltaY	=	delta_d*sin((robot_pose.alfa)*(PI/180));
+
+	Serial.print("X"); Serial.println(robot_pose.alfa);
 
 	robot_pose.x += deltaX;
-	robot_pose.y += deltaY; 
+	robot_pose.y += deltaY;
+
+
 	return;
 }
 
@@ -118,28 +129,39 @@ void PoseController::ley_de_control(const int vd, const int wd){
 */
 void PoseController::ley_de_control(){
 	float x_error, y_error, alfa_error, x_error_r;
-	Consigna cons;
 	
 	// Calculo de error coordenadas iniciales
     x_error    = ref_pose.x    - robot_pose.x;
     y_error    = ref_pose.y    - robot_pose.y;
     alfa_error = ref_pose.alfa - robot_pose.alfa;
 
+ 	// Serial.println(x_error);
 	// Calculo de error respecto a las coordenadas del robot_pose
     x_error_r  =  cos(robot_pose.alfa) * x_error + sin(robot_pose.alfa) * y_error;
 
     // Ley de control
     cons.v = Kx    * x_error_r;
 	cons.w = Kalfa * sin(alfa_error);
-	
+
+    // Serial.println("V1");
+    // Serial.println(cons.v);
+	// Serial.println(cons.w);
+
 	return;
 }
 
 void PoseController::consigna_to_velocidad(){
 
-	v_ruedas.r = (2*cons.v + cons.w * L)/(2 * R);
-	v_ruedas.l = (2*cons.v - cons.w * L)/(2 * R);
+    // Serial.println("V2");
+    // Serial.println(cons.v);
+	// Serial.println(cons.w);
 
+	v_ruedas.r = REDUCTORA*(2*cons.v + cons.w * L)/(2 * R);
+	v_ruedas.l = REDUCTORA*(2*cons.v - cons.w * L)/(2 * R);
+
+    // Serial.println("Vr");
+    // Serial.println(v_ruedas.r);
+	// Serial.println(v_ruedas.l);
 	return;	
 }
 void PoseController::update_motor_speed(){

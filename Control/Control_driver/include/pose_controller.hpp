@@ -42,7 +42,8 @@ class PoseController{
             EncoderDriver   &rencoder_,
             EncoderDriver   &lencoder_,
             uint16_t         L_,
-            uint16_t         R_);
+            uint16_t         R_,
+            uint16_t         reductora_);
         // Funciones interfaz
         void giro(int degrees);
         void recta(int mm);
@@ -57,6 +58,7 @@ class PoseController{
         void reset_controller();
         bool check_stop();
         bool in_goal();
+        Pose             ref_pose;
 
 
     private:
@@ -64,10 +66,10 @@ class PoseController{
         MotorDriver     *lmotor;
         EncoderDriver   *rencoder;
         EncoderDriver   *lencoder;
-        uint16_t         L;                                     // longitud_eje
-        uint16_t         R;                                     // radio_rueda
+        uint16_t         L;                             // longitud_eje mm
+        uint16_t         R;                             // radio_rueda  mm
+        uint16_t         REDUCTORA;                     // adimensional, el encoder lee el motor TAL CUAL la reductora afecta al avance real 
         Pose             robot_pose;
-        Pose             ref_pose;
         Consigna         cons;
         VRuedas          v_ruedas;
 };
