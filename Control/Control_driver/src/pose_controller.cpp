@@ -1,9 +1,10 @@
+
 #include <Arduino.h>
 #include "pose_controller.hpp"
 
-constexpr uint8_t Kx 	= 5;		// 1/s
-constexpr uint8_t Ky 	= 1;		
-constexpr uint8_t Kalfa = 2;		// rad/s
+constexpr uint32_t Kx 	= 20;		// 1/s
+constexpr uint32_t Ky 	= 1;		
+constexpr uint32_t Kalfa = 5;		// rad/s
 constexpr uint8_t ERROR_MINIMO_MM  = 5;
 constexpr uint8_t ERROR_MINIMO_RAD = PI/1000; 
 
@@ -14,14 +15,24 @@ constexpr uint8_t ERROR_MINIMO_RAD = PI/1000;
 
 extern PoseController robot;
 
-void config_TIMER1(void) //Timer medida tiempos largos con Ts = 20 ms
+
+void config_Timer_1()
 {
-	TCCR1A = 0;                //limpia registros
- 	TCCR1B = 0;                //limpia registros
- 	TCNT1  = 0;                //Inicializa el contador
-	OCR1A  = 39999;
-	TCCR1B = (1<<WGM12) | (1<<CS11);
-	TIMSK1|=(1<<OCIE1A);   //Set the interrupt request
+  noInterrupts();
+  // Clear registers
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
+
+  // 1 Hz (16000000/((15624+1)*1024))
+  OCR1A = 0xFFFF;
+  // CTC
+  TCCR1B |= (1 << WGM12) | (1 << WGM11);
+  // Prescaler 1024
+  TCCR1B |= (1 << CS12) | (1 << CS10);
+  // Output Compare Match A Interrupt Enable
+  TIMSK1 |= (1 << OCIE1A);
+  interrupts();
 }
 
 
@@ -41,7 +52,7 @@ PoseController::PoseController(
 		lmotor = &lmotor_;
 		rencoder = &rencoder_;
 		lencoder = &lencoder_;
-		config_TIMER1();
+		config_Timer_1();
 		return;
 	}
 
@@ -118,7 +129,7 @@ void PoseController::cuentas_to_odom(){
 
 	right_twist = rencoder->get_angle_increment() * R;			// mm
 	left_twist  = lencoder->get_angle_increment() * R;			// mm
-
+	reset_counts();
 
 	delta_d = ((right_twist + left_twist) / 2);					// Rads
 	delta_a = (right_twist - left_twist) / L;					// Rads
@@ -128,10 +139,11 @@ void PoseController::cuentas_to_odom(){
 	deltaX  =	delta_d*cos(DEG2RAD(robot_pose.alfa));
 	deltaY	=	delta_d*sin(DEG2RAD(robot_pose.alfa));
 
-	//Serial.print("X"); Serial.println(robot_pose.alfa);
+
 
 	robot_pose.x += deltaX;
 	robot_pose.y += deltaY;
+
 
 	return;
 }
@@ -166,7 +178,9 @@ void PoseController::ley_de_control(){
 	// Calculo de error coordenadas iniciales
     x_error    = ref_pose.x    - robot_pose.x;					// mm
     y_error    = ref_pose.y    - robot_pose.y;					// mm
-    alfa_error = ref_pose.alfa - robot_pose.alfa;				// mm
+    alfa_error = ref_pose.alfa - robot_pose.alfa;				// grados
+
+
 
 	// Calculo de error respecto a las coordenadas del robot_pose
     x_error_r  =  cos(DEG2RAD(robot_pose.alfa)) * x_error + sin(DEG2RAD(robot_pose.alfa)) * y_error;		// mm
@@ -175,6 +189,10 @@ void PoseController::ley_de_control(){
     cons.v = Kx    * x_error_r;						// mm/s 
 	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
 
+	Serial.print("V"); 
+	Serial.println(cons.v);
+	Serial.print("W"); 
+	Serial.println(cons.w);
 	return;
 }
 
@@ -187,37 +205,51 @@ void PoseController::consigna_to_velocidad(){
 	v_ruedas.r = (2*cons.v + cons.w * L)/(2 * R);
 	v_ruedas.l = (2*cons.v - cons.w * L)/(2 * R);
 
-    // Serial.println("Vr");
-    // Serial.println(v_ruedas.r);
-	// Serial.println(v_ruedas.l);
+    Serial.println("Vr");
+    Serial.println(v_ruedas.r);
+	Serial.println(v_ruedas.l);
 	return;	
 }
 void PoseController::update_motor_speed(){
 	rmotor->set_speed(v_ruedas.r);
 	lmotor->set_speed(v_ruedas.l);
-	
+
 	return;	
 }
 
 
 ISR(TIMER1_COMPA_vect){    // This is the interrupt request
+	// TCNT1 = 0;
+	TCCR1A = 0x0;
+
+
+	static int prueba=0;
+	prueba++;
+
+	if(prueba == 10)
+	{
+		// PRINTs
+		Serial.print(prueba); 
+		prueba = 0;
+	}
+	/*
+	// 4º Check de fin de movimiento
+	if(robot.check_stop()
+		&& 
+		robot.in_goal()) robot.reset_controller();
 	
+
 	// 1º Calcular el error:
 	//  right_odom y left_odom -> cuentas -> mm -> (x,y,alfa)
 	robot.cuentas_to_odom();
 
 	// 2º Calcular la consigna:
+	
 	robot.ley_de_control(); 	// m/s y rad/s
 	robot.consigna_to_velocidad();	// rad/s
 
 	// 3º Actualizar las salidas:
 	robot.update_motor_speed();
-
-
-	// 4º Check de fin de movimiento
-	if(robot.check_stop()
-		&& 
-		robot.in_goal()) robot.reset_controller();
-
-	robot.reset_counts();
+	*/
 }
+

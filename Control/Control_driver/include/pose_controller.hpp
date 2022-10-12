@@ -59,6 +59,7 @@ class PoseController{
         bool check_stop();
         bool in_goal();
         Pose             ref_pose;
+        Pose             robot_pose;
 
 
     private:
@@ -69,7 +70,6 @@ class PoseController{
         uint16_t         L;                             // longitud_eje mm
         uint16_t         R;                             // radio_rueda  mm
         uint16_t         REDUCTORA;                     // adimensional, el encoder lee el motor TAL CUAL la reductora afecta al avance real 
-        Pose             robot_pose;
         Consigna         cons;
         VRuedas          v_ruedas;
 };

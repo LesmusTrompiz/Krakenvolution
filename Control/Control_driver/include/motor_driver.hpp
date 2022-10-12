@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "register_types.hpp"
 
-constexpr float MIN_PWM = 0.09999;
+constexpr float MIN_PWM = 0.095;
 
 
 struct MotorDriver{
