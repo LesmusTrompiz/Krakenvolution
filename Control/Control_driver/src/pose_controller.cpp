@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "pose_controller.hpp"
 
+/* Me interesa tener ganancias con decimales */
 constexpr uint32_t Kx 	= 20;		// 1/s
 constexpr uint32_t Ky 	= 1;		
 constexpr uint32_t Kalfa = 5;		// rad/s
@@ -11,10 +12,7 @@ constexpr uint8_t ERROR_MINIMO_RAD = PI/1000;
 #define RAD2DEG(X) X * 180 / PI
 #define DEG2RAD(X) X * PI  / 180
 
-
-
 extern PoseController robot;
-
 
 void config_Timer_1()
 {
@@ -180,19 +178,19 @@ void PoseController::ley_de_control(){
     y_error    = ref_pose.y    - robot_pose.y;					// mm
     alfa_error = ref_pose.alfa - robot_pose.alfa;				// grados
 
-
-
 	// Calculo de error respecto a las coordenadas del robot_pose
     x_error_r  =  cos(DEG2RAD(robot_pose.alfa)) * x_error + sin(DEG2RAD(robot_pose.alfa)) * y_error;		// mm
 
     // Ley de control
     cons.v = Kx    * x_error_r;						// mm/s 
+	// CAMBIAR LEY DE CONTROL PARA W -> cons.w = Kalfa*DEG2RAD(alfa_error); -> Implica tener ganancia baja
 	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
 
 	Serial.print("V"); 
 	Serial.println(cons.v);
 	Serial.print("W"); 
 	Serial.println(cons.w);
+
 	return;
 }
 
