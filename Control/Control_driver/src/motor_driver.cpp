@@ -3,11 +3,27 @@
 
 constexpr int MAX_RPM = 8100;	// MAX_VEL_RECOMMENDED_BY_JQP_09_10_22
 
+
+
+
+
 inline float speed_to_duty_cycle(float speed){
-	// Serial.println(MIN_PWM + ((RADS_TO_RPM(speed) * 0.8) / MAX_RPM)); 
+	/**
+ 	* @todo Cambiar MIN_PWM de lugar, deberia de
+	* actualizarse en set_pwm y cambiar el valor 
+	* por un uint_8t ahorrando ciclos al procesa-
+	* dor.
+ 	*/
 	return MIN_PWM + (RADS_TO_RPM(speed)/MAX_RPM)*0.8;
 }
 
+
+
+
+/**
+ * @todo No hay const correctnes en todo el archivo,
+ * casi todos los parametros podrian ser const.
+ */
 
 MotorDriver::MotorDriver(register8           pwm_register, 
 						 uint8_t             pwm_pin,
@@ -69,6 +85,18 @@ void MotorDriver::set_pwm(const float &duty_cycle){
 	return;
 }
 
+
+/**
+ * @todo modificar la logica de las maxon para no
+ * hacer el negado.
+ * @param direction 
+ */
+
+/**
+ * @todo cambiar el tipo de dato bool por un enum de 
+ * tipo dirección
+ */
+
 void inline MotorDriver::set_direction(const bool direction){
 	digitalWrite(Pdir, !direction);		
 	// ESTOS COMEPINGAS NO QUIEREN QUE PONGA ESA EXCLAMACION
@@ -76,6 +104,14 @@ void inline MotorDriver::set_direction(const bool direction){
 	// Serial.println(direction);
 	return;
 }
+
+
+/**
+ * @todo Se utilizan digitalWrtie en estas funciones
+ * pudiendo escribir directamente sobre el registro,
+ * algunas de estas funciones se ejecutan en el
+ * bucle de control.... :(
+ */
 
 void inline MotorDriver::enable_motor(){
 	//Portenable |= 1 << Penable;

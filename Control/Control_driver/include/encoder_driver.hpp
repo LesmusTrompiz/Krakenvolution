@@ -19,8 +19,8 @@ struct EncoderDriver{
 		EncoderDriver(
 					const uint8_t     chanel_A,
 					const uint8_t     chanel_B,
-					uint16_t          resolucion_encoder_,
-					uint16_t          reductora,
+					const uint16_t    resolucion_encoder_,
+					const uint16_t    reductora,
 					volatile int16_t *cnt,
 					void(*cb)(void)
 					);

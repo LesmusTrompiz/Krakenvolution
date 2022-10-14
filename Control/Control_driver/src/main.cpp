@@ -50,13 +50,16 @@ constexpr uint16_t ENCODER_RESOLUTION = 256 * 2;          //  pulsos / vuelta es
   EncoderDriver rencoder(R_ENC_A,
                         R_ENC_B,
                         ENCODER_RESOLUTION,
+                        REDUCTORA,
                         &right_odom,
                         increment_right_odometry_channel_a
                         );
 
-  EncoderDriver lencoder(L_ENC_A,
+  EncoderDriver lencoder(
+                        L_ENC_A,
                         L_ENC_B,
                         ENCODER_RESOLUTION,
+                        REDUCTORA,
                         &left_odom,
                         increment_left_odometry_chanel_a
                         );
@@ -73,41 +76,9 @@ constexpr uint16_t ENCODER_RESOLUTION = 256 * 2;          //  pulsos / vuelta es
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-	
-  // pinMode(6, OUTPUT);
-  // pinMode(4, OUTPUT);
-  // pinMode(7, OUTPUT);
-  // pinMode(12, OUTPUT);
-  // digitalWrite(7, LOW);
-  // digitalWrite(6, LOW);
-
-
 }
 
 void loop() {
-
-  //analogWrite(12, 150);
-  //analogWrite(4, 150);
-  //digitalWrite(7, HIGH);
-  //digitalWrite(6, HIGH); 
-  //rmotor.set_speed(RPM2RAD(4050));
-  //lmotor.set_speed(RPM2RAD(4050));
-
-  // delay(1000);
-
-  // rmotor.set_speed(0.7);
-  //lmotor.set_pwm(0.7);  
   robot.ref_pose = Pose(100,0,0);
-
-  while (true)
-  {
-    
-    // digitalWrite(13,HIGH);
-    // digitalWrite(4,HIGH);
-
-
-
-    //rmotor.set_speed(RPM2RAD(4050));
-    //lmotor.set_speed(RPM2RAD(4050));
-  }
+  while (true){}
 }

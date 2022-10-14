@@ -58,8 +58,8 @@ class PoseController{
         void reset_controller();
         bool check_stop();
         bool in_goal();
-        Pose             ref_pose;
-        Pose             robot_pose;
+        Pose ref_pose;
+        Pose robot_pose;
 
 
     private:
