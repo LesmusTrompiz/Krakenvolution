@@ -5,7 +5,8 @@ extern volatile int left_odom;
 
 
 /** @todo:
- * Los registros de las interrupciones estan prefijados
+ * Los registros de las interrupciones estan prefijados sin
+ * ser ninguna Constexpresion, no mola....
 */
 
 /**
@@ -45,8 +46,8 @@ void increment_left_odometry_chanel_b(void)
 EncoderDriver::EncoderDriver(
 					const uint8_t     chanel_A,
 					const uint8_t     chanel_B,
-					uint16_t          resolucion_encoder_,
-					uint16_t          reductora,
+					const uint16_t    resolucion_encoder_,
+					const uint16_t    reductora,
 					volatile int16_t *cnt,
 					void(*cb)(void)
 					):

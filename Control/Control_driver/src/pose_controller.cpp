@@ -14,6 +14,15 @@ constexpr uint8_t ERROR_MINIMO_RAD = PI/1000;
 
 extern PoseController robot;
 
+
+/**
+ * @todo La configuración del timer, no esta
+ * funcionando correctamente a priori probar
+ * con la función millis():
+ * https://www.arduino.cc/reference/en/language/functions/time/millis/
+ */
+
+
 void config_Timer_1()
 {
   noInterrupts();
@@ -36,6 +45,13 @@ void config_Timer_1()
   
   interrupts();
 }
+
+
+
+/**
+ * @todo No hay const correctnes en todo el archivo,
+ * casi todos los parametros podrian ser const.
+ */
 
 
 PoseController::PoseController(
@@ -62,16 +78,20 @@ PoseController::PoseController(
 void PoseController::reset_counts(){
 	rencoder->reset_pulses();
 	lencoder->reset_pulses();
-
 	return;
 }
 
+/**
+ * @todo examinar si es más rapido
+ * iniciar estos valores a cero uno
+ * a uno, en vez de resetear la 
+ * estructura.
+ */
+
 void PoseController::reset_controller(){
 	Pose zero;
-
 	ref_pose   = zero;
 	robot_pose = zero;
-
 	return;
 }
 
@@ -91,39 +111,6 @@ bool PoseController::in_goal(){
 			fabs(alfa_error) < ERROR_MINIMO_RAD);
 }
 
-
-/*
-void PoseController::cuentas_to_odom_2(){
-	float delta_d, delta_a, deltaX, deltaY = 0;
-	int rcounts, lcounts;
-
-
-	rcounts = rencoder->read_pulses();			// Rads 
-	lcounts = rencoder->read_pulses();
-
-
-	// delta_d = (R * 2 * PI / rencoder->resolucion_encoder*2) * ((rcounts + lcounts) / 2);
-	
-	delta_d = ((rcounts + lcounts) / 2)*((2*R*PI)/(rencoder->resolucion_encoder*REDUCTORA));
-	
-	// delta_a = (180 / PI * rencoder->resolucion_encoder*2)   * ((rcounts - lcounts) / (L));
-	
-	delta_a = (((rcounts - lcounts) / 2)*((2*R*PI)/(rencoder->resolucion_encoder*REDUCTORA)))/L;
-
-	robot_pose.alfa += delta_a * (180/PI);
-
-	deltaX  =	delta_d*cos((robot_pose.alfa)*(PI/180));
-	deltaY	=	delta_d*sin((robot_pose.alfa)*(PI/180));
-
-	Serial.print("X"); Serial.println(robot_pose.alfa);
-
-	robot_pose.x += deltaX;
-	robot_pose.y += deltaY;
-
-	return;
-}
-*/
-
 void PoseController::cuentas_to_odom(){
 	float delta_d, delta_a, deltaX, deltaY = 0;
 	float right_twist, left_twist;
@@ -141,11 +128,8 @@ void PoseController::cuentas_to_odom(){
 	deltaX  =	delta_d*cos(DEG2RAD(robot_pose.alfa));
 	deltaY	=	delta_d*sin(DEG2RAD(robot_pose.alfa));
 
-
-
 	robot_pose.x += deltaX;
 	robot_pose.y += deltaY;
-
 
 	return;
 }
@@ -165,6 +149,12 @@ void PoseController::ley_de_control(const int vd, const int wd){
 
     // Ley de control
     cons.v = Kx    * x_error_r       + vd * cos(DEG2RAD(alfa_error));
+
+	/**
+	 * @todo Cuidado si el error es de 180 grados
+	 * esta parte del control no actual...
+	 */
+
 	cons.w = Kalfa * sin(DEG2RAD(alfa_error)) + Ky * vd * y_error_r + wd;
 	
 	return;
@@ -187,6 +177,13 @@ void PoseController::ley_de_control(){
 
     // Ley de control
     cons.v = Kx    * x_error_r;						// mm/s 
+	
+	/**
+	 * @todo Cuidado si el error es de 180 grados
+	 * esta parte del control no actual...
+	 * Basicamente lo que pone Navil abajo:
+	 */
+	
 	// CAMBIAR LEY DE CONTROL PARA W -> cons.w = Kalfa*DEG2RAD(alfa_error); -> Implica tener ganancia baja
 	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
 
