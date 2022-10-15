@@ -25,28 +25,55 @@ extern PoseController robot;
 
 void config_Timer_1()
 {
-  noInterrupts();
+
+  // Parar interrupciones
+  cli();
+
   // Clear registers
   TCCR1A = 0;
   TCCR1B = 0;
   TCNT1 = 0;
 
-  // 1 Hz (16000000/((15624+1)*1024))
-  // Esto qué es Trompo -> OCR1A = 0xFFFF;
+/**
+ * @brief La fórmula del registro de comparación es la siguiente
+ * 
+ * f_{OCnA} = f_{clk_{I/O}}/ (N·(1 + OCRnA))
+ * 
+ * Siendo f_{clk_{I/O}} la frecuencia prescalada, y N el valor del prescaler.
+ * Por otro lado el primer término de la ecuación representa la frecuencia deseada.
+ */
 
-  OCR1A = 2499;
+/**
+ * @brief Ponemos la frecuencia de f_{OCnA} a 50Hz, y para ello no podemos acceder directamenteç
+ * a OCRnA, sino que se accede PRIMERO a OCRnAH y SEGUNDO a OCRnAL para escritura.
+ */
+  OCR1AH = 0xFF;
+  OCR1AL = 0xFF;
 
-  // CTC
-  TCCR1B |= (1 << WGM11); // | (1 << WGM11);
-  // Prescaler 1024
-  TCCR1B |= (1 << CS11);
+  // CTC y preescaler a 8
+  TCCR1B = (1 << WGM12) | (1 << CS11);
+
   // Output Compare Match A Interrupt Enable
   TIMSK1 |= (1 << OCIE1A);
   
-  interrupts();
+  Serial.print("CONFIGURATION DONE");
+
+  // Iniciar interrupciones
+  sei();
 }
 
+ISR(TIMER1_COMPA_vect){    // This is the interrupt request
 
+	static int prueba=0;
+	prueba++;
+
+	if(prueba >= 0)
+	{
+		// PRINTs
+		Serial.println("INT");
+		prueba = 0;
+	}
+}
 
 /**
  * @todo No hay const correctnes en todo el archivo,
@@ -216,39 +243,37 @@ void PoseController::update_motor_speed(){
 	return;	
 }
 
+// ISR(TIMER1_COMPA_vect){    // This is the interrupt request
 
-ISR(TIMER1_COMPA_vect){    // This is the interrupt request
-	// TCNT1 = 0;
-	TCCR1A = 0x0;
+// 	static int prueba=0, prueba2=0;
+// 	prueba++;
 
-
-	static int prueba=0;
-	prueba++;
-
-	if(prueba == 10)
-	{
-		// PRINTs
-		Serial.print(prueba); 
-		prueba = 0;
-	}
-	/*
-	// 4º Check de fin de movimiento
-	if(robot.check_stop()
-		&& 
-		robot.in_goal()) robot.reset_controller();
+// 	if(prueba == 50)
+// 	{
+// 		prueba2++;
+// 		// PRINTs
+// 		// Serial.println(prueba2);
+// 		// Serial.println("INT");
+// 		prueba = 0;
+// 	}
+	
+// 	// 4º Check de fin de movimiento
+// 	if(robot.check_stop()
+// 		&& 
+// 		robot.in_goal()) robot.reset_controller();
 	
 
-	// 1º Calcular el error:
-	//  right_odom y left_odom -> cuentas -> mm -> (x,y,alfa)
-	robot.cuentas_to_odom();
+// 	// 1º Calcular el error:
+// 	//  right_odom y left_odom -> cuentas -> mm -> (x,y,alfa)
+// 	robot.cuentas_to_odom();
 
-	// 2º Calcular la consigna:
+// 	// 2º Calcular la consigna:
 	
-	robot.ley_de_control(); 	// m/s y rad/s
-	robot.consigna_to_velocidad();	// rad/s
+// 	robot.ley_de_control(); 	// m/s y rad/s
+// 	robot.consigna_to_velocidad();	// rad/s
 
-	// 3º Actualizar las salidas:
-	robot.update_motor_speed();
-	*/
-}
+// 	// 3º Actualizar las salidas:
+// 	robot.update_motor_speed();
+	
+// }
 

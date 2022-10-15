@@ -60,7 +60,7 @@ EncoderDriver::EncoderDriver(
 	pinMode(chanel_A,INPUT);
 	pinMode(chanel_B,INPUT);
 	
-	attachPCINT(digitalPinToPCINT(chanel_A), cb, CHANGE);
+	// attachPCINT(digitalPinToPCINT(chanel_A), cb, CHANGE);
 	return;
 }
 

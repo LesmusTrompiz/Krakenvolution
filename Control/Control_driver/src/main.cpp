@@ -75,10 +75,15 @@ constexpr uint16_t ENCODER_RESOLUTION = 256 * 2;          //  pulsos / vuelta es
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
-void loop() {
-  robot.ref_pose = Pose(100,0,0);
-  while (true){}
+void loop() 
+{
+  
+  // robot.ref_pose = Pose(100,0,0);
+  
+  while (true)
+  {
+  }
 }
