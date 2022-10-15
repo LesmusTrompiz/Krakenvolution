@@ -23,13 +23,17 @@ void config_Timer_1()
   TCNT1 = 0;
 
   // 1 Hz (16000000/((15624+1)*1024))
-  OCR1A = 0xFFFF;
+  // Esto qué es Trompo -> OCR1A = 0xFFFF;
+
+  OCR1A = 2499;
+
   // CTC
-  TCCR1B |= (1 << WGM12) | (1 << WGM11);
+  TCCR1B |= (1 << WGM11); // | (1 << WGM11);
   // Prescaler 1024
-  TCCR1B |= (1 << CS12) | (1 << CS10);
+  TCCR1B |= (1 << CS11);
   // Output Compare Match A Interrupt Enable
   TIMSK1 |= (1 << OCIE1A);
+  
   interrupts();
 }
 
