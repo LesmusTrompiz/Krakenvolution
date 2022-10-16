@@ -1,4 +1,3 @@
-from pickle import GLOBAL
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node   import Node
