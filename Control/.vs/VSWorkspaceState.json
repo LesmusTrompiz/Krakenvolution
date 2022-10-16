@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Control_driver",
+    "\\Control_driver\\include",
+    "\\Control_driver\\src",
+    "\\Control_driver\\test"
+  ],
+  "SelectedNode": "\\Control_driver\\test\\test_motor_driver.cpp",
+  "PreviewInSolutionExplorer": false
+}

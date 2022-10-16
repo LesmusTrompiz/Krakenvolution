@@ -29,8 +29,6 @@ int16_t volatile left_odom = 0;
 constexpr uint16_t ENCODER_RESOLUTION = 256 * 2;          //  pulsos / vuelta es decir radianes
                                                           // 256 es la resolución del encoder pero como leemos en los dos canales se multiplica por dos 2
 
-
-
  // put your main code here, to run repeatedly:
   MotorDriver rmotor(&OCR0A,                    // pwm_register
                      R_PWM,                     // pwm_pin
@@ -74,15 +72,16 @@ constexpr uint16_t ENCODER_RESOLUTION = 256 * 2;          //  pulsos / vuelta es
                        );
 
 void setup() {
-  // put your setup code here, to run once:
+
+  // Configuración del TIMER1
+  robot.config_TIMER1();
+  // Inicialización del puerto serie
   Serial.begin(115200);
 }
 
 void loop() 
 {
-  
   // robot.ref_pose = Pose(100,0,0);
-  
   while (true)
   {
   }

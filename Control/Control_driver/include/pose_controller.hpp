@@ -49,6 +49,7 @@ class PoseController{
         void recta(int mm);
 
         // Funciones internas:
+        void config_TIMER1();
         void ley_de_control();
         void ley_de_control(const int vd, const int wd);
         void consigna_to_velocidad();

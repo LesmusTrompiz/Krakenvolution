@@ -14,33 +14,33 @@ extern volatile int left_odom;
  * mascaras fuera de la interrupción
  */
 
-void increment_right_odometry_channel_a(void)
-{
-	if(((PINB >> PINB5) & 1) == ((PINB >> PINB6) & 1)) --right_odom;
-	else ++right_odom;
-	return;
-}
+// void increment_right_odometry_channel_a(void)
+// {
+// 	if(((PINB >> PINB5) & 1) == ((PINB >> PINB6) & 1)) --right_odom;
+// 	else ++right_odom;
+// 	return;
+// }
 
-void increment_right_odometry_channel_b(void)
-{
-	if((PINB & (1 << PINB6)) != (PINB & (1 << PINB5))) --right_odom;
-	else ++right_odom;
-	return;
-}
+// void increment_right_odometry_channel_b(void)
+// {
+// 	if((PINB & (1 << PINB6)) != (PINB & (1 << PINB5))) --right_odom;
+// 	else ++right_odom;
+// 	return;
+// }
 
-void increment_left_odometry_chanel_a(void)
-{
-	if(((PINB >> PINB4) & 1) == ((PINE >> PINE5) & 1)) --left_odom;
-	else ++left_odom;
-	return;
-}
+// void increment_left_odometry_chanel_a(void)
+// {
+// 	if(((PINB >> PINB4) & 1) == ((PINE >> PINE5) & 1)) --left_odom;
+// 	else ++left_odom;
+// 	return;
+// }
 
-void increment_left_odometry_chanel_b(void)
-{
-	if(((PINB >> PINB4) & 1) != ((PINE >> PINE5) & 1)) --left_odom;
-	else ++left_odom;
-	return;
-}
+// void increment_left_odometry_chanel_b(void)
+// {
+// 	if(((PINB >> PINB4) & 1) != ((PINE >> PINE5) & 1)) --left_odom;
+// 	else ++left_odom;
+// 	return;
+// }
 
 
 EncoderDriver::EncoderDriver(

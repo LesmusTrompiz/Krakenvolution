@@ -14,72 +14,10 @@ constexpr uint8_t ERROR_MINIMO_RAD = PI/1000;
 
 extern PoseController robot;
 
-
 /**
- * @todo La configuración del timer, no esta
- * funcionando correctamente a priori probar
- * con la función millis():
- * https://www.arduino.cc/reference/en/language/functions/time/millis/
- */
-
-
-void config_Timer_1()
-{
-
-  // Parar interrupciones
-  cli();
-
-  // Clear registers
-  TCCR1A = 0;
-  TCCR1B = 0;
-  TCNT1 = 0;
-
-/**
- * @brief La fórmula del registro de comparación es la siguiente
- * 
- * f_{OCnA} = f_{clk_{I/O}}/ (N·(1 + OCRnA))
- * 
- * Siendo f_{clk_{I/O}} la frecuencia prescalada, y N el valor del prescaler.
- * Por otro lado el primer término de la ecuación representa la frecuencia deseada.
- */
-
-/**
- * @brief Ponemos la frecuencia de f_{OCnA} a 50Hz, y para ello no podemos acceder directamenteç
- * a OCRnA, sino que se accede PRIMERO a OCRnAH y SEGUNDO a OCRnAL para escritura.
- */
-  OCR1AH = 0xFF;
-  OCR1AL = 0xFF;
-
-  // CTC y preescaler a 8
-  TCCR1B = (1 << WGM12) | (1 << CS11);
-
-  // Output Compare Match A Interrupt Enable
-  TIMSK1 |= (1 << OCIE1A);
-  
-  Serial.print("CONFIGURATION DONE");
-
-  // Iniciar interrupciones
-  sei();
-}
-
-ISR(TIMER1_COMPA_vect){    // This is the interrupt request
-
-	static int prueba=0;
-	prueba++;
-
-	if(prueba >= 0)
-	{
-		// PRINTs
-		Serial.println("INT");
-		prueba = 0;
-	}
-}
-
-/**
- * @todo No hay const correctnes en todo el archivo,
+ * @todo No hay const correctness en todo el archivo,
  * casi todos los parametros podrian ser const.
  */
-
 
 PoseController::PoseController(
 		MotorDriver     &rmotor_,
@@ -97,12 +35,52 @@ PoseController::PoseController(
 		lmotor = &lmotor_;
 		rencoder = &rencoder_;
 		lencoder = &lencoder_;
-		config_Timer_1();
 		return;
 	}
 
+void PoseController::config_TIMER1()
+{
+  // Clear registers
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
 
-void PoseController::reset_counts(){
+/**
+ * @brief La fórmula del registro de comparación es la siguiente
+ * 
+ * f_{OCnA} = f_{clk_{I/O}}/ (2· N·(1 + OCRnA))
+ * 
+ * Siendo f_{clk_{I/O}} la frecuencia prescalada, y N el valor del prescaler.
+ * Por otro lado el primer término de la ecuación representa la frecuencia deseada.
+*/
+
+/**
+ * @brief Arduino Mega: Ponemos la frecuencia de f_{OCnA} a 50Hz, y para ello no podemos acceder directamente
+ * a OCRnA, sino que se accede PRIMERO a OCRnAH y SEGUNDO a OCRnAL para escritura. En esta placa han aparecido problemas varios
+ * con la frecuencia de la interrupción en modo CTC.
+*/
+
+//   OCR1AH = 0xFF;
+//   OCR1AL = 0xFF;
+
+/**
+ * @brief Arduino Uno: Ponemos la frecuencia de f_{OCnA} a 50Hz, en el caso de la Arduino Uno sí podemos realizar operaciones de escritura 
+ * en registros de 16bits.
+*/  
+
+  // Frecuencia = 50Hz
+  OCR1A = 39999; 
+
+  // CTC y preescaler a 8
+  TCCR1B = (1 << WGM12) | (1 << CS11);
+
+  // Output Compare Match A Interrupt Enable
+  TIMSK1 |= (1 << OCIE1A);
+
+}
+
+void PoseController::reset_counts()
+{
 	rencoder->reset_pulses();
 	lencoder->reset_pulses();
 	return;
@@ -115,18 +93,21 @@ void PoseController::reset_counts(){
  * estructura.
  */
 
-void PoseController::reset_controller(){
+void PoseController::reset_controller()
+{
 	Pose zero;
 	ref_pose   = zero;
 	robot_pose = zero;
 	return;
 }
 
-bool PoseController::check_stop(){
+bool PoseController::check_stop()
+{
 	return (rencoder->read_pulses() <= 3 || lencoder->read_pulses() <= 3);
 }
 
-bool PoseController::in_goal(){
+bool PoseController::in_goal()
+{
 	float x_error, alfa_error;
 	
 	// Calculo de error coordenadas iniciales
@@ -138,7 +119,8 @@ bool PoseController::in_goal(){
 			fabs(alfa_error) < ERROR_MINIMO_RAD);
 }
 
-void PoseController::cuentas_to_odom(){
+void PoseController::cuentas_to_odom()
+{
 	float delta_d, delta_a, deltaX, deltaY = 0;
 	float right_twist, left_twist;
 
@@ -161,7 +143,8 @@ void PoseController::cuentas_to_odom(){
 	return;
 }
 
-void PoseController::ley_de_control(const int vd, const int wd){
+void PoseController::ley_de_control(const int vd, const int wd)
+{
 	float x_error, y_error, alfa_error, x_error_r, y_error_r;
 	Consigna cons;
 	
@@ -191,7 +174,8 @@ void PoseController::ley_de_control(const int vd, const int wd){
 /*
 	Rectas y giros (Velocidad final = 0)
 */
-void PoseController::ley_de_control(){
+void PoseController::ley_de_control()
+{
 	float x_error, y_error, alfa_error, x_error_r;
 	
 	// Calculo de error coordenadas iniciales
@@ -214,15 +198,16 @@ void PoseController::ley_de_control(){
 	// CAMBIAR LEY DE CONTROL PARA W -> cons.w = Kalfa*DEG2RAD(alfa_error); -> Implica tener ganancia baja
 	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
 
-	Serial.print("V"); 
-	Serial.println(cons.v);
-	Serial.print("W"); 
-	Serial.println(cons.w);
+	// Serial.print("V"); 
+	// Serial.println(cons.v);
+	// Serial.print("W"); 
+	// Serial.println(cons.w);
 
 	return;
 }
 
-void PoseController::consigna_to_velocidad(){
+void PoseController::consigna_to_velocidad()
+{
 
     // Serial.println("V2");
     // Serial.println(cons.v);
@@ -231,49 +216,50 @@ void PoseController::consigna_to_velocidad(){
 	v_ruedas.r = (2*cons.v + cons.w * L)/(2 * R);
 	v_ruedas.l = (2*cons.v - cons.w * L)/(2 * R);
 
-    Serial.println("Vr");
-    Serial.println(v_ruedas.r);
-	Serial.println(v_ruedas.l);
+    // Serial.println("Vr");
+    // Serial.println(v_ruedas.r);
+	// Serial.println(v_ruedas.l);
 	return;	
 }
-void PoseController::update_motor_speed(){
+
+void PoseController::update_motor_speed()
+{
 	rmotor->set_speed(v_ruedas.r);
 	lmotor->set_speed(v_ruedas.l);
 
 	return;	
 }
 
-// ISR(TIMER1_COMPA_vect){    // This is the interrupt request
+ISR(TIMER1_COMPA_vect)
+{    // This is the interrupt request
 
-// 	static int prueba=0, prueba2=0;
-// 	prueba++;
+	static int prueba=0;
+	prueba++;
 
-// 	if(prueba == 50)
-// 	{
-// 		prueba2++;
-// 		// PRINTs
-// 		// Serial.println(prueba2);
-// 		// Serial.println("INT");
-// 		prueba = 0;
-// 	}
+	if(prueba == 50)
+	{
+		// PRINTs
+		Serial.println("INT");
+		prueba = 0;
+	}
 	
-// 	// 4º Check de fin de movimiento
-// 	if(robot.check_stop()
-// 		&& 
-// 		robot.in_goal()) robot.reset_controller();
+	// 4º Check de fin de movimiento
+	if(robot.check_stop()
+		&& 
+		robot.in_goal()) robot.reset_controller();
 	
 
-// 	// 1º Calcular el error:
-// 	//  right_odom y left_odom -> cuentas -> mm -> (x,y,alfa)
-// 	robot.cuentas_to_odom();
+	// 1º Calcular el error:
+	//  right_odom y left_odom -> cuentas -> mm -> (x,y,alfa)
+	robot.cuentas_to_odom();
 
-// 	// 2º Calcular la consigna:
+	// 2º Calcular la consigna:
 	
-// 	robot.ley_de_control(); 	// m/s y rad/s
-// 	robot.consigna_to_velocidad();	// rad/s
+	robot.ley_de_control(); 	// m/s y rad/s
+	robot.consigna_to_velocidad();	// rad/s
 
-// 	// 3º Actualizar las salidas:
-// 	robot.update_motor_speed();
+	// 3º Actualizar las salidas:
+	robot.update_motor_speed();
 	
-// }
+}
 
