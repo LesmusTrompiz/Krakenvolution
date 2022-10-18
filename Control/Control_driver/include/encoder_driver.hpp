@@ -1,6 +1,6 @@
 #pragma once
 #include <Arduino.h>
-// #include "PinChangeInterrupt.h"
+#include "PinChangeInterrupt.h"
 #include "register_types.hpp"
 
 void increment_right_odometry_channel_a(void);

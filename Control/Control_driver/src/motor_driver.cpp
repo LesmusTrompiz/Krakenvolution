@@ -2,6 +2,7 @@
 #define RADS_TO_RPM(x) x*60/(2*PI)
 
 constexpr int MAX_RPM = 8100;	// MAX_VEL_RECOMMENDED_BY_JQP_09_10_22
+constexpr float MAX_PWM = 0.6;	// MAX_PWM
 
 
 
@@ -14,7 +15,10 @@ inline float speed_to_duty_cycle(float speed){
 	* por un uint_8t ahorrando ciclos al procesa-
 	* dor.
  	*/
-	return MIN_PWM + (RADS_TO_RPM(speed)/MAX_RPM)*0.8;
+ 	float duty_cycle;
+	duty_cycle = MIN_PWM + (RADS_TO_RPM(speed)/MAX_RPM)*0.8;
+	if (duty_cycle <= MAX_PWM) return duty_cycle;
+	else 					  return MAX_PWM;
 }
 
 
@@ -131,13 +135,14 @@ void inline MotorDriver::disable_motor(){
 void MotorDriver::set_speed(float speed){
 	bool dir = true;
 	float duty_cycle = 0;
-	duty_cycle = speed_to_duty_cycle(speed);
 	
-	if(duty_cycle < 0.0){
+	if(speed < 0.0){
 		dir = false;
-		duty_cycle = -duty_cycle;
+		speed = -speed;
 	}
 
+
+	duty_cycle = speed_to_duty_cycle(speed);
 	set_direction(dir);
 	set_pwm(duty_cycle);	
     enable_motor();	

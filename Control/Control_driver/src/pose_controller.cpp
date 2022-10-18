@@ -3,11 +3,11 @@
 #include "pose_controller.hpp"
 
 /* Me interesa tener ganancias con decimales */
-constexpr uint32_t Kx 	= 20;		// 1/s
+constexpr uint32_t Kx 	= 80;		// 1/s
 constexpr uint32_t Ky 	= 1;		
-constexpr uint32_t Kalfa = 5;		// rad/s
-constexpr uint8_t ERROR_MINIMO_MM  = 5;
-constexpr uint8_t ERROR_MINIMO_RAD = PI/1000; 
+constexpr float Kalfa = 12;		// rad/s
+constexpr float ERROR_MINIMO_MM  = 5;
+constexpr float ERROR_MINIMO_DEG = 180.0/100; 
 
 #define RAD2DEG(X) X * 180 / PI
 #define DEG2RAD(X) X * PI  / 180
@@ -114,9 +114,18 @@ bool PoseController::in_goal()
     x_error    = ref_pose.x    - robot_pose.x;
     alfa_error = ref_pose.alfa - robot_pose.alfa;
 
+	if((fabs(x_error) < ERROR_MINIMO_MM && fabs(alfa_error) < ERROR_MINIMO_DEG) && (ref_pose.x != 0 || ref_pose.alfa != 0))
+	{
+		Serial.print("X_error"); Serial.println(x_error);
+		Serial.print("A_error"); Serial.println(alfa_error);
+	}
+
+	// Serial.print("MM "); Serial.println(abs(x_error));
+	// Serial.print("A_error"); Serial.println(alfa_error);
+
 	return (fabs(x_error) < ERROR_MINIMO_MM
 			&&
-			fabs(alfa_error) < ERROR_MINIMO_RAD);
+			fabs(alfa_error) < ERROR_MINIMO_DEG);
 }
 
 void PoseController::cuentas_to_odom()
@@ -196,7 +205,7 @@ void PoseController::ley_de_control()
 	 */
 	
 	// CAMBIAR LEY DE CONTROL PARA W -> cons.w = Kalfa*DEG2RAD(alfa_error); -> Implica tener ganancia baja
-	cons.w = Kalfa * sin(DEG2RAD(alfa_error));		// rad/s
+	cons.w = 0; // Kalfa*DEG2RAD(alfa_error);		// rad/s
 
 	// Serial.print("V"); 
 	// Serial.println(cons.v);
@@ -236,17 +245,21 @@ ISR(TIMER1_COMPA_vect)
 	static int prueba=0;
 	prueba++;
 
-	if(prueba == 50)
+	if(prueba == 100)
 	{
 		// PRINTs
-		Serial.println("INT");
+		Serial.print("X: "); Serial.println(robot.robot_pose.x);
+		Serial.print("A: "); Serial.println(robot.robot_pose.alfa);
+
+		// Serial.print("Vr: "); Serial.println(robot.v_ruedas.r);
+		// Serial.print("Vl: "); Serial.println(robot.v_ruedas.l);
+		// Serial.print("In_goal "); Serial.println(robot.in_goal());
+		// Serial.print("Stop "); Serial.println(robot.check_stop());
 		prueba = 0;
 	}
 	
 	// 4º Check de fin de movimiento
-	if(robot.check_stop()
-		&& 
-		robot.in_goal()) robot.reset_controller();
+	if(robot.in_goal()) robot.reset_controller();
 	
 
 	// 1º Calcular el error:
@@ -254,7 +267,6 @@ ISR(TIMER1_COMPA_vect)
 	robot.cuentas_to_odom();
 
 	// 2º Calcular la consigna:
-	
 	robot.ley_de_control(); 	// m/s y rad/s
 	robot.consigna_to_velocidad();	// rad/s
 
