@@ -17,3 +17,10 @@ void MoveToPoseNode::timer_callback()
     RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     publisher_->publish(message);
   }
+
+
+int spin_to_goal(float robot_alfa, float goal_alfa){
+  return 0;
+}
+
+

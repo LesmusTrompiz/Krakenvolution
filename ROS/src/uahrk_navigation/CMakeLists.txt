@@ -49,8 +49,15 @@ install(TARGETS
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
+  #find_package(ament_lint_auto REQUIRED)
+  find_package(ament_cmake_gtest)
+  #find_package(ros_testing REQUIRED)
+
+  #ament_lint_auto_find_test_dependencies()
+  ament_add_gtest(move_to_pose_utils_test tests/move_to_pose_utils_test.cpp)
+  ament_target_dependencies(move_to_pose_utils_test ${dependencies})
+target_link_libraries(move_to_pose_utils_test ${PROJECT_NAME})
 endif()
+
 
 ament_package()

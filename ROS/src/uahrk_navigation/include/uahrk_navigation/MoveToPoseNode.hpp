@@ -18,3 +18,7 @@ class MoveToPoseNode : public rclcpp::Node
     
 };
 
+
+int spin_to_goal(float robot_alfa, float goal_alfa);
+
+
