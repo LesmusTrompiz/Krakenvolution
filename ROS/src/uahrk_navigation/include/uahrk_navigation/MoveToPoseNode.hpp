@@ -6,10 +6,10 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-class MinimalPublisher : public rclcpp::Node
+class MoveToPoseNode : public rclcpp::Node
 {
   public:
-    MinimalPublisher();
+    MoveToPoseNode();
   private:
     void timer_callback();
     rclcpp::TimerBase::SharedPtr timer_;
