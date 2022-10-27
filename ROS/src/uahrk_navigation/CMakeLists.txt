@@ -33,14 +33,14 @@ add_library(${PROJECT_NAME} SHARED
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 
-add_executable(basic src/basic_node.cpp)
-ament_target_dependencies(basic ${dependencies})
-target_link_libraries(basic ${PROJECT_NAME})
+add_executable(move_to_pose_main src/move_to_pose_main.cpp)
+ament_target_dependencies(move_to_pose_main ${dependencies})
+target_link_libraries(move_to_pose_main ${PROJECT_NAME})
 
 
 install(TARGETS
   ${PROJECT_NAME}
-  basic
+  move_to_pose_main
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
