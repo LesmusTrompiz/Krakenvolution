@@ -1,5 +1,4 @@
 #include "uahrk_navigation/MoveToPoseNode.hpp"
-
 using namespace std::chrono_literals;
 
 MoveToPoseNode::MoveToPoseNode()
@@ -30,7 +29,10 @@ int spin_to_goal(float robot_alfa, float goal_alfa){
    * @param goal_alfa Goal rotation in degrees, 
    * the valid range is (-180º, 180º)
    */
-  return goal_alfa - robot_alfa;
+  int spin = goal_alfa - robot_alfa;
+  if      (spin >  180) return spin - 360;
+  else if (spin < -180) return spin + 360;
+  else                  return spin;
 }
 
 

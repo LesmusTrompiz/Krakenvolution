@@ -10,7 +10,7 @@ TEST(CalculateSpinTest, ZeroTo90){
    */
   float robot_alfa = 0.0;
   float goal_alfa  = 90.0;
-  int spin  = 0; 
+  int spin; 
   spin = spin_to_goal(robot_alfa, goal_alfa);
   ASSERT_EQ(spin, 90);
 }
@@ -24,7 +24,7 @@ TEST(CalculateSpinTest, ZeroTo180){
    */
   float robot_alfa =    0.0;
   float goal_alfa  =  180.0;
-  int   spin       =    0; 
+  int   spin; 
   spin = spin_to_goal(robot_alfa, goal_alfa);
   ASSERT_EQ(spin, 180);
 }
@@ -37,7 +37,7 @@ TEST(CalculateSpinTest, ZeroToMinus180){
    */
   float robot_alfa =    0.0;
   float goal_alfa  = -180.0;
-  int   spin       =    0; 
+  int   spin; 
   spin = spin_to_goal(robot_alfa, goal_alfa);
   ASSERT_EQ(spin, -180);
 }
@@ -49,10 +49,23 @@ TEST(CalculateSpinTest, Minus170To170){
    * spin 20º to accomplish the goal.
    */
   float robot_alfa = -170.0;
-  float goal_alfa  = -170.0;
-  int   spin       =    0; 
+  float goal_alfa  =  170.0;
+  int   spin; 
   spin = spin_to_goal(robot_alfa, goal_alfa);
   ASSERT_EQ(spin, -20);
+}
+
+TEST(CalculateSpinTest, Plus170ToMinus170){
+  /**
+   * @test The robot has a -170º orientation 
+   * and the goal is at 170º, the robot must
+   * spin 20º to accomplish the goal.
+   */
+  float robot_alfa =  170.0;
+  float goal_alfa  = -170.0;
+  int   spin; 
+  spin = spin_to_goal(robot_alfa, goal_alfa);
+  ASSERT_EQ(spin, 20);
 }
 
 TEST(CalculateSpinTest, Minus100To30){
