@@ -20,7 +20,17 @@ void MoveToPoseNode::timer_callback()
 
 
 int spin_to_goal(float robot_alfa, float goal_alfa){
-  return 0;
+  /**
+   * @brief This function calculates the spin
+   * needed by the robot to accomplish the 
+   * angle goal.
+   * 
+   * @param robot_alfa Actual rotation of the robot
+   * in degrees, the valid range is (-180º, 180º)
+   * @param goal_alfa Goal rotation in degrees, 
+   * the valid range is (-180º, 180º)
+   */
+  return goal_alfa - robot_alfa;
 }
 
 
