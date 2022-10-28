@@ -1,6 +1,10 @@
 #include "uahrk_navigation/MoveToPoseNode.hpp"
 using namespace std::chrono_literals;
 
+extern "C"{
+    #include <cassert>
+}
+
 MoveToPoseNode::MoveToPoseNode()
   : Node("minimal_publisher"), count_(0)
   {
@@ -25,10 +29,20 @@ int spin_to_goal(float robot_alfa, float goal_alfa){
    * angle goal.
    * 
    * @param robot_alfa Actual rotation of the robot
-   * in degrees.
+   * in degrees, the expected range is from 
+   * -180 to 180 (ROS STANDARD).
    * @param goal_alfa Goal rotation in degrees 
-   * 
+   * the expected range is from  -180 to 180
+   * (ROS STANDARD).
    */
+  
+  // Check that arguments are in the expected range
+  assert(robot_alfa <=  180);
+  assert(robot_alfa >= -180);
+  assert(goal_alfa  <=  180);
+  assert(goal_alfa  >= -180);
+
+
   int spin = goal_alfa - robot_alfa;
   if      (spin >  180) return spin - 360;
   else if (spin < -180) return spin + 360;
