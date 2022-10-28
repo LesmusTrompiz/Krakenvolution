@@ -25,9 +25,9 @@ int spin_to_goal(float robot_alfa, float goal_alfa){
    * angle goal.
    * 
    * @param robot_alfa Actual rotation of the robot
-   * in degrees, the valid range is (-180º, 180º)
-   * @param goal_alfa Goal rotation in degrees, 
-   * the valid range is (-180º, 180º)
+   * in degrees.
+   * @param goal_alfa Goal rotation in degrees 
+   * 
    */
   int spin = goal_alfa - robot_alfa;
   if      (spin >  180) return spin - 360;

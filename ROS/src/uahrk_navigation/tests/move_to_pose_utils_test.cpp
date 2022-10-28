@@ -2,7 +2,7 @@
 #include "uahrk_navigation/MoveToPoseNode.hpp"
 
 
-TEST(CalculateSpinTest, ZeroTo90){
+TEST(SpinTest, ZeroTo90){
   /**
    * @test The robot has a 0º orientation 
    * and the goal is at 90º, the robot must
@@ -16,7 +16,7 @@ TEST(CalculateSpinTest, ZeroTo90){
 }
 
 
-TEST(CalculateSpinTest, ZeroTo180){
+TEST(SpinTest, ZeroTo180){
   /**
    * @test The robot has a 0º orientation 
    * and the goal is at 180º, the robot must
@@ -29,7 +29,7 @@ TEST(CalculateSpinTest, ZeroTo180){
   ASSERT_EQ(spin, 180);
 }
 
-TEST(CalculateSpinTest, ZeroToMinus180){
+TEST(SpinTest, ZeroToMinus180){
   /**
    * @test The robot has a 0º orientation 
    * and the goal is at -180º, the robot must
@@ -42,7 +42,7 @@ TEST(CalculateSpinTest, ZeroToMinus180){
   ASSERT_EQ(spin, -180);
 }
 
-TEST(CalculateSpinTest, Minus170To170){
+TEST(SpinTest, Minus170To170){
   /**
    * @test The robot has a -170º orientation 
    * and the goal is at 170º, the robot must
@@ -55,7 +55,7 @@ TEST(CalculateSpinTest, Minus170To170){
   ASSERT_EQ(spin, -20);
 }
 
-TEST(CalculateSpinTest, Plus170ToMinus170){
+TEST(SpinTest, Plus170ToMinus170){
   /**
    * @test The robot has a -170º orientation 
    * and the goal is at 170º, the robot must
@@ -68,7 +68,7 @@ TEST(CalculateSpinTest, Plus170ToMinus170){
   ASSERT_EQ(spin, 20);
 }
 
-TEST(CalculateSpinTest, Minus100To30){
+TEST(SpinTest, Minus100To30){
   /**
    * @test The robot has a -100º orientation 
    * and the goal is at 30º, the robot must
@@ -81,7 +81,7 @@ TEST(CalculateSpinTest, Minus100To30){
   ASSERT_EQ(spin, 130);
 }
 
-TEST(CalculateSpinTest, Minus180To180){
+TEST(SpinTest, Minus180To180){
   /**
    * @test The robot has a -180º orientation 
    * and the goal is at 180º, the robot must
@@ -93,3 +93,36 @@ TEST(CalculateSpinTest, Minus180To180){
   spin = spin_to_goal(robot_alfa, goal_alfa);
   ASSERT_EQ(spin, 0);
 }
+
+
+TEST(NotItRangeInput, RobotAlfa185){
+    // The only object is the whole scan
+    float robot_alfa =  185.0;
+    float goal_alfa  =   40.0;
+    EXPECT_DEBUG_DEATH(spin_to_goal(robot_alfa, goal_alfa),"");
+}
+
+TEST(NotItRangeInput, RobotAlfaMinus190){
+    // The only object is the whole scan
+    float robot_alfa = -190.0;
+    float goal_alfa  =   40.0;
+    EXPECT_DEBUG_DEATH(spin_to_goal(robot_alfa, goal_alfa),"");
+}
+
+TEST(NotItRangeInput, GoalAlfa190){
+    // The only object is the whole scan
+    float robot_alfa =   30.0;
+    float goal_alfa  =  190.0;
+    EXPECT_DEBUG_DEATH(spin_to_goal(robot_alfa, goal_alfa),"");
+}
+
+TEST(NotItRangeInput, GoalAlfaMinus190){
+    // The only object is the whole scan
+    float robot_alfa =   30.0;
+    float goal_alfa  = -190.0;
+    EXPECT_DEBUG_DEATH(spin_to_goal(robot_alfa, goal_alfa),"");
+}
+
+
+
+
