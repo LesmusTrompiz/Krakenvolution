@@ -54,9 +54,9 @@ if(BUILD_TESTING)
   #find_package(ros_testing REQUIRED)
 
   #ament_lint_auto_find_test_dependencies()
-  ament_add_gtest(move_to_pose_utils_test tests/move_to_pose_utils_test.cpp)
-  ament_target_dependencies(move_to_pose_utils_test ${dependencies})
-target_link_libraries(move_to_pose_utils_test ${PROJECT_NAME})
+  ament_add_gtest(spin_to_goal_test tests/spin_to_goal_test.cpp)
+  ament_target_dependencies(spin_to_goal_test ${dependencies})
+target_link_libraries(spin_to_goal_test ${PROJECT_NAME})
 endif()
 
 
