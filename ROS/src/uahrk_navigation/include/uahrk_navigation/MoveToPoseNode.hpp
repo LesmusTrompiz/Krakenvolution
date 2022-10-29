@@ -2,6 +2,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include "uahrk_navigation/point2d.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -18,7 +19,7 @@ class MoveToPoseNode : public rclcpp::Node
     
 };
 
-
 int spin_to_goal(float robot_alfa, float goal_alfa);
+inline int advance_to_goal(const Point2d &robot, const Point2d &goal);
 
 
