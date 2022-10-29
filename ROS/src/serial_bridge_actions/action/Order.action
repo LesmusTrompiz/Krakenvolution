@@ -1,0 +1,6 @@
+string  id
+int16   arg
+---
+int16   ret
+---
+bool    sent
