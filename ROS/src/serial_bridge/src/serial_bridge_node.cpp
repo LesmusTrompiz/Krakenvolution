@@ -30,13 +30,11 @@ class SerialBridgeNode : public rclcpp::Node
 
   private:
     void timer_callback();
-    rclcpp::TimerBase::SharedPtr timer_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     rclcpp_action::Server<serial_bridge::action::Order>::SharedPtr order_server;
 };
 
 SerialBridgeNode::SerialBridgeNode(std::string port_name)
-: Node("serial_bridge_node"), count_(0),vprotocol()
+: Node("serial_bridge_node")
 {
   using namespace std::placeholders;
   
@@ -53,14 +51,6 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
 
 SerialBridgeNode::~SerialBridgeNode(){}
 
-
-void SerialBridgeNode::timer_callback()
-{
-  auto message = std_msgs::msg::String();
-  message.data = "Hello, world! " + std::to_string(count_++);
-  RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-  publisher_->publish(message);
-}
 
 
 rclcpp_action::GoalResponse SerialBridgeNode::handle_goal(
@@ -91,8 +81,6 @@ void SerialBridgeNode::handle_accepted(const
   goal_handle->succeed(result);
   return;
 }
-
-
 
 int main(int argc, char * argv[])
 {
