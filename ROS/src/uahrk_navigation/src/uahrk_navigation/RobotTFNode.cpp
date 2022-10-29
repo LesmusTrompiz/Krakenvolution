@@ -1,5 +1,4 @@
 #include "uahrk_navigation/RobotTFNode.hpp"
-#include <iostream>
 
 using namespace std::chrono_literals;
 
