@@ -43,6 +43,30 @@ TEST(AdvanceTest, From00To05){
   ASSERT_EQ(advance, 5);
 }
 
+TEST(AdvanceTest, From00To34){
+  /**
+   * @test The robot is in a (0,0) coords
+   * and the goal is in (3,4), it has to
+   * advance 5 coords unit.
+   */
+  Point2d robot {0,0};
+  Point2d goal  {3,4};
+  int advance;
+  advance = advance_to_goal(robot, goal);
+  ASSERT_EQ(advance, 5);
+}
 
+TEST(AdvanceTest, FromMinus1Minus1To23){
+  /**
+   * @test The robot is in a (0,0) coords
+   * and the goal is in (3,4), it has to
+   * advance 5 coords unit.
+   */
+  Point2d robot {-1,-1};
+  Point2d goal  { 2, 3};
+  int advance;
+  advance = advance_to_goal(robot, goal);
+  ASSERT_EQ(advance, 5);
+}
 
 
