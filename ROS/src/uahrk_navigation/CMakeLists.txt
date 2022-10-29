@@ -16,8 +16,10 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(serial_bridge_actions REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(uahrk_navigation_msgs REQUIRED)
 
-# find_package(rclcpp_action REQUIRED)
 
 
 set(dependencies
@@ -25,8 +27,9 @@ set(dependencies
   geometry_msgs
   tf2 
   tf2_ros
-
-  # rclcpp_action
+  serial_bridge_actions
+  rclcpp_action
+  uahrk_navigation_msgs
 )
 
 include_directories(include)
