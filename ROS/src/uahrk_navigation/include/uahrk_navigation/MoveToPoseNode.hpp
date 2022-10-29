@@ -20,6 +20,21 @@ class MoveToPoseNode : public rclcpp::Node
 };
 
 int spin_to_goal(float robot_alfa, float goal_alfa);
-inline int advance_to_goal(const Point2d &robot, const Point2d &goal);
+
+inline int advance_to_goal(const Point2d &robot, const Point2d &goal){
+  /**
+   * @brief This function calculates the advance
+   * needed by the robot to accomplish the xy
+   * goal.
+   * 
+   * @param robot Actual xy position of the robot
+   * @param goal Goal xy position of the goal
+   */
+  
+    // Return the eculidean distance
+    return sqrt(((robot.x - goal.x) * (robot.x - goal.x)) + ((robot.y - goal.y) * (robot.y - goal.y)));
+}
+
+
 
 

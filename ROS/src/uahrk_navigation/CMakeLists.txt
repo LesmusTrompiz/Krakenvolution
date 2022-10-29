@@ -12,14 +12,20 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-#find_package(rclcpp_action REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+
+# find_package(rclcpp_action REQUIRED)
 
 
 set(dependencies
   rclcpp
+  geometry_msgs
+  tf2 
+  tf2_ros
+
   # rclcpp_action
 )
 
@@ -32,15 +38,19 @@ add_library(${PROJECT_NAME} SHARED
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-
 add_executable(move_to_pose_main src/move_to_pose_main.cpp)
 ament_target_dependencies(move_to_pose_main ${dependencies})
 target_link_libraries(move_to_pose_main ${PROJECT_NAME})
+
+add_executable(robot_tf_main src/robot_tf_main.cpp)
+ament_target_dependencies(robot_tf_main ${dependencies})
+target_link_libraries(robot_tf_main ${PROJECT_NAME})
 
 
 install(TARGETS
   ${PROJECT_NAME}
   move_to_pose_main
+  robot_tf_main
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
@@ -56,7 +66,11 @@ if(BUILD_TESTING)
   #ament_lint_auto_find_test_dependencies()
   ament_add_gtest(spin_to_goal_test tests/spin_to_goal_test.cpp)
   ament_target_dependencies(spin_to_goal_test ${dependencies})
-target_link_libraries(spin_to_goal_test ${PROJECT_NAME})
+  target_link_libraries(spin_to_goal_test ${PROJECT_NAME})
+
+  ament_add_gtest(advance_to_goal_test tests/advance_to_goal_test.cpp)
+  ament_target_dependencies(advance_to_goal_test ${dependencies})
+  target_link_libraries(advance_to_goal_test ${PROJECT_NAME})
 endif()
 
 
