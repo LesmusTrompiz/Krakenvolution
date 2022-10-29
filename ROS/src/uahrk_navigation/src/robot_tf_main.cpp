@@ -1,5 +1,5 @@
 #include "uahrk_navigation/RobotTFNode.hpp"
-
+#include <iostream>
 int main(int argc, char * argv[])
 {
   // Pass parameters and initialize node
