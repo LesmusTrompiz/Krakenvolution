@@ -8,7 +8,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "serial_bridge/action/order.hpp"
+#include "serial_bridge_actions/action/order.hpp"
 #include "protocol.hpp"
 
 using namespace std::chrono_literals;
@@ -17,7 +17,7 @@ using namespace std::chrono_literals;
 class SerialBridgeNode : public rclcpp::Node
 {
   public:
-    using Order     = serial_bridge::action::Order;
+    using Order     = serial_bridge_actions::action::Order;
     using GoalOrder = rclcpp_action::ServerGoalHandle<Order>;
     SerialBridgeNode(std::string port_name);
     ~SerialBridgeNode();
@@ -30,7 +30,7 @@ class SerialBridgeNode : public rclcpp::Node
 
   private:
     void timer_callback();
-    rclcpp_action::Server<serial_bridge::action::Order>::SharedPtr order_server;
+    rclcpp_action::Server<serial_bridge_actions::action::Order>::SharedPtr order_server;
 };
 
 SerialBridgeNode::SerialBridgeNode(std::string port_name)
@@ -38,7 +38,7 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
 {
   using namespace std::placeholders;
   
-  order_server =  rclcpp_action::create_server<serial_bridge::action::Order>(
+  order_server =  rclcpp_action::create_server<serial_bridge_actions::action::Order>(
     this,
     "serial_bridge_server",
     std::bind(&SerialBridgeNode::handle_goal,     this, _1, _2),

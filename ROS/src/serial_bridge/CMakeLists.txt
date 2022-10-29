@@ -18,16 +18,12 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(serial_bridge_actions REQUIRED)
 
-ament_export_dependencies(rosidl_default_runtime)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/Order.action"
-)
 
 
 
@@ -48,16 +44,11 @@ include_directories(
 
 add_executable(serial src/serial_bridge_node.cpp ${PROTOCOL_SRC})
 target_link_libraries(serial)
-
-
-ament_target_dependencies(serial rclcpp std_msgs rclcpp_action)
+ament_target_dependencies(serial rclcpp std_msgs rclcpp_action serial_bridge_actions)
 
 install(TARGETS
   serial
   DESTINATION lib/${PROJECT_NAME})
-
-rosidl_target_interfaces(serial
-  ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest)
