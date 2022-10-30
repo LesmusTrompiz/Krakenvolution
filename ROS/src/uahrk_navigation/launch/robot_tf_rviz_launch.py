@@ -13,19 +13,30 @@ def generate_launch_description():
         output      = 'screen'
     )
     
+    # Rviz interface node
+    rviz2_interface = Node(
+        package='uahrk_navigation',
+        executable='rviz_interface',
+        output='screen'
+    )
+
+
+
+
     # Rviz2 with a configurated view to see the tfs
     pkg_dir     = get_package_share_directory('uahrk_navigation')
     config_file = join(pkg_dir, 'config/rviz', 'Tf_config')
 
-    rviz2_tf = Node(
+    rviz2 = Node(
         package='rviz2',
         executable='rviz2',
         arguments=['-d' + config_file],
-        output='screen'
     )
+
 
     ld = LaunchDescription()
     ld.add_action(robot_tf)
-    ld.add_action(rviz2_tf)
+    ld.add_action(rviz2_interface)
+    ld.add_action(rviz2)
 
     return ld
