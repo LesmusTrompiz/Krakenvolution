@@ -46,13 +46,23 @@ rclcpp_action::CancelResponse MoveToPoseNode::handle_cancel(
 void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> goal_handle)
 {
   using namespace std::placeholders;
-  auto result = std::make_shared<GoToPose::Result>();
 
-  result->result.data = true;
-  goal_handle->succeed(result);
   // this needs to return quickly to avoid blocking the executor, so spin up a new thread
-  //std::thread{std::bind(&FibonacciActionServer::execute, this, _1), goal_handle}.detach();
+  std::thread{std::bind(&MoveToPoseNode::execute, this, _1), goal_handle}.detach();
 }
+
+
+void MoveToPoseNode::execute(const std::shared_ptr<GoalHandleGoToPose> goal_handle)
+{
+  RCLCPP_INFO(this->get_logger(), "Executing goal");
+  rclcpp::Rate loop_rate(1);
+  const auto goal = goal_handle->get_goal();
+  auto result = std::make_shared<GoToPose::Result>();
+  result->result.data = true;
+  RCLCPP_INFO(this->get_logger(), "Goal executed");
+  goal_handle->succeed(result);
+}
+
 
 
 

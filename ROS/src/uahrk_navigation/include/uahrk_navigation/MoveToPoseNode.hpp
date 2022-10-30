@@ -39,6 +39,7 @@ class MoveToPoseNode : public rclcpp::Node
     void handle_accepted(
       const std::shared_ptr<GoalHandleGoToPose> goal_handle);
     
+    void execute(const std::shared_ptr<GoalHandleGoToPose> goal_handle);
 };
 
 int spin_to_goal(float robot_alfa, float goal_alfa);
