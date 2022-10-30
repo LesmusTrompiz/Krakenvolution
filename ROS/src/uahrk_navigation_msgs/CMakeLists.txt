@@ -17,11 +17,11 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
 find_package(rosidl_default_generators REQUIRED)
-
+find_package(geometry_msgs REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/GoToPose.action"
+  DEPENDENCIES geometry_msgs
 )
 
 
