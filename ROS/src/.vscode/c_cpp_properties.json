@@ -10,7 +10,7 @@
                 "${workspaceFolder}/**",
                 "/opt/ros/foxy/include/**",
                 "~/catkin_ws/devel/include/**",
-                "~/ws/Krakenvolution/ROS/devel/include/**"
+                "~/ws/Krakenvolution/ROS/install/**"
 
             ],
             "defines": [],
