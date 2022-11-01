@@ -15,6 +15,8 @@
 
 
 using Order     = serial_bridge_actions::action::Order;
+using RequestHandleOrder = rclcpp_action::ClientGoalHandle<Order>;
+
 using GoToPose  = uahrk_navigation_msgs::action::GoToPose;
 using GoalHandleGoToPose = rclcpp_action::ServerGoalHandle<GoToPose>;
 
@@ -40,6 +42,9 @@ class MoveToPoseNode : public rclcpp::Node
       const std::shared_ptr<GoalHandleGoToPose> goal_handle);
     
     void execute(const std::shared_ptr<GoalHandleGoToPose> goal_handle);
+    void result_callback(const RequestHandleOrder::WrappedResult & result);
+    void send_order();
+
 };
 
 int spin_to_goal(float robot_alfa, float goal_alfa);
