@@ -46,8 +46,14 @@ add_executable(serial src/serial_bridge_node.cpp ${PROTOCOL_SRC})
 target_link_libraries(serial)
 ament_target_dependencies(serial rclcpp std_msgs rclcpp_action serial_bridge_actions)
 
+add_executable(dummy_serial src/dummy_serial_bridge_node.cpp ${PROTOCOL_SRC})
+target_link_libraries(dummy_serial)
+ament_target_dependencies(dummy_serial rclcpp std_msgs rclcpp_action serial_bridge_actions)
+
+
 install(TARGETS
   serial
+  dummy_serial
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
