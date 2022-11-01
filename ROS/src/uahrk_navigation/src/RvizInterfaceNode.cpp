@@ -9,6 +9,8 @@
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "uahrk_navigation_msgs/action/go_to_pose.hpp"
+#include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
 
 
@@ -26,7 +28,7 @@ class RvizInterfaceNode : public rclcpp::Node
     RvizInterfaceNode()
     : Node("rviz_interface")
     {
-      publisher_    = this->create_publisher<geometry_msgs::msg::Pose>("robot_odom", 10);
+      set_pose_client = this->create_client<uahrk_navigation_msgs::srv::SetPose2d>("set_pose");
       subscription_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
                   "initialpose", 10,
                 std::bind(&RvizInterfaceNode::pose_estimate_callback, this, std::placeholders::_1));
@@ -40,11 +42,21 @@ class RvizInterfaceNode : public rclcpp::Node
   private:
     void pose_estimate_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr rviz_pose)
     {
-      geometry_msgs::msg::Pose p;
-      p.position    = rviz_pose->pose.pose.position;
-      p.orientation = rviz_pose->pose.pose.orientation;
-      publisher_->publish(p);
-      RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", p.position.x);
+
+      tf2::Quaternion q(
+        rviz_pose->pose.pose.orientation.x,
+        rviz_pose->pose.pose.orientation.y,
+        rviz_pose->pose.pose.orientation.z,
+        rviz_pose->pose.pose.orientation.w);
+      tf2::Matrix3x3 m(q);
+      double roll, pitch, yaw;
+      m.getRPY(roll, pitch, yaw);
+
+      auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
+      request->x = rviz_pose->pose.pose.position.x;
+      request->y = rviz_pose->pose.pose.position.y;
+      request->a = yaw * 180 / M_PI;
+      set_pose_client->async_send_request(request);
       return;
     }
 
@@ -93,9 +105,10 @@ class RvizInterfaceNode : public rclcpp::Node
 
     rclcpp_action::Client<GoToPose>::SharedPtr client_ptr_;
     rclcpp::TimerBase::SharedPtr timer_;
-    rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr publisher_;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr subscription_;
     rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription2_;
+    rclcpp::Client<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr set_pose_client;
+
 };
 
 int main(int argc, char * argv[])
