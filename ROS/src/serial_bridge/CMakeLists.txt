@@ -20,11 +20,10 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(serial_bridge_actions REQUIRED)
-
-
-
+find_package(uahrk_navigation_msgs REQUIRED)
 
 
 
@@ -44,11 +43,11 @@ include_directories(
 
 add_executable(serial src/serial_bridge_node.cpp ${PROTOCOL_SRC})
 target_link_libraries(serial)
-ament_target_dependencies(serial rclcpp std_msgs rclcpp_action serial_bridge_actions)
+ament_target_dependencies(serial rclcpp std_msgs geometry_msgs rclcpp_action serial_bridge_actions uahrk_navigation_msgs)
 
 add_executable(dummy_serial src/dummy_serial_bridge_node.cpp ${PROTOCOL_SRC})
 target_link_libraries(dummy_serial)
-ament_target_dependencies(dummy_serial rclcpp std_msgs rclcpp_action serial_bridge_actions)
+ament_target_dependencies(dummy_serial rclcpp std_msgs geometry_msgs rclcpp_action serial_bridge_actions uahrk_navigation_msgs)
 
 
 install(TARGETS
