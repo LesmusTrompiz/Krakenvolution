@@ -13,6 +13,12 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 
 using namespace std::chrono_literals;
 
@@ -137,6 +143,8 @@ void DummySerialBridgeNode::handle_accepted(const
   const auto goal = goal_handle->get_goal();
   RCLCPP_INFO(this->get_logger(), "Handling order: Id %s, Arg %d", goal->id.c_str(), goal->arg);
   
+  sleep(1);
+
   if (goal->id=="advance")  simulate_advance(odom,goal->arg);
   else if(goal->id=="spin") simulate_spin(odom,goal->arg);
   
