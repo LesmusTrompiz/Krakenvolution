@@ -171,10 +171,8 @@ rclcpp_action::CancelResponse MoveToPoseNode::handle_cancel(
 
 void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> goal_handle)
 {
-  using namespace std::placeholders;
-
-  // this needs to return quickly to avoid blocking the executor, so spin up a new thread
-  //std::thread{std::bind(&MoveToPoseNode::execute, this, _1), goal_handle}.detach();
+  // Update the actual handle variable an
+  // acomplish the goal in control_cycle
   actual_handle = goal_handle;
 }
 
@@ -183,70 +181,5 @@ Pose2d MoveToPoseNode::get_robot_pose(){
       "map", "robot", tf2::TimePointZero);
     return {robot_pose};
 }
-
-void MoveToPoseNode::execute(const std::shared_ptr<GoalHandleGoToPose> goal_handle)
-{
-  RCLCPP_INFO(this->get_logger(), "Executing goal");
-  float dist_precision  = 0.05;
-  float angle_precision = 0.05;
-  int dist = 0;
-  int spin = 0;
-
-  rclcpp::Rate loop_rate(1);
-  const auto goal = goal_handle->get_goal();
-  auto result = std::make_shared<GoToPose::Result>();
-  Pose2d g{goal->pose.pose};
-  Pose2d robot_pose;
-
-  while(true){
-    try {
-      robot_pose = get_robot_pose();
-    }
-    catch (tf2::TransformException & ex) {
-      RCLCPP_WARN(get_logger(), "Obstacle transform not found: %s", ex.what());
-      goal_handle->abort(result);
-      return;
-    }
-    RCLCPP_INFO(this->get_logger(), "robot_pose %f %f %f", robot_pose.x, robot_pose.y, robot_pose.a);
-    RCLCPP_INFO(this->get_logger(), "goal_pose %f %f %f", g.x, g.y, g.a);
-
-    dist = advance_to_goal(robot_pose, g);
-    spin = spin_to_goal(robot_pose.a, g.a);
-    if(dist <= dist_precision){
-      if(spin <= angle_precision){
-        result->result.data = true;
-        goal_handle->succeed(result);
-        return;
-      }
-      else{
-        send_order("spin",spin);
-      }
-    }
-    else{
-      spin = spin_to_wp(robot_pose, g);
-      if ((spin < 5) && (spin > -5)){
-        send_order("advance",dist * 1000);
-      }
-      else{
-        send_order("spin",spin);
-      }
-    }
-    loop_rate.sleep();
-  }
-  RCLCPP_INFO(this->get_logger(), "Goal executed");
-  return;
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -67,7 +67,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "*.srv": "cpp"
     },
     "python.autoComplete.extraPaths": [
         "/home/trompiz/ws/Krakenvolution/ROS/install/serial_bridge/lib/python3.8/site-packages",
