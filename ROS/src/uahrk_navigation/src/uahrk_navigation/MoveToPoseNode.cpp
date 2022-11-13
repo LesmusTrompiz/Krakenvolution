@@ -14,7 +14,6 @@ MoveToPoseNode::MoveToPoseNode()
     
     order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
     
-    
     go_to_pose_server = rclcpp_action::create_server<GoToPose>(
       this,
       "move_server",
@@ -64,12 +63,12 @@ void MoveToPoseNode::control_cycle(){
       }
       catch (const std::exception &exc)
       {
-          // catch anything thrown within try block that derives from std::exception
-          std::cerr << exc.what();
-          RCLCPP_ERROR(get_logger(), "Unknown Exception not found: %s", exc.what());
-          actual_handle->abort(result);
-          state = IDLE;
-          return;
+        // catch anything thrown within try block that derives from std::exception
+        std::cerr << exc.what();
+        RCLCPP_ERROR(get_logger(), "Unknown Exception not found: %s", exc.what());
+        actual_handle->abort(result);
+        state = IDLE;
+        return;
       }
     break;
     case EXECUTING:
@@ -94,6 +93,8 @@ void MoveToPoseNode::control_cycle(){
       }
     break;
   default:
+    RCLCPP_ERROR(get_logger(), "Unknown state %i in the control cycle loop", state);
+    state = IDLE;
     break;
   }
 }
