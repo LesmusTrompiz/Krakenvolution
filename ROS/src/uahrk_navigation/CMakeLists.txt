@@ -38,6 +38,7 @@ include_directories(include)
 add_library(${PROJECT_NAME} SHARED
   src/uahrk_navigation/MoveToPoseNode.cpp
   src/uahrk_navigation/RobotTFNode.cpp
+  src/uahrk_navigation/move_utils.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})

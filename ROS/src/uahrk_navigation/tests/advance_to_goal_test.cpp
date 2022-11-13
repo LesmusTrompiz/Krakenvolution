@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "uahrk_navigation/MoveToPoseNode.hpp"
-#include "uahrk_navigation/pose2d.hpp"
+#include "uahrk_navigation/move_utils.hpp"
+
 
 
 TEST(AdvanceTest, From00To20){

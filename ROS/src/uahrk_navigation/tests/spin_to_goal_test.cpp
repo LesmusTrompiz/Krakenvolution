@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "uahrk_navigation/MoveToPoseNode.hpp"
+#include "uahrk_navigation/move_utils.hpp"
+
 
 
 TEST(SpinTest, ZeroTo90){
