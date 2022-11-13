@@ -30,8 +30,8 @@ class MoveToPoseNode : public rclcpp::Node
   private:
     rclcpp_action::Server<GoToPose>::SharedPtr go_to_pose_server;
     rclcpp_action::Client<Order>::SharedPtr    order_client;
-    tf2::BufferCore tf_buffer_;
-    tf2_ros::TransformListener tf_listener_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
+    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     rclcpp::TimerBase::SharedPtr timer_;
     ControlState state;        
     rclcpp_action::ResultCode order_result;

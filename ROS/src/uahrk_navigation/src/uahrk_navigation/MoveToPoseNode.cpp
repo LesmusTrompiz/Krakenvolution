@@ -1,14 +1,15 @@
 #include "uahrk_navigation/MoveToPoseNode.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-
+#include <chrono>
 using namespace std::chrono_literals;
 
 
 MoveToPoseNode::MoveToPoseNode()
-  : Node("move_to_pose_node"),
-    tf_buffer_(),
-    tf_listener_(tf_buffer_)
+  : Node("move_to_pose_node")
   {
+
+    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     //RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     using namespace std::placeholders;
     
@@ -178,9 +179,10 @@ void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> g
 }
 
 Pose2d MoveToPoseNode::get_robot_pose(){
-    auto robot_pose = tf_buffer_.lookupTransform(
-      "map", "robot", tf2::TimePointZero);
-    return {robot_pose};
+    rclcpp::Time now = this->get_clock()->now();
+    geometry_msgs::msg::TransformStamped robot_tf = tf_buffer_->lookupTransform(
+      "map", "robot", now, 50ms);
+    return {robot_tf};
 }
 
 
