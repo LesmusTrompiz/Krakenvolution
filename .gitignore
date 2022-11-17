@@ -134,4 +134,9 @@ ROS/build
 ROS/install
 ROS/log
 
+# Vscode folders
+.vscode/*
+.vs/*
+
+
 
