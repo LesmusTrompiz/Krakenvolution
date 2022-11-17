@@ -7,12 +7,12 @@ using namespace std::chrono_literals;
 MoveToPoseNode::MoveToPoseNode()
   : Node("move_to_pose_node")
   {
-
-    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-    //RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     using namespace std::placeholders;
+
+    tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     
+
     order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
     
     go_to_pose_server = rclcpp_action::create_server<GoToPose>(
@@ -110,6 +110,10 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
   auto send_goal_options = rclcpp_action::Client<Order>::SendGoalOptions();
   auto goal_msg = Order::Goal();
   order_result = rclcpp_action::ResultCode::UNKNOWN;
+
+  if (order_client->wait_for_action_server(300ms)){
+    throw std::logic_error(error_msg.str("Could not contact the Serial Bridge Server. Throwing an exception"));
+  }
 
   send_goal_options.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
 
