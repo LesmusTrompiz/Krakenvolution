@@ -111,7 +111,7 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
   auto goal_msg = Order::Goal();
   order_result = rclcpp_action::ResultCode::UNKNOWN;
 
-  if (order_client->wait_for_action_server(300ms)){
+  if (!order_client->wait_for_action_server(300ms)){
     throw std::logic_error("Could not contact the Serial Bridge Server. Throwing an exception");
   }
 
