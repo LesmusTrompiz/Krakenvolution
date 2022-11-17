@@ -112,7 +112,7 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
   order_result = rclcpp_action::ResultCode::UNKNOWN;
 
   if (order_client->wait_for_action_server(300ms)){
-    throw std::logic_error(error_msg.str("Could not contact the Serial Bridge Server. Throwing an exception"));
+    throw std::logic_error("Could not contact the Serial Bridge Server. Throwing an exception");
   }
 
   send_goal_options.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
