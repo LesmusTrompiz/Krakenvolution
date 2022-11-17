@@ -19,7 +19,7 @@ RobotTFNode::RobotTFNode() : Node("RobotTFNode"){
   // Create a timer that will call the control_cycle
   // every 100ms
   timer_ = create_wall_timer(
-    100ms, std::bind(&RobotTFNode::control_cycle, this));
+    50ms, std::bind(&RobotTFNode::control_cycle, this));
 }
 
 

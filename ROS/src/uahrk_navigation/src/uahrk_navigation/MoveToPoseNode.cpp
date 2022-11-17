@@ -185,7 +185,7 @@ void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> g
 Pose2d MoveToPoseNode::get_robot_pose(){
     rclcpp::Time now = this->get_clock()->now();
     geometry_msgs::msg::TransformStamped robot_tf = tf_buffer_->lookupTransform(
-      "map", "robot", now, 50ms);
+      "map", "robot", now, 100ms);
     return {robot_tf};
 }
 
