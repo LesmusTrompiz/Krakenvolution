@@ -137,6 +137,9 @@ ROS/log
 # Vscode folders
 .vscode/*
 .vs/*
+*/.vscode/*
+*/*/.vscode/*
+*/*/*/.vscode/*
 
 
 
