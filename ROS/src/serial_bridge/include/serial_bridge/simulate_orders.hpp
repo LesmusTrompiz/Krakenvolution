@@ -6,6 +6,10 @@ extern "C"{
     #include <math.h>
 }
 
+constexpr float MIN_DIST = 100;
+constexpr float MIN_SPIN = 5;
+
+
 void simulate_advance(Pose2d &p,int distance);
 void simulate_spin(Pose2d &p,int spin);
 inline float DEG2RAD(const float deg)

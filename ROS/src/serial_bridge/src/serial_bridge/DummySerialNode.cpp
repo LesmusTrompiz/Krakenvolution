@@ -72,20 +72,27 @@ void DummySerialBridgeNode::handle_accepted(const
   const auto goal = goal_handle->get_goal();
   RCLCPP_INFO(this->get_logger(), "Handling order: Id %s, Arg %d", goal->id.c_str(), goal->arg);
   
-  sleep(1);
-
-  auto sim_fn = simulate.find(goal->id);
-  if (sim_fn != simulate.end()){
-    sim_fn->second(odom,goal->arg);
-    auto result   = std::make_shared<Order::Result>();
-    goal_handle->succeed(result);
-    return;
+  try
+  {
+    auto sim_fn = simulate.find(goal->id);
+    if (sim_fn != simulate.end()){
+      sim_fn->second(odom,goal->arg);
+      auto result   = std::make_shared<Order::Result>();
+      goal_handle->succeed(result);
+      return;
+    }
+    else{
+      auto result   = std::make_shared<Order::Result>();
+      RCLCPP_ERROR(this->get_logger(), "Error : Id %s is not an RMI function", goal->id.c_str());
+      goal_handle->canceled(result);
+      return;
+    }
   }
-  else{
+  catch(const std::exception& e)
+  {
     auto result   = std::make_shared<Order::Result>();
-    RCLCPP_INFO(this->get_logger(), "Error : Id %s is not an RMI function", goal->id.c_str());
+    RCLCPP_ERROR(this->get_logger(), "Error : simulating action %s", e.what());
     goal_handle->canceled(result);
-    return;
   }
 }
 
