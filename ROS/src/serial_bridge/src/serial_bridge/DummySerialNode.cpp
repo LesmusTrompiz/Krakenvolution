@@ -83,9 +83,13 @@ void DummySerialBridgeNode::handle_accepted(const
 
   if (goal->id=="advance")  simulate_advance(odom,goal->arg);
   else if(goal->id=="spin") simulate_spin(odom,goal->arg);
-  
+  else{
+    auto result   = std::make_shared<Order::Result>();
+    RCLCPP_INFO(this->get_logger(), "Error : Id %s is not an RMI function", goal->id.c_str());
+    goal_handle->canceled(result);
+    return;
+  }
   auto result   = std::make_shared<Order::Result>();
-  //result.return = rmi.invoque(goal->id,goal->arg);
   goal_handle->succeed(result);
   return;
 }
