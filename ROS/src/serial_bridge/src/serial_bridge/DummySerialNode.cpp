@@ -1,8 +1,5 @@
 #include "serial_bridge/DummySerialNode.hpp"
 
-
-
-
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -11,6 +8,7 @@
 
 
 using namespace std::chrono_literals;
+
 
 
 
@@ -24,11 +22,6 @@ geometry_msgs::msg::Pose Pose2dtoPose(const Pose2d &p2d)
   tf2::convert(quat_tf.normalize(), p.orientation);
   return p;
 }
-
-
-
-
-
 
 DummySerialBridgeNode::DummySerialBridgeNode(std::string port_name)
 : Node("dummy_serial_bridge_node")
@@ -81,17 +74,19 @@ void DummySerialBridgeNode::handle_accepted(const
   
   sleep(1);
 
-  if (goal->id=="advance")  simulate_advance(odom,goal->arg);
-  else if(goal->id=="spin") simulate_spin(odom,goal->arg);
+  auto sim_fn = simulate.find(goal->id);
+  if (sim_fn != simulate.end()){
+    sim_fn->second(odom,goal->arg);
+    auto result   = std::make_shared<Order::Result>();
+    goal_handle->succeed(result);
+    return;
+  }
   else{
     auto result   = std::make_shared<Order::Result>();
     RCLCPP_INFO(this->get_logger(), "Error : Id %s is not an RMI function", goal->id.c_str());
     goal_handle->canceled(result);
     return;
   }
-  auto result   = std::make_shared<Order::Result>();
-  goal_handle->succeed(result);
-  return;
 }
 
 void DummySerialBridgeNode::control_cycle(){

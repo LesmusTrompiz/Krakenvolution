@@ -1,6 +1,12 @@
 #include "serial_bridge/simulate_orders.hpp"
 
 
+const std::unordered_map<std::string, std::function<void(Pose2d &, int)>> simulate = {
+  {"spin" , simulate_spin},
+  {"advance" , simulate_advance}
+};
+
+
 void simulate_advance(Pose2d &p,int distance)
 {
   float d = (float)distance/1000;
