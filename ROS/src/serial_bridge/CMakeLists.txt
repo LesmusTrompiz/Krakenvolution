@@ -19,11 +19,22 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(serial_bridge_actions REQUIRED)
 find_package(uahrk_navigation_msgs REQUIRED)
+
+
+set(dependencies
+  rclcpp
+  std_msgs
+  geometry_msgs
+  serial_bridge_actions
+  rclcpp_action
+  uahrk_navigation_msgs
+)
 
 
 
@@ -32,28 +43,39 @@ FILE(GLOB PROTOCOL_SRC
   "${PROTOCOL_PATH}/sources/*.cpp"
 )
 
-FILE(GLOB PROTOCOL_HEADERS
-  "${PROTOCOL_PATH}/headers/*.hpp"
+include_directories(include)
+
+add_library(${PROJECT_NAME} SHARED
+  src/serial_bridge/SerialBridgeNode.cpp
+  src/serial_bridge/DummySerialNode.cpp
+  src/serial_bridge/simulate_orders.cpp
+  ${PROTOCOL_SRC}
 )
 
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-include_directories(
-  "${PROTOCOL_PATH}/headers/"
-)
 
-add_executable(serial src/serial_bridge_node.cpp ${PROTOCOL_SRC})
-target_link_libraries(serial)
-ament_target_dependencies(serial rclcpp std_msgs geometry_msgs rclcpp_action serial_bridge_actions uahrk_navigation_msgs)
+add_executable(serial src/serial_bridge_main.cpp)
+ament_target_dependencies(serial ${dependencies})
+target_link_libraries(serial ${PROJECT_NAME})
 
-add_executable(dummy_serial src/dummy_serial_bridge_node.cpp ${PROTOCOL_SRC})
-target_link_libraries(dummy_serial)
-ament_target_dependencies(dummy_serial rclcpp std_msgs geometry_msgs rclcpp_action serial_bridge_actions uahrk_navigation_msgs)
+
+add_executable(dummy_serial src/dummy_serial_main.cpp)
+ament_target_dependencies(dummy_serial ${dependencies})
+target_link_libraries(dummy_serial ${PROJECT_NAME}) 
 
 
 install(TARGETS
+  ${PROJECT_NAME}
   serial
   dummy_serial
-  DESTINATION lib/${PROJECT_NAME})
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest)

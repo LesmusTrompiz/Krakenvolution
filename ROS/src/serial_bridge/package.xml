@@ -8,6 +8,9 @@
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>serial_bridge_actions</buildtool_depend>
+  <buildtool_depend>uahrk_navigation_msgs</buildtool_depend>
+
   <depend>serial_brige_actions</depend>
 
   <exec_depend>ros2launch</exec_depend>
