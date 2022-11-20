@@ -26,6 +26,8 @@ MoveToPoseNode::MoveToPoseNode()
     // every 100ms
     timer_ = create_wall_timer(
       100ms, std::bind(&MoveToPoseNode::control_cycle, this));  
+    RCLCPP_INFO(this->get_logger(), "CONSTRUCTOR -> IDLE STATE");
+    
   }
 
 void MoveToPoseNode::control_cycle(){
@@ -36,30 +38,32 @@ void MoveToPoseNode::control_cycle(){
   switch (state)
   {
     case IDLE:
-      RCLCPP_INFO(this->get_logger(), "IDLE STATE");
       if (actual_handle != nullptr && actual_handle->is_active()){
         state = NEXT_MOVE;
+        RCLCPP_INFO(this->get_logger(), "IDLE -> NEXT MOVE");
       }
     break;
     case NEXT_MOVE:
       try {
-        RCLCPP_INFO(this->get_logger(), "NEXT MOVE STATE");
         auto robot_pose = get_robot_pose();
         Pose2d goal_pose{actual_handle->get_goal()->pose.pose};
         if (robot_in_goal(robot_pose, goal_pose, dist_precision, angle_precision)){
           actual_handle->succeed(result);
           state = IDLE;
+          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
         }
         else{
           auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
           send_order(std::get<0>(move),std::get<1>(move));
           state = EXECUTING;
+          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> EXECUTING");
         }
       }
       catch (tf2::TransformException & ex) {
         RCLCPP_WARN(get_logger(), "Obstacle transform not found: %s", ex.what());
         actual_handle->abort(result);
         state = IDLE;
+        RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
         return;
       }
       catch (const std::exception &exc)
@@ -67,6 +71,7 @@ void MoveToPoseNode::control_cycle(){
         // catch anything thrown within try block that derives from std::exception
         std::cerr << exc.what();
         RCLCPP_ERROR(get_logger(), "Unknown Exception not found: %s", exc.what());
+        RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
         actual_handle->abort(result);
         state = IDLE;
         return;
@@ -75,19 +80,22 @@ void MoveToPoseNode::control_cycle(){
     case EXECUTING:
       // Check out if the order to serial
       // Node has finished
-      RCLCPP_INFO(this->get_logger(), "EXECUTING");
       switch (order_result) {
         case rclcpp_action::ResultCode::SUCCEEDED:
           state = NEXT_MOVE;
+          RCLCPP_INFO(this->get_logger(), "EXECUTING -> NEXT_MOVE");
           break;
         case rclcpp_action::ResultCode::ABORTED:
           actual_handle->abort(result);
           state = IDLE;
           RCLCPP_ERROR(this->get_logger(), "Goal was aborted");
+          RCLCPP_INFO(this->get_logger(), "EXECUTING -> IDLE");
+          break;
         case rclcpp_action::ResultCode::CANCELED:
-          RCLCPP_ERROR(this->get_logger(), "Goal was canceled");
           actual_handle->abort(result);
           state = IDLE;
+          RCLCPP_ERROR(this->get_logger(), "Goal was canceled");
+          RCLCPP_INFO(this->get_logger(), "EXECUTING -> IDLE");
           break;
         default:
           break;
@@ -95,6 +103,7 @@ void MoveToPoseNode::control_cycle(){
     break;
   default:
     RCLCPP_ERROR(get_logger(), "Unknown state %i in the control cycle loop", state);
+    RCLCPP_INFO(this->get_logger(), "UNKNOWN -> IDLE");
     state = IDLE;
     break;
   }
