@@ -72,6 +72,7 @@ void DummySerialBridgeNode::handle_accepted(const
   const auto goal = goal_handle->get_goal();
   RCLCPP_INFO(this->get_logger(), "Handling order: Id %s, Arg %d", goal->id.c_str(), goal->arg);
   
+  sleep(1);
   try
   {
     auto sim_fn = simulate.find(goal->id);

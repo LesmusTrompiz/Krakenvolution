@@ -8,6 +8,8 @@ extern "C"{
 
 constexpr float MIN_DIST = 100;
 constexpr float MIN_SPIN = 5;
+constexpr int   DIST_MAX_NOISE = 50;
+constexpr int   SPIN_MAX_NOISE =  5;
 
 
 void simulate_advance(Pose2d &p,int distance);

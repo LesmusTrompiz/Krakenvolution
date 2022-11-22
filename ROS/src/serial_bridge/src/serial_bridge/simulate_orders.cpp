@@ -15,10 +15,14 @@ void simulate_advance(Pose2d &p,int distance)
     throw std::invalid_argument(error_msg.str());
   }
 
+  float noise = (rand() % DIST_MAX_NOISE) - (DIST_MAX_NOISE/2);
+  distance    = distance + noise;
+  
   float d = (float)distance/1000;
   p.x += d * cos(DEG2RAD(p.a));
   p.y += d * sin(DEG2RAD(p.a));
 }
+
 
 void simulate_spin(Pose2d &p,int spin)
 {
@@ -28,7 +32,8 @@ void simulate_spin(Pose2d &p,int spin)
     throw std::invalid_argument(error_msg.str());
   }
 
-  p.a += spin;
+  float noise = (rand() % SPIN_MAX_NOISE) - (SPIN_MAX_NOISE/2);
+  p.a += spin + noise;
   if (p.a >  180) p.a -= 360;
   if (p.a < -180) p.a += 360;
 }
