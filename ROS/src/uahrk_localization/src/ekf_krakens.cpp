@@ -9,7 +9,7 @@
 *
 */
 
-#include "ekf_krakens.hpp"
+#include "../include/ekf_krakens.hpp"
 
 EKFilter::EKFilter( const Eigen::MatrixXd& A,
                     const Eigen::MatrixXd& B,

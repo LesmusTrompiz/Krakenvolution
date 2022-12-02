@@ -1,7 +1,6 @@
-#include <cstdio>
-
-#include "ekf_krakens.hpp"
-// #include <Eigen/Dense>
+#include "../include/ekf_krakens.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include <Eigen/Dense>
 
 int main(int argc, char ** argv)
 {
