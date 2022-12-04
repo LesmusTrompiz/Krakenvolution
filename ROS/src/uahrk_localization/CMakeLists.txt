@@ -13,10 +13,13 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3)
+find_package(geometry_msgs REQUIRED)
+
 
 include_directories(
 SYSTEM
 ${EIGEN3_INCLUDE_DIR}
+include
 )
 
 add_library( ${PROJECT_NAME} SHARED 
@@ -28,7 +31,7 @@ target_include_directories(localization_node PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(localization_node rclcpp)
+ament_target_dependencies(localization_node rclcpp geometry_msgs)
 
 install(TARGETS localization_node
 DESTINATION lib/${PROJECT_NAME})
