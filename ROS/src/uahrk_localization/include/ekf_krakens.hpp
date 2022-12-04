@@ -17,6 +17,9 @@ class EKFilter
 {
     public:
 
+        // Constructor vacio especial para Eurobot.
+        EKFilter(int m, int n);
+
         // Constructor con valor inicial. 
         EKFilter(   
                     const Eigen::MatrixXd& A,

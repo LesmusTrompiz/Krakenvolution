@@ -11,6 +11,24 @@
 
 #include "../include/ekf_krakens.hpp"
 
+// Si quieres construir este objeto dentro de una clase debe tener un
+// constructor sin parámetros de entrada... O al menos con los dos conocidos a priori.
+// @todo: Este constructor es muy específico del modelo que vamos a usar nosotros... Por las dimensiones de las matrices.
+EKFilter::EKFilter(int m, int n)
+:m(m), n(n), A(n,n), B(n,n), H(n,n), Q(n,n), R(n,n), P(n,n), I(n,n), x_hat(n), x_hat_new(n), u(n)
+{
+    I.setIdentity();
+    A.setIdentity();
+    B.setIdentity();
+    H.setIdentity();
+    Q.setIdentity();
+    R.setIdentity();
+    P.setIdentity();
+    x_hat.setZero();
+    x_hat_new.setZero();
+    u.setZero();
+}
+
 EKFilter::EKFilter( const Eigen::MatrixXd& A,
                     const Eigen::MatrixXd& B,
                     const Eigen::MatrixXd& H,

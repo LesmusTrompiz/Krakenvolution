@@ -11,12 +11,11 @@ using namespace std::chrono_literals;
  * este separada del main. Como la biblioteca del filtro.
 */
 
-class LocalizationNode : public rclcpp::Node
+class LocalizationNode : public rclcpp::Node, public EKFilter
 {
-
   public:
     LocalizationNode()
-    : Node("localization_node")
+    : Node("localization_node"), EKFilter(3,3)
     {
       //Matrices EKF
       A.setIdentity();
@@ -48,6 +47,10 @@ class LocalizationNode : public rclcpp::Node
     rclcpp::TimerBase::SharedPtr timer_pub;
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr pose_publisher;
 
+    // Dimensiones de las matrices...
+    const int m = 1;
+    const int n = 3;
+
     // Matrices del EKF
     Eigen::MatrixXd A;
     Eigen::MatrixXd B;
@@ -55,8 +58,6 @@ class LocalizationNode : public rclcpp::Node
     Eigen::MatrixXd Q;
     Eigen::MatrixXd R;
     Eigen::MatrixXd P;
-    // EKF
-    EKFilter PoseFilter;
 
 };
 
