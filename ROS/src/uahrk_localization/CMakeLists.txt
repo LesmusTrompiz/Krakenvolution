@@ -18,8 +18,10 @@ find_package(geometry_msgs REQUIRED)
 
 include_directories(
 SYSTEM
-${EIGEN3_INCLUDE_DIR}
-include
+${EIGEN3_INCLUDE_DIR})
+
+include_directories(
+  include
 )
 
 add_library( ${PROJECT_NAME} SHARED 

@@ -9,7 +9,7 @@
 *
 */
 
-#include "../include/ekf_krakens.hpp"
+#include "uahrk_localization/ekf_krakens.hpp"
 
 // Si quieres construir este objeto dentro de una clase debe tener un
 // constructor sin parámetros de entrada... O al menos con los dos conocidos a priori.
