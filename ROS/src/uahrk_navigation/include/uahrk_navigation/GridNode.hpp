@@ -14,8 +14,9 @@ class GridNode : public rclcpp::Node
 
     // Subscriber con los enemigos
 
-    // Grid original (Solo contiene las zonas inaccesibles del campo)
-    
+    // Grid del campo
+    eurobot_grid grid;
+
     // Vector con los robots enemigos y sus time stamps
 
     // Función que publica el mapa cada n_segundos
