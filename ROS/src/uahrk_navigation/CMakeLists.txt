@@ -14,6 +14,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(serial_bridge_actions REQUIRED)
@@ -25,6 +26,7 @@ find_package(uahrk_navigation_msgs REQUIRED)
 set(dependencies
   rclcpp
   geometry_msgs
+  nav_msgs
   tf2 
   tf2_ros
   serial_bridge_actions
@@ -38,6 +40,7 @@ include_directories(include)
 add_library(${PROJECT_NAME} SHARED
   src/uahrk_navigation/MoveToPoseNode.cpp
   src/uahrk_navigation/RobotTFNode.cpp
+  src/uahrk_navigation/GridNode.cpp
   src/uahrk_navigation/move_utils.cpp
 )
 
@@ -56,11 +59,15 @@ ament_target_dependencies(rviz_interface ${dependencies})
 target_link_libraries(rviz_interface ${PROJECT_NAME})
 
 
+add_executable(grid_main src/grid_main.cpp)
+ament_target_dependencies(grid_main ${dependencies})
+target_link_libraries(grid_main ${PROJECT_NAME})
 
 install(TARGETS
   ${PROJECT_NAME}
   move_to_pose_main
   robot_tf_main
+  grid_main
   rviz_interface
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
