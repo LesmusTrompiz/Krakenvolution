@@ -6,11 +6,7 @@
 #include <unistd.h>
 #endif
 
-
 using namespace std::chrono_literals;
-
-
-
 
 geometry_msgs::msg::Pose Pose2dtoPose(const Pose2d &p2d)
 {
@@ -54,7 +50,7 @@ rclcpp_action::GoalResponse DummySerialBridgeNode::handle_goal(
 {
   // Debug Info
   RCLCPP_INFO(this->get_logger(), "Order received");
-
+  (void)uuid;
   // Accept all request
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
@@ -62,6 +58,7 @@ rclcpp_action::GoalResponse DummySerialBridgeNode::handle_goal(
 rclcpp_action::CancelResponse  DummySerialBridgeNode::handle_cancel(
   const std::shared_ptr<GoalOrder> goal_handle)
 {
+  (void)goal_handle;
   // Accept all  Cancel request
   return rclcpp_action::CancelResponse::ACCEPT;
 }
@@ -71,15 +68,20 @@ void DummySerialBridgeNode::handle_accepted(const
 {
   const auto goal = goal_handle->get_goal();
   RCLCPP_INFO(this->get_logger(), "Handling order: Id %s, Arg %d", goal->id.c_str(), goal->arg);
+  RCLCPP_INFO(this->get_logger(), "Saliendo order: Id %s, Arg %d", goal->id.c_str(), goal->arg);
   
-  sleep(1);
   try
   {
     auto sim_fn = simulate.find(goal->id);
     if (sim_fn != simulate.end()){
-      sim_fn->second(odom,goal->arg);
-      auto result   = std::make_shared<Order::Result>();
-      goal_handle->succeed(result);
+      auto f = [request =std::move(goal_handle), sim_fn](Pose2d &odom, int16_t &arg) { 
+        auto result   = std::make_shared<Order::Result>();
+        auto succeed  = sim_fn->second(odom,arg);
+        if (succeed) request->succeed(result);
+        return succeed;
+      };
+      tick_functions.emplace_back(std::make_tuple(f,goal->arg));
+      RCLCPP_INFO(this->get_logger(), "funcion creada");
       return;
     }
     else{
@@ -97,7 +99,20 @@ void DummySerialBridgeNode::handle_accepted(const
   }
 }
 
+
+
 void DummySerialBridgeNode::control_cycle(){
+  std::vector<int> succeed_fns;
+  int n = 0;
+  for(auto &f : tick_functions){
+    auto succeed = std::get<0>(f)(odom, std::get<1>(f));
+    if(succeed) succeed_fns.push_back(n);
+    n++;
+  }
+
+  for (auto it = succeed_fns.rbegin(); it != succeed_fns.rend(); ++it){
+    tick_functions.erase(tick_functions.begin()+*it);
+  }
   publisher_->publish(Pose2dtoPose(odom));
 }
 

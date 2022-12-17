@@ -23,6 +23,7 @@ using GoalHandleGoToPose = rclcpp_action::ServerGoalHandle<GoToPose>;
 
 enum ControlState {IDLE, EXECUTING, NEXT_MOVE};
 
+
 class MoveToPoseNode : public rclcpp::Node
 {
   public:
@@ -33,7 +34,7 @@ class MoveToPoseNode : public rclcpp::Node
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     rclcpp::TimerBase::SharedPtr timer_;
-    ControlState state;        
+    ControlState state;
     rclcpp_action::ResultCode order_result;
 //    std::shared_ptr<const std::shared_ptr<GoalHandleGoToPose>> actual_handle;
     std::shared_ptr<GoalHandleGoToPose> actual_handle;
@@ -53,6 +54,8 @@ class MoveToPoseNode : public rclcpp::Node
     void control_cycle();
     void execute(const std::shared_ptr<GoalHandleGoToPose> goal_handle);
     void result_callback(const RequestHandleOrder::WrappedResult & result);
+    void goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future);
+
     void send_order(std::string id, int16_t arg);
     Pose2d get_robot_pose();
 };

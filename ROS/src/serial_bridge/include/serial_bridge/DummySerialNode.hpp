@@ -15,6 +15,11 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "serial_bridge/pose2d.hpp"
 #include "serial_bridge/simulate_orders.hpp"
+#include <functional>
+#include <tuple>
+
+typedef std::function<bool(Pose2d&,int16_t&)> fn_thread;
+
 
 
 
@@ -30,6 +35,7 @@ class DummySerialBridgeNode : public rclcpp::Node
                                             std::shared_ptr<const Order::Goal> goal);
     rclcpp_action::CancelResponse   handle_cancel(const std::shared_ptr<GoalOrder> goal_handle);
     void handle_accepted(const std::shared_ptr<GoalOrder> goal_handle);
+    std::vector<std::tuple<fn_thread, int16_t>> tick_functions;
 
   private:
     void control_cycle();
@@ -39,6 +45,5 @@ class DummySerialBridgeNode : public rclcpp::Node
     rclcpp::Service<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr reset_service;
     void set_pose(const std::shared_ptr<uahrk_navigation_msgs::srv::SetPose2d::Request> request,
              std::shared_ptr<uahrk_navigation_msgs::srv::SetPose2d::Response> response);
-
     Pose2d odom;
 };

@@ -12,14 +12,16 @@ constexpr int   DIST_MAX_NOISE = 50;
 constexpr int   SPIN_MAX_NOISE =  5;
 
 
-void simulate_advance(Pose2d &p,int distance);
-void simulate_spin(Pose2d &p,int spin);
+bool advance_thread(Pose2d &p, int16_t &distance);
+bool spin_thread(Pose2d &p, int16_t &distance);
+
+
 inline float DEG2RAD(const float deg)
 {
   return deg* M_PI / 180;
 }
 
-extern const std::unordered_map<std::string, std::function<void(Pose2d &, int)>> simulate;
+extern const std::unordered_map<std::string, std::function<bool(Pose2d &, int16_t &)>> simulate;
 
 
 

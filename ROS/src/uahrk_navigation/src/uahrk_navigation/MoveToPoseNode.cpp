@@ -30,6 +30,16 @@ MoveToPoseNode::MoveToPoseNode()
     
   }
 
+void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future)
+{
+  auto goal_handle = future.get();
+  if (!goal_handle) {
+    RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
+  } else {
+    RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
+  }
+}
+
 void MoveToPoseNode::control_cycle(){
   auto result = std::make_shared<GoToPose::Result>();
   float dist_precision  = 0.5;
@@ -125,17 +135,18 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
   }
 
   send_goal_options.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
-
+  send_goal_options.goal_response_callback = std::bind(&MoveToPoseNode::goal_response_callback, this, std::placeholders::_1);
   goal_msg.id  = id;
   goal_msg.arg = arg;
   RCLCPP_INFO(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);
-
   order_client->async_send_goal(goal_msg, send_goal_options);
 }
 
 void MoveToPoseNode::result_callback(const RequestHandleOrder::WrappedResult & result)
 {
   order_result = result.code;
+  RCLCPP_INFO(this->get_logger(), "Resultado CB");
+
   switch (result.code) {
     case rclcpp_action::ResultCode::SUCCEEDED:
       break;
