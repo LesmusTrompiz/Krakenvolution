@@ -18,16 +18,14 @@ find_package(geometry_msgs REQUIRED)
 
 include_directories(
 SYSTEM
-${EIGEN3_INCLUDE_DIR})
+${EIGEN3_INCLUDE_DIR}
+include)
 
-include_directories(
-  include
-)
 
 add_library( ${PROJECT_NAME} SHARED 
 src/ekf_krakens.cpp )
  
-add_executable(localization_node src/localization_node.cpp)
+add_executable(localization_node src/localization_node.cpp src/ekf_krakens)
 
 target_include_directories(localization_node PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

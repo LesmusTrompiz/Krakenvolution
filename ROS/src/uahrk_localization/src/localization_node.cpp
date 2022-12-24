@@ -11,19 +11,17 @@ using namespace std::chrono_literals;
  * este separada del main. Como la biblioteca del filtro.
 */
 
-class LocalizationNode : public rclcpp::Node, public EKFilter
+class LocalizationNode : public rclcpp::Node
 {
   public:
     LocalizationNode()
-    : Node("localization_node"), EKFilter(3,3)
+    : Node("localization_node"), LocalizationFilter(m,n)
     {
-      //Matrices EKF
-      A.setIdentity();
-      B.setIdentity();
-      C << 1, 1, 1;
-      for(int i=0; i<3;++i){Q.diagonal()[i]=0.05;}
-      for(int i=0; i<3;++i){R.diagonal()[i]=5;}
-      P << .1, .1, .1, 10, 10, 10, 100, 100, 100;
+      // Matrices de prueba para EKF
+      LocalizationFilter.H << 1, 1, 1;
+      for(int i=0; i<3;++i){LocalizationFilter.Q.diagonal()[i]=0.05;}
+      LocalizationFilter.P << .1, .1, .1, 10, 10, 10, 100, 100, 100;
+      LocalizationFilter.x_hat << 2, 3, 4;
 
       // Publicación cada 100ms
       pose_publisher  = this->create_publisher<geometry_msgs::msg::Pose>("uahrk_localization_pose", 10);
@@ -33,15 +31,17 @@ class LocalizationNode : public rclcpp::Node, public EKFilter
     void pose_pub_callback()
     {
       auto final_pose = geometry_msgs::msg::Pose();
-
       final_pose.position.x      = 1.0;
       final_pose.position.y      = 2.0;
       final_pose.position.z      = 3.0;
 
-      printf("X: %f \t Y: %f \t Th: %f \n", final_pose.position.x, final_pose.position.y, final_pose.position.z);
+      Eigen::VectorXd medidas(3);
+      medidas << final_pose.position.x, final_pose.position.y, final_pose.position.z;
+
+      std::cout<<"X: "<<final_pose.position.x<<"\t Y:"<<final_pose.position.y<<"\t Th: "<<final_pose.position.z<<std::endl;
+      std::cout<<LocalizationFilter.prediction(medidas)<<std::endl;
 
       pose_publisher->publish(final_pose);
-
     }
 
     rclcpp::TimerBase::SharedPtr timer_pub;
@@ -51,18 +51,23 @@ class LocalizationNode : public rclcpp::Node, public EKFilter
     const int m = 1;
     const int n = 3;
 
-    // Matrices del EKF
-    Eigen::MatrixXd A;
-    Eigen::MatrixXd B;
-    Eigen::MatrixXd C; 
-    Eigen::MatrixXd Q;
-    Eigen::MatrixXd R;
-    Eigen::MatrixXd P;
+    // Kalman Filter
+    EKFilter  LocalizationFilter;
+};
 
+class Foo : public rclcpp::Node
+{
+  public:
+    Foo()
+    : Node("test_node")
+    {
+      std::cout<<"testing foo node..."<<std::endl;
+    }
 };
 
 int main(int argc, char ** argv)
 {
+  std::cout<<"X_main"<<std::endl;
   rclcpp::init(argc,argv);
   rclcpp::spin(std::make_shared<LocalizationNode>());
   rclcpp::shutdown();
