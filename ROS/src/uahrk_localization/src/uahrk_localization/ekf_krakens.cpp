@@ -16,7 +16,7 @@
 // @todo: Este constructor es muy específico del modelo que vamos a usar nosotros... Por las dimensiones de las matrices.
 
 EKFilter::EKFilter(int m, int n)
-:m(m), n(n), A(n,n), B(n,n), H(m,n), Q(n,n), R(m,m), P(n,n), I(n,n), x_hat(n), x_hat_new(n), u(n), K(m,n)
+:m(m), n(n), A(n,n), B(n,n), H(m,n), Q(n,n), R(m,m), P(n,n), I(n,n), x_hat(n), x_hat_new(n), u(n), K(n,m)
 {
     I.setIdentity();
     A.setIdentity();
@@ -24,6 +24,7 @@ EKFilter::EKFilter(int m, int n)
     H.setIdentity();
     Q.setIdentity();
     P.setIdentity();
+    R << 4;
     K.setOnes();
     x_hat.setZero();
     x_hat_new.setZero();
@@ -117,8 +118,8 @@ Eigen::VectorXd& EKFilter::prediction()
 Eigen::VectorXd& EKFilter::update(const Eigen::VectorXd& z)
 {
     // Actualización de las medidas.
-    K           = P*H.transpose()*(H*P.inverse()*H.transpose() + R).inverse();
-    x_hat_new   += K*(z - H*x_hat_new);
+    K           = P*H.transpose()*(H*P*H.transpose() + R).inverse();
+    x_hat_new   += K*(H*z - H*x_hat_new);
     P           = (I - K*H)*P;
 
     // Último valor del vector de estados...
@@ -130,7 +131,7 @@ Eigen::VectorXd& EKFilter::update(const Eigen::VectorXd& z)
 Eigen::VectorXd& EKFilter::update()
 {
     // Actualización de las medidas.
-    K           = P*H.transpose()*(H*P.inverse()*H.transpose() + R).inverse();
+    K           = P*H.transpose()*(H*P*H.transpose() + R).inverse();
     x_hat_new   += K*(H*x_hat - H*x_hat_new);
     P           = (I - K*H)*P;
 
