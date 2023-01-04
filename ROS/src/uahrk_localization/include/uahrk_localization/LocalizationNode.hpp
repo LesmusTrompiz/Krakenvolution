@@ -5,25 +5,28 @@
 
 #include "uahrk_localization/ekf_krakens.hpp"
 
-#include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 class LocalizationNode : public rclcpp::Node
 {
     public:
-        // Constructor
+        // Constructor.
         LocalizationNode(const char *node_name, const char *topic_name);
     private:
-        // Callbacks
-        void pose_pub_callback();
-        // Timer, publisher y demás
-        rclcpp::TimerBase::SharedPtr timer_pub;
-        rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr pose_publisher;        
-        // Nombre del nodo
-        const char *node_name;
-        // Dimensiones de las matrices...
-        const int m = 1;
-        const int n = 3;
-        // Filtro de Kalman
+        // Filtro de Kalman.
         EKFilter  LocalizationFilter;
+        // Bucle del filtro.
+        void pose_pub_callback();
+        // Obtención de datos.
+        void odom_callback(const geometry_msgs::msg::PoseStamped::SharedPtr odom_msg);
+        void lidar_callback(const geometry_msgs::msg::PoseStamped::SharedPtr lidar_msg);
+        void camera_callback(const geometry_msgs::msg::PoseStamped::SharedPtr camera_msg);
+        // Int. por timer y publisher.
+        rclcpp::TimerBase::SharedPtr timer_pub;
+        rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr final_pose_publisher;        
+        // Subscriber.
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr odom_sub;
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr lidar_sub;
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr camera_sub;
 };

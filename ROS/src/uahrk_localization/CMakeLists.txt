@@ -24,7 +24,8 @@ include)
 add_executable( localization_main 
                 src/localization_main.cpp 
                 src/uahrk_localization/ekf_krakens.cpp 
-                src/uahrk_localization/LocalizationNode.cpp)
+                src/uahrk_localization/LocalizationNode.cpp
+                src/uahrk_localization/RobotSimNode.cpp)
 
 target_include_directories(localization_main PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
