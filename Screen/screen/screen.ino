@@ -122,6 +122,39 @@ uint16_t lidar_c1, uint16_t lidar_c2, uint16_t apagar_c1, uint16_t apagar_c2) {
   mylcd.Fill_Rect(452, 229, 8, 4, apagar_c2);
 }
 
+void marcoMenuPrincipal() {
+  //Verticales menu principal
+  mylcd.Fill_Rect(424, 0, 8, 280, WHITE);
+  mylcd.Fill_Rect(49, 273, 8, 56, WHITE);
+
+  //Horizontales menu principal
+  mylcd.Fill_Rect(424, 49, 56, 8, WHITE);
+  mylcd.Fill_Rect(424, 105, 56, 8, WHITE);
+  mylcd.Fill_Rect(424, 161, 56, 8, WHITE);
+  mylcd.Fill_Rect(424, 217, 56, 8, WHITE);
+  mylcd.Fill_Rect(0, 273, 480, 8, WHITE);
+}
+
+void menuEstadistica() {
+  pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+}
+
+void menuCaballo() {
+  pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+}
+
+void menuBicho() {
+  pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+}
+
+void menuLidar() {
+  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+}
+
+void menuApagar() {
+  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+}
+
 void loop() {
   mylcd.Set_Text_Mode(0);
   //display 1 times string
@@ -160,25 +193,16 @@ void loop() {
   mylcd.Set_Text_Size(5);
   mylcd.Print_String("Hello!", 0, 224);
 
-  //Verticales menu principal
-  mylcd.Fill_Rect(424, 0, 8, 280, WHITE);
-  mylcd.Fill_Rect(49, 273, 8, 56, WHITE);
+  marcoMenuPrincipal();
 
-  //Horizontales menu principal
-  mylcd.Fill_Rect(424, 49, 56, 8, WHITE);
-  mylcd.Fill_Rect(424, 105, 56, 8, WHITE);
-  mylcd.Fill_Rect(424, 161, 56, 8, WHITE);
-  mylcd.Fill_Rect(424, 217, 56, 8, WHITE);
-  mylcd.Fill_Rect(0, 273, 480, 8, WHITE);
-
-  pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+  menuEstadistica();
   delay(2000);
-  pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+  menuCaballo();
   delay(2000);
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+  menuBicho();
   delay(2000);
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+  menuLidar();
   delay(2000);
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+  menuApagar();
   delay(2000);
 }
