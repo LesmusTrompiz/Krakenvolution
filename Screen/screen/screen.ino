@@ -24,6 +24,7 @@ void setup() {
   mylcd.Fill_Screen(BLACK);
 }
 
+//Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
 void pintarIconos(uint16_t estadistica_c1, uint16_t estadistica_c2,
 uint16_t caballo_c1, uint16_t caballo_c2, uint16_t bicho_c1, uint16_t bicho_c2,
 uint16_t lidar_c1, uint16_t lidar_c2, uint16_t apagar_c1, uint16_t apagar_c2) {
@@ -135,24 +136,35 @@ void marcoMenuPrincipal() {
   mylcd.Fill_Rect(0, 273, 480, 8, WHITE);
 }
 
+//Fondo menu estadistica en blanco y resto en negro
 void menuEstadistica() {
   pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
 }
 
+//Fondo menu caballo en blanco y resto en negro
 void menuCaballo() {
   pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
 }
 
+//Fondo menu bicho en blanco y resto en negro
 void menuBicho() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
 }
 
+//Fondo menu lidar en blanco y resto en negro
 void menuLidar() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
 }
 
+//Fondo menu apagar en blanco y resto en negro
 void menuApagar() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+}
+
+void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coordenada_X, uint8_t coordenada_Y) {
+  mylcd.Set_Text_colour(color);
+  mylcd.Set_Text_Size(tamanno);
+  mylcd.Print_String(texto, coordenada_X, coordenada_Y);
 }
 
 void loop() {
@@ -168,30 +180,23 @@ void loop() {
   //mylcd.Print_String("DEADBEF", 0, 16);
 
   //display 2 times string
-  mylcd.Set_Text_colour(GREEN);
-  mylcd.Set_Text_Size(2);
-  mylcd.Print_String("Hello World!", 0, 40);
+  escribirTexto(GREEN, 2, "Hello World!", 0, 40);
   mylcd.Print_Number_Float(01234.56789, 2, 0, 56, '.', 0, ' ');  
   mylcd.Print_Number_Int(0xDEADBEF, 0, 72, 0, ' ',16);
   //mylcd.Print_String("DEADBEEF", 0, 72);
 
   //display 3 times string
-  mylcd.Set_Text_colour(BLUE);
-  mylcd.Set_Text_Size(3);
-  mylcd.Print_String("Hello World!", 0, 104);
+  escribirTexto(BLUE, 3, "Hello World!", 0, 104);
+  
   mylcd.Print_Number_Float(01234.56789, 2, 0, 128, '.', 0, ' ');  
   mylcd.Print_Number_Int(0xDEADBEF, 0, 152, 0, ' ',16);
  // mylcd.Print_String("DEADBEEF", 0, 152);
 
   //display 4 times string
-  mylcd.Set_Text_colour(WHITE);
-  mylcd.Set_Text_Size(4);
-  mylcd.Print_String("Hello!", 0, 192);
+  escribirTexto(WHITE, 4, "Hello!", 0, 192);
 
   //display 5 times string
-  mylcd.Set_Text_colour(YELLOW);
-  mylcd.Set_Text_Size(5);
-  mylcd.Print_String("Hello!", 0, 224);
+  escribirTexto(YELLOW, 5, "Hello!", 0, 224);
 
   marcoMenuPrincipal();
 
