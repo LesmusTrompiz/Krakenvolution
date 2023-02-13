@@ -2,11 +2,19 @@
 #include <LCDWIKI_KBV.h> //Hardware-specific library
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
-LCDWIKI_KBV mylcd(ILI9488,A3,A2,A1,A0,A4); //model,cs,cd,wr,rd,reset
+LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 //if the IC model is not known and the modules is readable,you can use this constructed function
 //LCDWIKI_KBV mylcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
-//define some colour values
+//Pines menu principal
+int menuEstadistica = 0;
+int menuCaballo = 0;
+int menuBicho = 0;
+int menuLidar = 0;
+int menuApagar = 0;
+int menuActual = 1;
+
+//Colores
 #define BLACK   0x0000
 #define BLUE    0x001F
 #define RED     0xF800
@@ -17,11 +25,35 @@ LCDWIKI_KBV mylcd(ILI9488,A3,A2,A1,A0,A4); //model,cs,cd,wr,rd,reset
 #define WHITE   0xFFFF
 
 void setup() {
+  //Configuracion botones menu principal
+  pinMode(menuEstadistica, INPUT);
+  pinMode(menuCaballo, INPUT);
+  pinMode(menuBicho, INPUT);
+  pinMode(menuLidar, INPUT);
+  pinMode(menuApagar, INPUT);
+
+  //Configuracion pantalla
   Serial.begin(9600);
   mylcd.Init_LCD();
   mylcd.Set_Rotation(1);
   Serial.println(mylcd.Read_ID(), HEX);
   mylcd.Fill_Screen(BLACK);
+}
+
+//Devolvemos el boton pulsado con prioridad de menor a mayor
+int mirarBotonesPrincipal() {
+  if(digitalRead(menuEstadistica) == HIGH)
+    return menuActual = 1;
+  else if(digitalRead(menuCaballo) == HIGH)
+    return menuActual = 2;
+  else if(digitalRead(menuBicho) == HIGH)
+    return menuActual = 3;
+  else if(digitalRead(menuLidar) == HIGH)
+    return menuActual = 4;
+  else if(digitalRead(menuApagar) == HIGH)
+    return menuActual = 5;
+  else
+    return menuActual;
 }
 
 //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
@@ -136,29 +168,71 @@ void marcoMenuPrincipal() {
   mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
 }
 
+void ejecutarMenuEstadistica() {
+  //Pendiente
+}
+
+void ejecutarMenuCaballo() {
+  //Pendiente
+}
+
+void ejecutarMenuBicho() {
+  //Pendiente
+}
+
+void ejecutarMenuLidar() {
+  //Pendiente
+}
+
+void ejecutarMenuApagar() {
+  //Pendiente
+}
+
+/**TEMPORAL, PARA MOSTRAR LA DEMO
 //Fondo menu estadistica en blanco y resto en negro
-void menuEstadistica() {
+void selecMenuEstadistica() {
   pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
 }
 
 //Fondo menu caballo en blanco y resto en negro
-void menuCaballo() {
+void selecMenuCaballo() {
   pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
 }
 
 //Fondo menu bicho en blanco y resto en negro
-void menuBicho() {
+void selecMenuBicho() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
 }
 
 //Fondo menu lidar en blanco y resto en negro
-void menuLidar() {
+void selecMenuLidar() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
 }
 
 //Fondo menu apagar en blanco y resto en negro
-void menuApagar() {
+void selecMenuApagar() {
   pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+}*/
+
+void seleccionarMenu(int eleccion) {
+  marcoMenuPrincipal();
+
+  if(eleccion == 1) {
+    pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+    ejecutarMenuEstadistica();
+  } else if(eleccion == 2) {
+    pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+    ejecutarMenuCaballo();
+  } else if(eleccion == 3) {
+    pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+    ejecutarMenuBicho();
+  } else if(eleccion == 4) {
+    pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+    ejecutarMenuLidar();
+  } else if(eleccion == 5) {
+    pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+    ejecutarMenuApagar();
+  }
 }
 
 void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coordenada_X, uint8_t coordenada_Y) {
@@ -168,6 +242,8 @@ void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coorde
 }
 
 void loop() {
+  seleccionarMenu(mirarBotonesPrincipal());
+
   mylcd.Set_Text_Mode(0);
   //display 1 times string
   mylcd.Fill_Screen(0x0000);
@@ -200,16 +276,16 @@ void loop() {
   //display 5 times string
   escribirTexto(YELLOW, 5, "Hello!", 0, 224);
 
-  marcoMenuPrincipal();
-
-  menuEstadistica();
+  /**TEMPORAL, PARA MOSTRAR LA DEMO
+  selecMenuEstadistica();
   delay(2000);
-  menuCaballo();
+  selecMenuCaballo();
   delay(2000);
-  menuBicho();
+  selecMenuBicho();
   delay(2000);
-  menuLidar();
+  selecMenuLidar();
   delay(2000);
-  menuApagar();
+  selecMenuApagar();
   delay(2000);
+  */
 }
