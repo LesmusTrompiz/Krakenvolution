@@ -188,32 +188,6 @@ void ejecutarMenuApagar() {
   //Pendiente
 }
 
-/**TEMPORAL, PARA MOSTRAR LA DEMO
-//Fondo menu estadistica en blanco y resto en negro
-void selecMenuEstadistica() {
-  pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-}
-
-//Fondo menu caballo en blanco y resto en negro
-void selecMenuCaballo() {
-  pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-}
-
-//Fondo menu bicho en blanco y resto en negro
-void selecMenuBicho() {
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
-}
-
-//Fondo menu lidar en blanco y resto en negro
-void selecMenuLidar() {
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
-}
-
-//Fondo menu apagar en blanco y resto en negro
-void selecMenuApagar() {
-  pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
-}*/
-
 void seleccionarMenu(int eleccion) {
   marcoMenuPrincipal();
 
@@ -276,16 +250,15 @@ void loop() {
   //display 5 times string
   escribirTexto(YELLOW, 5, "Hello!", 0, 224);
 
-  /**TEMPORAL, PARA MOSTRAR LA DEMO
-  selecMenuEstadistica();
+  //TEMPORAL, PARA MOSTRAR LA DEMO
+  seleccionarMenu(1);
   delay(2000);
-  selecMenuCaballo();
+  seleccionarMenu(2);
   delay(2000);
-  selecMenuBicho();
+  seleccionarMenu(3);
   delay(2000);
-  selecMenuLidar();
+  seleccionarMenu(4);
   delay(2000);
-  selecMenuApagar();
+  seleccionarMenu(5);
   delay(2000);
-  */
 }

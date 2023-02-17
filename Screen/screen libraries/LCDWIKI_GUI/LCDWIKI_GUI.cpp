@@ -725,6 +725,13 @@ void LCDWIKI_GUI::Print_Number_Int(long num, int16_t x, int16_t y, int16_t lengt
 	Print(st, x, y);
 }
 
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
+  char fmt[20];
+  sprintf(fmt, "%%%d.%df", width, prec);
+  sprintf(sout, fmt, val);
+  return sout;
+}
+
 //print float number
 void LCDWIKI_GUI::Print_Number_Float(double num, uint8_t dec, int16_t x, int16_t y, uint8_t divider, int16_t length, uint8_t filler)
 {
