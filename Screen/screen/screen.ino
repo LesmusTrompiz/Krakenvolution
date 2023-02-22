@@ -14,9 +14,16 @@ int menuLidar = 0;
 int menuApagar = 0;
 int menuActual = 1;
 
+//Pines menu secundario
+int secundario_b1 = 0;
+int secundario_b2 = 0;
+int secundario_b3 = 0;
+int secundario_b4 = 0;
+
 //Colores
 #define BLACK   0x0000
 #define BLUE    0x001F
+#define GREY    0x000F
 #define RED     0xF800
 #define GREEN   0x07E0
 #define CYAN    0x07FF
@@ -31,6 +38,12 @@ void setup() {
   pinMode(menuBicho, INPUT);
   pinMode(menuLidar, INPUT);
   pinMode(menuApagar, INPUT);
+
+  //Configuracion botones menu secundario
+  pinMode(secundario_b1, INPUT);
+  pinMode(secundario_b2, INPUT);
+  pinMode(secundario_b3, INPUT);
+  pinMode(secundario_b4, INPUT);
 
   //Configuracion pantalla
   Serial.begin(9600);
@@ -54,6 +67,19 @@ int mirarBotonesPrincipal() {
     return menuActual = 5;
   else
     return menuActual;
+}
+
+//Hacemos lo mismo que en el metodo mirarBotonesPrincipal() pero con
+//los botones del menu secundario
+int mirarBotonesSecundario() {
+  if(digitalRead(secundario_b1) == HIGH)
+    return 1;
+  else if(digitalRead(secundario_b2) == HIGH)
+    return 2;
+  else if(digitalRead(secundario_b3) == HIGH)
+    return 3;
+  else if(digitalRead(secundario_b4) == HIGH)
+    return 4;
 }
 
 //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
@@ -168,12 +194,51 @@ void marcoMenuPrincipal() {
   mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
 }
 
+void pintarIconosConexion() {
+  //Marco conexion
+  mylcd.Fill_Rect(47, 0, 8, 55, WHITE);
+  mylcd.Fill_Rect(0, 47, 47, 8, WHITE);
+
+  //Conexion router
+  mylcd.Fill_Rect(3, 30, 8, 13, GREY);
+  mylcd.Fill_Rect(19, 17, 8, 26, GREY);
+  mylcd.Fill_Rect(35, 4, 8, 39, GREY);
+}
+
+void pintarCampo() {
+  //Verticales campo
+  mylcd.Fill_Rect(416, 8, 8, 272, WHITE);
+  mylcd.Fill_Rect(  8, 8, 8, 272, WHITE);
+
+  //Horizontales campo
+  mylcd.Fill_Rect(  8,   8,  400, 8, WHITE);
+  mylcd.Fill_Rect(416, 416,  56, 8, WHITE);
+}
+
 void ejecutarMenuEstadistica() {
   //Pendiente
 }
 
 void ejecutarMenuCaballo() {
-  //Pendiente
+  Serial.write("Esto es un mensaje de prueba para el puerto");
+  
+  switch(mirarBotonesSecundario()) {
+    case 1:
+      //Pendiente
+      break;
+
+    case 2:
+      //Pendiente
+      break;
+
+    case 3:
+      //Pendiente
+      break;
+
+    case 4:
+      //Pendiente
+      break;
+  }
 }
 
 void ejecutarMenuBicho() {
@@ -185,27 +250,50 @@ void ejecutarMenuLidar() {
 }
 
 void ejecutarMenuApagar() {
-  //Pendiente
+  switch(mirarBotonesSecundario()) {
+    case 1:
+      //Pendiente
+      break;
+
+    case 2:
+      //Pendiente
+      break;
+  }
 }
 
 void seleccionarMenu(int eleccion) {
   marcoMenuPrincipal();
 
-  if(eleccion == 1) {
-    pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-    ejecutarMenuEstadistica();
-  } else if(eleccion == 2) {
-    pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-    ejecutarMenuCaballo();
-  } else if(eleccion == 3) {
-    pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
-    ejecutarMenuBicho();
-  } else if(eleccion == 4) {
-    pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
-    ejecutarMenuLidar();
-  } else if(eleccion == 5) {
-    pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
-    ejecutarMenuApagar();
+  switch(eleccion) {
+    case 1:
+      pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuEstadistica();
+
+      break;
+
+    case 2:
+      pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuCaballo();
+
+      break;
+
+    case 3:
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuBicho();
+
+      break;
+
+    case 4:
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+      ejecutarMenuLidar();
+
+      break;
+
+    case 5:
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+      ejecutarMenuApagar();
+
+      break;
   }
 }
 
@@ -249,6 +337,10 @@ void loop() {
 
   //display 5 times string
   escribirTexto(YELLOW, 5, "Hello!", 0, 224);
+
+  //pintarCampo();
+  pintarIconosConexion();
+  delay(2000);
 
   //TEMPORAL, PARA MOSTRAR LA DEMO
   seleccionarMenu(1);
