@@ -9,7 +9,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from PyQt5.QtCore import QTimer
 from rclpy.action import ActionClient
-from uahrk_navigation_msgs.action import GoToPose
+from uahrk_navigation_msgs.action import GoToPose, Path
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, PoseArray
 from uahrk_navigation_msgs.srv import SetPose2d
 from tf_transformations import euler_from_quaternion
@@ -31,7 +31,7 @@ class Application(Node,	QMainWindow):
 		# ROS things:
 		Node.__init__(self,'Rviz_interface')
 		self.set_pose_client = self.create_client(SetPose2d, "set_pose")
-		self.nav_client 		  = ActionClient(self, GoToPose, 'move_server')
+		self.nav_client 		  = ActionClient(self, Path, 'move_server')
 		self.path_finding_client  = ActionClient(self, GoToPose, 'path_finding_server')
 		self.pub_obstacles = self.create_publisher(PoseArray, 'obstacles', 10)
 		self.obstacles = PoseArray()
@@ -93,8 +93,8 @@ class Application(Node,	QMainWindow):
 
 		if mode == "navigation":
 			self.get_logger().info(f'Navigation: {mode}')
-			goal_msg = GoToPose.Goal()
-			goal_msg._pose = new_goal
+			goal_msg = Path.Goal()
+			goal_msg.pose.poses.append(new_goal.pose)
 			self.nav_client.send_goal_async(goal_msg)
 			self.get_logger().info(f'Navigation GOal: {mode}')
 

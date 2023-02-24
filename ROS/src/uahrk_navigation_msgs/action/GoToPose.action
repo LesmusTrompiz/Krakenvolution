@@ -1,5 +1,5 @@
 #goal definition
-geometry_msgs/PoseArray pose
+geometry_msgs/PoseStamped pose
 string behavior_tree
 ---
 #result definition
