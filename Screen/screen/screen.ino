@@ -7,11 +7,11 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 //LCDWIKI_KBV mylcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
 //Pines menu principal
-int menuEstadistica = 0;
-int menuCaballo = 0;
-int menuBicho = 0;
-int menuLidar = 0;
-int menuApagar = 0;
+int menuEstadistica = 25;
+int menuCaballo = 24;
+int menuBicho = 33;
+int menuLidar = 39;
+int menuApagar = 47;
 int menuActual = 1;
 
 //Pines menu secundario
@@ -33,40 +33,43 @@ int secundario_b4 = 0;
 
 void setup() {
   //Configuracion botones menu principal
-  pinMode(menuEstadistica, INPUT);
-  pinMode(menuCaballo, INPUT);
-  pinMode(menuBicho, INPUT);
-  pinMode(menuLidar, INPUT);
-  pinMode(menuApagar, INPUT);
+  pinMode(menuEstadistica, INPUT_PULLUP);
+  pinMode(menuCaballo, INPUT_PULLUP);
+  pinMode(menuBicho, INPUT_PULLUP);
+  pinMode(menuLidar, INPUT_PULLUP);
+  pinMode(menuApagar, INPUT_PULLUP);
 
   //Configuracion botones menu secundario
-  pinMode(secundario_b1, INPUT);
-  pinMode(secundario_b2, INPUT);
-  pinMode(secundario_b3, INPUT);
-  pinMode(secundario_b4, INPUT);
+  pinMode(secundario_b1, INPUT_PULLUP);
+  pinMode(secundario_b2, INPUT_PULLUP);
+  pinMode(secundario_b3, INPUT_PULLUP);
+  pinMode(secundario_b4, INPUT_PULLUP);
 
   //Configuracion pantalla
   Serial.begin(9600);
   mylcd.Init_LCD();
-  mylcd.Set_Rotation(1);
+  mylcd.Set_Rotation(-1);
   Serial.println(mylcd.Read_ID(), HEX);
   mylcd.Fill_Screen(BLACK);
+
+  marcoMenuPrincipal();
+  seleccionarMenu(1);
 }
 
 //Devolvemos el boton pulsado con prioridad de menor a mayor
 int mirarBotonesPrincipal() {
-  if(digitalRead(menuEstadistica) == HIGH)
+  if(!digitalRead(menuEstadistica) && menuActual != 1)
     return menuActual = 1;
-  else if(digitalRead(menuCaballo) == HIGH)
+  else if(!digitalRead(menuCaballo) && menuActual != 2)
     return menuActual = 2;
-  else if(digitalRead(menuBicho) == HIGH)
+  else if(!digitalRead(menuBicho) && menuActual != 3)
     return menuActual = 3;
-  else if(digitalRead(menuLidar) == HIGH)
+  else if(!digitalRead(menuLidar) && menuActual != 4)
     return menuActual = 4;
-  else if(digitalRead(menuApagar) == HIGH)
+  else if(!digitalRead(menuApagar) && menuActual != 5)
     return menuActual = 5;
   else
-    return menuActual;
+    return 0;
 }
 
 //Hacemos lo mismo que en el metodo mirarBotonesPrincipal() pero con
@@ -262,38 +265,66 @@ void ejecutarMenuApagar() {
 }
 
 void seleccionarMenu(int eleccion) {
-  marcoMenuPrincipal();
-
   switch(eleccion) {
     case 1:
-      pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-      ejecutarMenuEstadistica();
+      {
+        mylcd.Set_Text_Mode(0);      
+        pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+        ejecutarMenuEstadistica();
 
-      break;
+        mylcd.Set_Text_colour(WHITE);
+        mylcd.Set_Text_Back_colour(BLACK);
+        mylcd.Set_Text_Size(1);
+        mylcd.Print_String("Hello World!", 0, 0);
+        escribirTexto(WHITE, 2, "Hello World!", 0, 40);
+        escribirTexto(WHITE, 3, "Hello World!", 0, 104);
+        escribirTexto(WHITE, 4, "Hello!", 0, 192);
+        escribirTexto(WHITE, 5, "Hello!", 0, 224);
+
+        break;
+      }
 
     case 2:
-      pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-      ejecutarMenuCaballo();
+      {
+        mylcd.Set_Text_Mode(0);
+        pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+        ejecutarMenuCaballo();
 
-      break;
+        mylcd.Set_Text_colour(WHITE);
+        mylcd.Set_Text_Back_colour(BLACK);
+        mylcd.Set_Text_Size(1);
+        mylcd.Print_String("Hello World!", 0, 0);
+        escribirTexto(WHITE, 2, "Hello World!", 0, 40);
+        escribirTexto(WHITE, 3, "Hello World!", 0, 104);
+        escribirTexto(WHITE, 4, "Hello!", 0, 192);
+        escribirTexto(WHITE, 5, "Hello!", 0, 224);
+
+        break;
+      }
 
     case 3:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
-      ejecutarMenuBicho();
+      {
+        pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+        ejecutarMenuBicho();
 
-      break;
+        break;
+      }
 
     case 4:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
-      ejecutarMenuLidar();
+      {
+        pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+        ejecutarMenuLidar();
 
-      break;
+        break;
+      }
 
     case 5:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
-      ejecutarMenuApagar();
+      {
+        pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+        ejecutarMenuApagar();
 
-      break;
+        break;
+      }
   }
 }
 
@@ -303,54 +334,12 @@ void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coorde
   mylcd.Print_String(texto, coordenada_X, coordenada_Y);
 }
 
+void pintarMatriz(int matriz[][2], uint16_t color) {
+  for(int i = 0; i < (sizeof(matriz) / sizeof(matriz[0])); i++) {
+    mylcd.Draw_Pixe(matriz[i][0], matriz[i][1], color);
+  }
+}
+
 void loop() {
   seleccionarMenu(mirarBotonesPrincipal());
-
-  mylcd.Set_Text_Mode(0);
-  //display 1 times string
-  mylcd.Fill_Screen(0x0000);
-  mylcd.Set_Text_colour(RED);
-  mylcd.Set_Text_Back_colour(BLACK);
-  mylcd.Set_Text_Size(1);
-  mylcd.Print_String("Hello World!", 0, 0);
-
-  mylcd.Print_Number_Float(01234.56789, 2, 0, 8, '.', 0, ' ');  
-  mylcd.Print_Number_Int(0xDEADBEF, 0, 16, 0, ' ',16);
-  //mylcd.Print_String("DEADBEF", 0, 16);
-
-  //display 2 times string
-  escribirTexto(GREEN, 2, "Hello World!", 0, 40);
-
-  mylcd.Print_Number_Float(01234.56789, 2, 0, 56, '.', 0, ' ');  
-  mylcd.Print_Number_Int(0xDEADBEF, 0, 72, 0, ' ',16);
-  //mylcd.Print_String("DEADBEEF", 0, 72);
-
-  //display 3 times string
-  escribirTexto(BLUE, 3, "Hello World!", 0, 104);
-
-  mylcd.Print_Number_Float(01234.56789, 2, 0, 128, '.', 0, ' ');  
-  mylcd.Print_Number_Int(0xDEADBEF, 0, 152, 0, ' ',16);
- // mylcd.Print_String("DEADBEEF", 0, 152);
-
-  //display 4 times string
-  escribirTexto(WHITE, 4, "Hello!", 0, 192);
-
-  //display 5 times string
-  escribirTexto(YELLOW, 5, "Hello!", 0, 224);
-
-  //pintarCampo();
-  pintarIconosConexion();
-  delay(2000);
-
-  //TEMPORAL, PARA MOSTRAR LA DEMO
-  seleccionarMenu(1);
-  delay(2000);
-  seleccionarMenu(2);
-  delay(2000);
-  seleccionarMenu(3);
-  delay(2000);
-  seleccionarMenu(4);
-  delay(2000);
-  seleccionarMenu(5);
-  delay(2000);
 }
