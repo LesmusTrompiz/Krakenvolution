@@ -11,6 +11,8 @@
 #include "uahrk_navigation_msgs/action/go_to_pose.hpp"
 #include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "geometry_msgs/msg/pose_array.hpp"
+
 
 
 
@@ -19,6 +21,8 @@ using GoToPose  = uahrk_navigation_msgs::action::GoToPose;
 
 using GoalHandleGoToPose = rclcpp_action::ClientGoalHandle<GoToPose>;
 
+
+enum RVIZ_MODES {NAV_GOAL, GRID};
 /* This example creates a subclass of Node and uses std::bind() to register a
 * member function as a callback from the timer. */
 
@@ -28,6 +32,7 @@ class RvizInterfaceNode : public rclcpp::Node
     RvizInterfaceNode()
     : Node("rviz_interface")
     {
+      mode = NAV_GOAL;
       set_pose_client = this->create_client<uahrk_navigation_msgs::srv::SetPose2d>("set_pose");
       subscription_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
                   "initialpose", 10,
@@ -35,14 +40,20 @@ class RvizInterfaceNode : public rclcpp::Node
       subscription2_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
                   "goal_pose", 10,
                 std::bind(&RvizInterfaceNode::goal_pose, this, std::placeholders::_1));
-      client_ptr_ = rclcpp_action::create_client<GoToPose>(this, "move_server");
 
+      obstacles_publisher = this->create_publisher<geometry_msgs::msg::PoseArray>("obstacles", 10);
+      client_ptr_ = rclcpp_action::create_client<GoToPose>(this, "move_server");
+      //client_ptr_ = rclcpp_action::create_client<GoToPose>(this, "path_finding_server");
+      
+      timer_ = this->create_wall_timer(500ms, std::bind(&RvizInterfaceNode::timer_callback, this));
     }
 
   private:
+    RVIZ_MODES mode;
+    geometry_msgs::msg::PoseArray obstacles;
+    rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr obstacles_publisher;
     void pose_estimate_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr rviz_pose)
     {
-
       tf2::Quaternion q(
         rviz_pose->pose.pose.orientation.x,
         rviz_pose->pose.pose.orientation.y,
@@ -60,22 +71,32 @@ class RvizInterfaceNode : public rclcpp::Node
       return;
     }
 
-    void goal_pose(geometry_msgs::msg::PoseStamped::UniquePtr rviz_pose)
-    {
+    void goal_pose(geometry_msgs::msg::PoseStamped::UniquePtr rviz_pose){
       using namespace std::placeholders;
-      RCLCPP_INFO(this->get_logger(), "Sending goal: '%f'", rviz_pose->pose.position.x);
       auto goal_msg = GoToPose::Goal();
-      goal_msg.pose = *rviz_pose;
-
       auto send_goal_options = rclcpp_action::Client<GoToPose>::SendGoalOptions();
-      send_goal_options.goal_response_callback = std::bind(&RvizInterfaceNode::goal_response_callback, this, _1);
-      send_goal_options.result_callback = std::bind(&RvizInterfaceNode::result_callback, this, _1);
-      client_ptr_->async_send_goal(goal_msg, send_goal_options);
+
+      switch (mode){
+        case NAV_GOAL:
+          RCLCPP_INFO(this->get_logger(), "Sending goal: '%f'", rviz_pose->pose.position.x);
+          goal_msg.pose = *rviz_pose;
+
+          send_goal_options.goal_response_callback = std::bind(&RvizInterfaceNode::goal_response_callback, this, _1);
+          send_goal_options.result_callback = std::bind(&RvizInterfaceNode::result_callback, this, _1);
+          client_ptr_->async_send_goal(goal_msg, send_goal_options);
+          break;
+        
+        case GRID:
+          obstacles.poses.push_back(rviz_pose->pose);
+          RCLCPP_INFO(this->get_logger(), "New grid obstacle: '%f'", rviz_pose->pose.position.x);
+          break;
+        default:
+          break;
+      }
       return;
     }
 
-    void goal_response_callback(std::shared_future<GoalHandleGoToPose::SharedPtr> future)
-    {
+    void goal_response_callback(std::shared_future<GoalHandleGoToPose::SharedPtr> future){
       auto goal_handle = future.get();
       if (!goal_handle) {
         RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
@@ -83,8 +104,7 @@ class RvizInterfaceNode : public rclcpp::Node
         RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
       }
     }
-    void result_callback(const GoalHandleGoToPose::WrappedResult & result)
-    {
+    void result_callback(const GoalHandleGoToPose::WrappedResult & result){
       switch (result.code) {
         case rclcpp_action::ResultCode::SUCCEEDED:
           break;
@@ -103,11 +123,17 @@ class RvizInterfaceNode : public rclcpp::Node
       RCLCPP_INFO(this->get_logger(), ss.str().c_str());
     }
 
+    void timer_callback(){
+      obstacles_publisher->publish(obstacles);
+      return;
+    }
+
     rclcpp_action::Client<GoToPose>::SharedPtr client_ptr_;
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr subscription_;
     rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription2_;
     rclcpp::Client<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr set_pose_client;
+    rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr pub_enemies;
 
 };
 

@@ -41,7 +41,10 @@ add_library(${PROJECT_NAME} SHARED
   src/uahrk_navigation/MoveToPoseNode.cpp
   src/uahrk_navigation/RobotTFNode.cpp
   src/uahrk_navigation/GridNode.cpp
+  src/uahrk_navigation/PathFindingNode.cpp
   src/uahrk_navigation/move_utils.cpp
+  src/uahrk_navigation/astar_ros.cpp
+
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -58,16 +61,21 @@ add_executable(rviz_interface src/RvizInterfaceNode.cpp)
 ament_target_dependencies(rviz_interface ${dependencies})
 target_link_libraries(rviz_interface ${PROJECT_NAME})
 
-
 add_executable(grid_main src/grid_main.cpp)
 ament_target_dependencies(grid_main ${dependencies})
 target_link_libraries(grid_main ${PROJECT_NAME})
+
+add_executable(path_finding_main src/path_finding_main.cpp)
+ament_target_dependencies(path_finding_main ${dependencies})
+target_link_libraries(path_finding_main ${PROJECT_NAME})
+
 
 install(TARGETS
   ${PROJECT_NAME}
   move_to_pose_main
   robot_tf_main
   grid_main
+  path_finding_main
   rviz_interface
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
