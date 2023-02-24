@@ -71,10 +71,11 @@ class EKFilter
         // Estados de la dinámica del filtro.
         Eigen::VectorXd& state(){return x_hat;}
 
-    private:
+        // Actualizar señal de control
+        void update_control_signal(const Eigen::VectorXd& u_input){u = u_input;}
 
         // Matrices.
-        Eigen::MatrixXd A, B, H, Q, R, P, K, P0, I; 
+        Eigen::MatrixXd A, B, H, Q, R, P, K, P0, I;
 
         // Dimensiones del sistema.
         int m, n;
@@ -84,5 +85,4 @@ class EKFilter
 
         // Señal de control para la predicción
         Eigen::VectorXd u;
-
 };

@@ -18,24 +18,22 @@ find_package(geometry_msgs REQUIRED)
 
 include_directories(
 SYSTEM
-${EIGEN3_INCLUDE_DIR})
-
-include_directories(
-  include
-)
-
-add_library( ${PROJECT_NAME} SHARED 
-src/ekf_krakens.cpp )
+${EIGEN3_INCLUDE_DIR}
+include)
  
-add_executable(localization_node src/localization_node.cpp)
+add_executable( localization_main 
+                src/localization_main.cpp 
+                src/uahrk_localization/ekf_krakens.cpp 
+                src/uahrk_localization/LocalizationNode.cpp
+                src/uahrk_localization/RobotSimNode.cpp)
 
-target_include_directories(localization_node PUBLIC
+target_include_directories(localization_main PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(localization_node rclcpp geometry_msgs)
+ament_target_dependencies(localization_main rclcpp geometry_msgs)
 
-install(TARGETS localization_node
+install(TARGETS localization_main
 DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
