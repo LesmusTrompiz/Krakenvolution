@@ -15,10 +15,10 @@ int menuApagar = 47;
 int menuActual = 1;
 
 //Pines menu secundario
-int secundario_b1 = 0;
-int secundario_b2 = 0;
-int secundario_b3 = 0;
-int secundario_b4 = 0;
+int secundario_b1 = 41;
+int secundario_b2 = 53;
+int secundario_b3 = 51;
+int secundario_b4 = 52;
 
 //Colores
 #define BLACK   0x0000
@@ -30,6 +30,8 @@ int secundario_b4 = 0;
 #define MAGENTA 0xF81F
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
+
+byte buffer[13];
 
 void setup() {
   //Configuracion botones menu principal
@@ -75,14 +77,16 @@ int mirarBotonesPrincipal() {
 //Hacemos lo mismo que en el metodo mirarBotonesPrincipal() pero con
 //los botones del menu secundario
 int mirarBotonesSecundario() {
-  if(digitalRead(secundario_b1) == HIGH)
+  if(!digitalRead(secundario_b1))
     return 1;
-  else if(digitalRead(secundario_b2) == HIGH)
+  else if(!digitalRead(secundario_b2))
     return 2;
-  else if(digitalRead(secundario_b3) == HIGH)
+  else if(!digitalRead(secundario_b3))
     return 3;
-  else if(digitalRead(secundario_b4) == HIGH)
+  else if(!digitalRead(secundario_b4))
     return 4;
+  else
+    return 0;
 }
 
 //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
@@ -223,23 +227,25 @@ void ejecutarMenuEstadistica() {
 }
 
 void ejecutarMenuCaballo() {
-  Serial.write("Esto es un mensaje de prueba para el puerto");
-  
   switch(mirarBotonesSecundario()) {
     case 1:
-      //Pendiente
+      Serial.write("Robot listo para jugar");
+      delay(1000);
       break;
 
     case 2:
-      //Pendiente
+      Serial.write("Elección de equipo");
+      delay(1000);
       break;
 
     case 3:
-      //Pendiente
+      Serial.write("Elección de spawn");
+      delay(1000);
       break;
 
     case 4:
-      //Pendiente
+      Serial.write("Elección de plan");
+      delay(1000);
       break;
   }
 }
@@ -267,64 +273,78 @@ void ejecutarMenuApagar() {
 void seleccionarMenu(int eleccion) {
   switch(eleccion) {
     case 1:
-      {
-        mylcd.Set_Text_Mode(0);      
-        pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-        ejecutarMenuEstadistica();
+      mylcd.Set_Text_Mode(0);      
+      pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuEstadistica();
 
-        mylcd.Set_Text_colour(WHITE);
-        mylcd.Set_Text_Back_colour(BLACK);
-        mylcd.Set_Text_Size(1);
-        mylcd.Print_String("Hello World!", 0, 0);
-        escribirTexto(WHITE, 2, "Hello World!", 0, 40);
-        escribirTexto(WHITE, 3, "Hello World!", 0, 104);
-        escribirTexto(WHITE, 4, "Hello!", 0, 192);
-        escribirTexto(WHITE, 5, "Hello!", 0, 224);
+      mylcd.Set_Text_colour(WHITE);
+      mylcd.Set_Text_Back_colour(BLACK);
+      mylcd.Set_Text_Size(1);
+      mylcd.Print_String("Hello World!", 0, 0);
+      escribirTexto(WHITE, 2, "Hello World!", 0, 40);
+      escribirTexto(WHITE, 3, "Hello World!", 0, 104);
+      escribirTexto(WHITE, 4, "Hello!", 0, 192);
+      escribirTexto(WHITE, 5, "Hello!", 0, 224);
 
-        break;
-      }
+      break;
 
     case 2:
-      {
-        mylcd.Set_Text_Mode(0);
-        pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
-        ejecutarMenuCaballo();
+      mylcd.Set_Text_Mode(0);
+      pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuCaballo();
 
-        mylcd.Set_Text_colour(WHITE);
-        mylcd.Set_Text_Back_colour(BLACK);
-        mylcd.Set_Text_Size(1);
-        mylcd.Print_String("Hello World!", 0, 0);
-        escribirTexto(WHITE, 2, "Hello World!", 0, 40);
-        escribirTexto(WHITE, 3, "Hello World!", 0, 104);
-        escribirTexto(WHITE, 4, "Hello!", 0, 192);
-        escribirTexto(WHITE, 5, "Hello!", 0, 224);
+      mylcd.Set_Text_colour(WHITE);
+      mylcd.Set_Text_Back_colour(BLACK);
+      mylcd.Set_Text_Size(1);
+      mylcd.Print_String("Hello World!", 0, 0);
+      escribirTexto(WHITE, 2, "Hello World!", 0, 40);
+      escribirTexto(WHITE, 3, "Hello World!", 0, 104);
+      escribirTexto(WHITE, 4, "Hello!", 0, 192);
+      escribirTexto(WHITE, 5, "Hello!", 0, 224);
 
-        break;
-      }
+      break;
 
     case 3:
-      {
-        pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
-        ejecutarMenuBicho();
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+      ejecutarMenuBicho();
 
-        break;
-      }
+      break;
 
     case 4:
-      {
-        pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
-        ejecutarMenuLidar();
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+      ejecutarMenuLidar();
 
-        break;
-      }
+      break;
 
     case 5:
-      {
-        pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
-        ejecutarMenuApagar();
+      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+      ejecutarMenuApagar();
 
-        break;
+      break;
+    default:
+      switch(menuActual) {
+        case 1:
+          ejecutarMenuEstadistica();
+          break;
+
+        case 2:
+          ejecutarMenuCaballo();
+          break;
+
+        case 3:
+          ejecutarMenuBicho();
+          break;
+
+        case 4:
+          ejecutarMenuLidar();
+          break;
+
+        case 5:
+          ejecutarMenuApagar();
+          break;
       }
+
+      break;
   }
 }
 
