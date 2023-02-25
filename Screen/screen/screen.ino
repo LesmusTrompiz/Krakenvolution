@@ -20,10 +20,15 @@ int secundario_b2 = 53;
 int secundario_b3 = 51;
 int secundario_b4 = 52;
 
+//Estado botones secundarios
+boolean estadoSecundario_1 = true;
+boolean estadoSecundario_2 = true;
+boolean estadoSecundario_3 = true;
+boolean estadoSecundario_4 = true;
+
 //Colores
 #define BLACK   0x0000
 #define BLUE    0x001F
-#define GREY    0x000F
 #define RED     0xF800
 #define GREEN   0x07E0
 #define CYAN    0x07FF
@@ -203,7 +208,7 @@ void marcoMenuPrincipal() {
   mylcd.Fill_Rect(424, 217,  56, 8, WHITE);
   mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
 }
-
+/*
 void pintarIconosConexion() {
   //Marco conexion
   mylcd.Fill_Rect(47, 0, 8, 55, WHITE);
@@ -213,7 +218,7 @@ void pintarIconosConexion() {
   mylcd.Fill_Rect(3, 30, 8, 13, GREY);
   mylcd.Fill_Rect(19, 17, 8, 26, GREY);
   mylcd.Fill_Rect(35, 4, 8, 39, GREY);
-}
+}*/
 /**
 void pintarCampo() {
   //Verticales campo
@@ -284,23 +289,31 @@ void ejecutarMenuEstadistica() {
 void ejecutarMenuCaballo() {
   switch(mirarBotonesSecundario()) {
     case 1:
-      Serial.write("Robot listo para jugar");
-      delay(1000);
+      if(digitalRead(secundario_b1) != estadoSecundario_1) {
+        Serial.write("Robot listo para jugar");
+        estadoSecundario_1 = !estadoSecundario_1;
+      }
       break;
 
     case 2:
-      Serial.write("Elección de equipo");
-      delay(1000);
+      if(digitalRead(secundario_b2) != estadoSecundario_2) {
+        Serial.write("Elección de equipo");
+        estadoSecundario_2 = !estadoSecundario_2;
+      }
       break;
 
     case 3:
-      Serial.write("Elección de spawn");
-      delay(1000);
+      if(digitalRead(secundario_b3) != estadoSecundario_3) {
+        Serial.write("Elección de spawn");
+        estadoSecundario_3 = !estadoSecundario_3;
+      }
       break;
 
     case 4:
-      Serial.write("Elección de plan");
-      delay(1000);
+      if(digitalRead(secundario_b4) != estadoSecundario_4) {
+        Serial.write("Elección de plan");
+        estadoSecundario_4 = !estadoSecundario_4;
+      }
       break;
   }
 }
@@ -332,9 +345,18 @@ void ejecutarMenuApagar() {
 int seleccionarMenu(int eleccion) {
   codigoInterrupcion = 0;
 
+  if(digitalRead(secundario_b1))
+    estadoSecundario_1 = true;
+  if(digitalRead(secundario_b2))
+    estadoSecundario_2 = true;
+  if(digitalRead(secundario_b3))
+    estadoSecundario_3 = true;
+  if(digitalRead(secundario_b4))
+    estadoSecundario_4 = true;
+
   switch(eleccion) {
     case 1:     
-      pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      pintarIconos(WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       ejecutarMenuEstadistica();
 
       mylcd.Set_Text_colour(WHITE);
@@ -349,13 +371,13 @@ int seleccionarMenu(int eleccion) {
       break;
 
     case 2:
-      pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
+      pintarIconos(BLACK, GREEN, WHITE, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       ejecutarMenuCaballo();
 
       mylcd.Set_Text_colour(WHITE);
       mylcd.Set_Text_Back_colour(BLACK);
       mylcd.Set_Text_Size(1);
-      mylcd.Print_String("Hello World!", 0, 0);
+      mylcd.Print_String("Hola buenos días", 0, 0);
       escribirTexto(WHITE, 2, "Hello World!", 0, 40);
       escribirTexto(WHITE, 3, "Hello World!", 0, 104);
       escribirTexto(WHITE, 4, "Hello!", 0, 192);
@@ -364,20 +386,20 @@ int seleccionarMenu(int eleccion) {
       break;
 
     case 3:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
+      pintarIconos(BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       if((codigoInterrupcion = ejecutarMenuBicho()) != 0)
         return codigoInterrupcion;
 
       break;
 
     case 4:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE);
+      pintarIconos(BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
       ejecutarMenuLidar();
 
       break;
 
     case 5:
-      pintarIconos(BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, BLACK);
+      pintarIconos(BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, WHITE, BLACK);
       ejecutarMenuApagar();
 
       break;
@@ -404,10 +426,8 @@ int seleccionarMenu(int eleccion) {
           ejecutarMenuApagar();
           break;
       }
-
       break;
   }
-
   return 0;
 }
 
