@@ -14,6 +14,13 @@ bool robot_in_goal(const Pose2d &robot,
                  const Pose2d &goal, 
                  float dist_precision,
                  float angle_precision);
+    
+bool robot_in_distance(const Pose2d &robot, 
+                 const Pose2d &goal, 
+                 float dist_precision);
+bool robot_in_angle(const Pose2d &robot, 
+                 const Pose2d &goal, 
+                 float angle_precision);
 
 std::tuple<std::string, int> calculate_move(
                     const Pose2d &robot_pose, 

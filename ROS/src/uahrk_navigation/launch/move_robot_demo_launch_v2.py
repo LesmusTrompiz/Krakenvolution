@@ -34,13 +34,19 @@ def generate_launch_description():
         output      = 'screen'
     )
 
-    # Rviz interface node
-    rviz2_interface = Node(
-        package='uahrk_navigation',
-        executable='rviz_interface',
-        output='screen'
+    # Path Finding node
+    path_finding = Node(
+        package     = 'uahrk_navigation',
+        executable  = 'path_finding_main',
+        output      = 'screen'
     )
 
+    # Rviz interface node
+    rviz2_interface = Node(
+        package='uahrk_rviz_interface',
+        executable='rviz_interface_main',
+        output='screen'
+    )
     # Rviz2 with a configurated view to see the tfs
     pkg_dir     = get_package_share_directory('uahrk_navigation')
     config_file = join(pkg_dir, 'config/rviz', 'Tf_config')
@@ -56,6 +62,7 @@ def generate_launch_description():
     ld.add_action(dummy_serial)
     ld.add_action(robot_tf)
     ld.add_action(move_to_pose)
+    ld.add_action(path_finding)
     ld.add_action(rviz2_interface)
     ld.add_action(rviz2)
     ld.add_action(grid)

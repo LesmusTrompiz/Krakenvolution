@@ -15,7 +15,7 @@ MoveToPoseNode::MoveToPoseNode()
 
     order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
     
-    go_to_pose_server = rclcpp_action::create_server<GoToPose>(
+    go_to_pose_server = rclcpp_action::create_server<Path>(
       this,
       "move_server",
       std::bind(&MoveToPoseNode::handle_goal, this, _1, _2),
@@ -41,9 +41,8 @@ void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrde
 }
 
 void MoveToPoseNode::control_cycle(){
-  auto result = std::make_shared<GoToPose::Result>();
-  float dist_precision  = 0.5;
-  float angle_precision = 10;
+  auto result = std::make_shared<Path::Result>();
+
 
   switch (state)
   {
@@ -56,11 +55,26 @@ void MoveToPoseNode::control_cycle(){
     case NEXT_MOVE:
       try {
         auto robot_pose = get_robot_pose();
-        Pose2d goal_pose{actual_handle->get_goal()->pose.pose};
-        if (robot_in_goal(robot_pose, goal_pose, dist_precision, angle_precision)){
-          actual_handle->succeed(result);
-          state = IDLE;
-          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
+        Pose2d goal_pose{path_goal->poses[actual_wp]};
+        if (robot_in_distance(robot_pose, goal_pose, dist_precision)){
+          RCLCPP_INFO(this->get_logger(), "ROBOT IN WP %d GOAL SIZE %d", actual_wp, path_goal->poses.size());
+          actual_wp++;
+          if(actual_wp == path_goal->poses.size()){
+            if(robot_in_angle(robot_pose, goal_pose, dist_precision)){
+              actual_handle->succeed(result);
+              state = IDLE;
+              RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
+              return;
+            }
+            else{
+              actual_wp--;
+            }
+          }
+          Pose2d goal_pose{path_goal->poses[actual_wp]};
+          auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
+          send_order(std::get<0>(move),std::get<1>(move));
+          state = EXECUTING;
+          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> EXECUTING");
         }
         else{
           auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
@@ -176,30 +190,31 @@ void MoveToPoseNode::result_callback(const RequestHandleOrder::WrappedResult & r
 
 rclcpp_action::GoalResponse MoveToPoseNode::handle_goal(
     const rclcpp_action::GoalUUID & uuid,
-    std::shared_ptr<const GoToPose::Goal> goal){
+    std::shared_ptr<const Path::Goal> goal){
 
     RCLCPP_INFO(this->get_logger(), 
-      "Received goal request with order x: %f y: %f  ",
-      goal->pose.pose.position.x,
-      goal->pose.pose.position.y);
+      "Received path goal. Path size : %d",
+      goal->pose.poses.size());
     (void)uuid;
     return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 
 
 rclcpp_action::CancelResponse MoveToPoseNode::handle_cancel(
-  const std::shared_ptr<GoalHandleGoToPose> goal_handle)
+  const std::shared_ptr<GoalHandlePath> goal_handle)
 {
   RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
   (void)goal_handle;
   return rclcpp_action::CancelResponse::ACCEPT;
 }
 
-void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> goal_handle)
+void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandlePath> goal_handle)
 {
   // Update the actual handle variable an
   // acomplish the goal in control_cycle
+  actual_wp = 0;
   actual_handle = goal_handle;
+  path_goal = std::make_shared<geometry_msgs::msg::PoseArray>(actual_handle->get_goal()->pose);
 }
 
 Pose2d MoveToPoseNode::get_robot_pose(){

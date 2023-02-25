@@ -1,0 +1,16 @@
+
+girar:
+  id_ros: spin
+  min_arg: -360
+  max_arg:  360
+
+avanzar:
+  id_ros: advance
+  min_arg: -2000
+  max_arg:  2000
+
+mover_brazo:
+  id_ros: mover
+  min_arg: -90
+  max_arg:  90
+

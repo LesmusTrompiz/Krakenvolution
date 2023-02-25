@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/trompiz/ws/Krakenvolution/ROS/install/uahrk_navigation_msgs/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/install/serial_bridge_actions/include/**",
+        "/opt/ros/foxy/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/serial_bridge/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/serial_bridge_actions/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/uahrk_lidar/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/uahrk_localization/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/uahrk_navigation/include/**",
+        "/home/trompiz/ws/Krakenvolution/ROS/src/uahrk_navigation_msgs/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
