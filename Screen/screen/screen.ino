@@ -31,7 +31,7 @@ int secundario_b4 = 52;
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-byte buffer[13];
+int codigoInterrupcion = 0;
 
 void setup() {
   //Configuracion botones menu principal
@@ -93,6 +93,9 @@ int mirarBotonesSecundario() {
 void pintarIconos(uint16_t estadistica_c1, uint16_t estadistica_c2,
 uint16_t caballo_c1, uint16_t caballo_c2, uint16_t bicho_c1, uint16_t bicho_c2,
 uint16_t lidar_c1, uint16_t lidar_c2, uint16_t apagar_c1, uint16_t apagar_c2) {
+  //Limpiar zona de escritura
+  mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
+
   //Fondo estadistica
   mylcd.Fill_Rect(432, 0, 48, 49, estadistica_c1);
   //Icono estadistica
@@ -211,7 +214,7 @@ void pintarIconosConexion() {
   mylcd.Fill_Rect(19, 17, 8, 26, GREY);
   mylcd.Fill_Rect(35, 4, 8, 39, GREY);
 }
-
+/**
 void pintarCampo() {
   //Verticales campo
   mylcd.Fill_Rect(416, 8, 8, 272, WHITE);
@@ -220,6 +223,58 @@ void pintarCampo() {
   //Horizontales campo
   mylcd.Fill_Rect(  8,   8,  400, 8, WHITE);
   mylcd.Fill_Rect(416, 416,  56, 8, WHITE);
+}
+*/
+void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coordenada_X, uint8_t coordenada_Y) {
+  mylcd.Set_Text_colour(color);
+  mylcd.Set_Text_Size(tamanno);
+  mylcd.Print_String(texto, coordenada_X, coordenada_Y);
+}
+
+//Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
+int escribirErrores(uint16_t color, uint8_t tamanno, String texto, uint8_t coordenada_X, uint8_t coordenada_Y) {
+  //Variables para el parrafo
+  String linea;
+  int longitudLinea = 32;
+  int interlineado = 20;
+  int lineasPintadas = 0;
+  int lineasMaximas = 13;
+  //Variable para las interrupciones
+  int menuDevuelto;
+  
+  mylcd.Set_Text_colour(color);
+  mylcd.Set_Text_Size(tamanno);
+
+  while(texto.length() > longitudLinea) {
+    
+    linea = "";
+    //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
+    //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer
+    while(linea.length() + texto.indexOf(" ") < longitudLinea && !(texto.indexOf(" ") == -1)) {
+      //Insertar la seccion del texto hasta el primer espacio en blanco en linea y borrarla de texto
+      linea += texto.substring(0, texto.indexOf(" ") + 1);
+      texto.remove(0, texto.indexOf(" ") + 1);
+    }
+
+    //Ventana de medio segundo antes de pintar cada linea para comprobar botones principales
+    for(uint32_t inicio = millis(); millis() - inicio < 500;) {
+      if((menuDevuelto = mirarBotonesPrincipal()) != 0) {
+        return menuDevuelto;
+      }
+    }
+
+    //Pintar una linea
+    mylcd.Print_String(linea, coordenada_X, coordenada_Y + lineasPintadas * interlineado);
+    lineasPintadas++;
+    if(lineasPintadas == lineasMaximas)
+      lineasPintadas = 0;
+  }
+
+  //Pintar ultima linea
+  if(texto.length() > 0)
+    mylcd.Print_String(texto, coordenada_X, coordenada_Y + lineasPintadas * interlineado);
+  
+  return 0;
 }
 
 void ejecutarMenuEstadistica() {
@@ -250,8 +305,8 @@ void ejecutarMenuCaballo() {
   }
 }
 
-void ejecutarMenuBicho() {
-  //Pendiente
+int ejecutarMenuBicho() {
+  return escribirErrores(WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10);
 }
 
 void ejecutarMenuLidar() {
@@ -261,19 +316,24 @@ void ejecutarMenuLidar() {
 void ejecutarMenuApagar() {
   switch(mirarBotonesSecundario()) {
     case 1:
-      //Pendiente
+      Serial.write("Reiniciar robot");
+      delay(1000);
+
       break;
 
     case 2:
-      //Pendiente
+      Serial.write("Apagar robot");
+      delay(1000);
+
       break;
   }
 }
 
-void seleccionarMenu(int eleccion) {
+int seleccionarMenu(int eleccion) {
+  codigoInterrupcion = 0;
+
   switch(eleccion) {
-    case 1:
-      mylcd.Set_Text_Mode(0);      
+    case 1:     
       pintarIconos(WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
       ejecutarMenuEstadistica();
 
@@ -289,7 +349,6 @@ void seleccionarMenu(int eleccion) {
       break;
 
     case 2:
-      mylcd.Set_Text_Mode(0);
       pintarIconos(BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE, BLACK, WHITE);
       ejecutarMenuCaballo();
 
@@ -306,7 +365,8 @@ void seleccionarMenu(int eleccion) {
 
     case 3:
       pintarIconos(BLACK, WHITE, BLACK, WHITE, WHITE, BLACK, BLACK, WHITE, BLACK, WHITE);
-      ejecutarMenuBicho();
+      if((codigoInterrupcion = ejecutarMenuBicho()) != 0)
+        return codigoInterrupcion;
 
       break;
 
@@ -321,6 +381,7 @@ void seleccionarMenu(int eleccion) {
       ejecutarMenuApagar();
 
       break;
+
     default:
       switch(menuActual) {
         case 1:
@@ -346,20 +407,12 @@ void seleccionarMenu(int eleccion) {
 
       break;
   }
-}
 
-void escribirTexto(uint16_t color, uint8_t tamanno, String texto, uint8_t coordenada_X, uint8_t coordenada_Y) {
-  mylcd.Set_Text_colour(color);
-  mylcd.Set_Text_Size(tamanno);
-  mylcd.Print_String(texto, coordenada_X, coordenada_Y);
-}
-
-void pintarMatriz(int matriz[][2], uint16_t color) {
-  for(int i = 0; i < (sizeof(matriz) / sizeof(matriz[0])); i++) {
-    mylcd.Draw_Pixe(matriz[i][0], matriz[i][1], color);
-  }
+  return 0;
 }
 
 void loop() {
   seleccionarMenu(mirarBotonesPrincipal());
+  if(codigoInterrupcion != 0)
+    seleccionarMenu(codigoInterrupcion);
 }
