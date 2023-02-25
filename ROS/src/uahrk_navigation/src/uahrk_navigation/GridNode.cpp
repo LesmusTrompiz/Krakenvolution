@@ -13,7 +13,6 @@ nav_msgs::msg::OccupancyGrid eurobotgrid_to_rosgrid(const eurobot_grid &eurogrid
   rosgrid.header.frame_id = "map";
 
   std::copy(eurogrid.cells, eurogrid.cells + (eurogrid.width * eurogrid.height) , rosgrid.data.begin());
-  std::cout<< "vector size " << rosgrid.data.size() << std::endl;
   return rosgrid;
 }
 
@@ -39,6 +38,57 @@ void draw_obstacle(nav_msgs::msg::OccupancyGrid &rosgrid, Obstacle obstacle){
       rosgrid.data[x + y*rosgrid.info.width] = 100;
     }
   }
+}
+
+void fill_space_between_objects(nav_msgs::msg::OccupancyGrid &rosgrid, float distance){
+  int max_distance  = distance / rosgrid.info.resolution;
+  int x = 1;
+  int y = 0;
+
+  for(int actual_cell = 1; actual_cell < rosgrid.data.size(); actual_cell++){
+
+    if(rosgrid.data[actual_cell] == 100){
+      x++;
+      y  += x / rosgrid.info.width;
+      x   = x % rosgrid.info.width;
+      continue;
+    }
+
+    // Check x
+    if(x > 1){
+      if(rosgrid.data[actual_cell - 1] == 100){
+        for(int next_x = 1; (next_x < max_distance && next_x < rosgrid.info.width - x) ; next_x++){
+          if(rosgrid.data[actual_cell + next_x ] == 100){
+            rosgrid.data[actual_cell] = 100;
+            continue;
+          }
+        }
+      }
+    }
+
+    // Can check y limits;
+    if(rosgrid.data[actual_cell]){
+      x++;
+      y  += x / rosgrid.info.width;
+      x   = x % rosgrid.info.width;
+      continue;
+    }
+
+    if(y > 1){
+      if(rosgrid.data[actual_cell - rosgrid.info.width]){
+        for(int next_y = 1; (next_y < max_distance && next_y < rosgrid.info.height - y); next_y++){
+          if(rosgrid.data[actual_cell + next_y * rosgrid.info.width]){
+            rosgrid.data[actual_cell] = 100;
+            continue;
+          }
+        }
+      }
+    }
+    x++;
+    y  += x / rosgrid.info.width;
+    x   = x % rosgrid.info.width;
+  }
+
 }
 
 void initialize_rosgrid(nav_msgs::msg::OccupancyGrid &rosgrid){
@@ -169,6 +219,9 @@ void GridNode::tick_map(){
   for(const auto &obstacle : robot_obstacles){
     draw_obstacle(actual_grid, obstacle);
   }
+
+  // Fill with black if two obstacles are extreamly near
+  fill_space_between_objects(actual_grid, 0.4);
 
   // Update the header time
   actual_grid.header.stamp = this->get_clock()->now();

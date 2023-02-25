@@ -7,7 +7,7 @@ constexpr int   EurobotGridHeight      = 30; // 30 dm
 constexpr int   PLAYGROUND_WIDTH       = 2;  // 2m
 constexpr int   PLAYGROUND_HEIGHT      = 3;  // 2m
 
-constexpr float EurobotGridResolution  = (float)PLAYGROUND_WIDTH /EurobotGridWidth; // 20 dm
+constexpr float EurobotGridResolution  = (float)PLAYGROUND_WIDTH /EurobotGridWidth; // 0.1 meters / cell
 
 
 
