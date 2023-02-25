@@ -8,7 +8,9 @@ PathFindingNode::PathFindingNode()
 
   tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-    
+  
+  path_client = rclcpp_action::create_client<Path>(this, "move_server");
+
 
   path_pub =  this->create_publisher<geometry_msgs::msg::PoseArray>(
     "path", 10);
@@ -65,7 +67,8 @@ void PathFindingNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> 
   // acomplish the goal in control_cycle
   auto result = std::make_shared<GoToPose::Result>();
   auto robot_pose = get_robot_pose();
-  Pose2d goal_pose{goal_handle->get_goal()->pose.pose};
+  const auto ros_goal = goal_handle->get_goal()->pose.pose;
+  Pose2d goal_pose{ros_goal};
 
   if (!inside_grid(goal_pose,grid)){
     goal_handle->abort(result);
@@ -79,7 +82,17 @@ void PathFindingNode::handle_accepted(const std::shared_ptr<GoalHandleGoToPose> 
     auto discretized_path = discretize_path(path);
     path_simplified_pub->publish(intpath2rospath(discretized_path,grid));
     auto reduced_path = reduce_by_slopes(discretized_path, grid);
-    path_reduced_pub->publish(intpath2rospath(reduced_path,grid));
+    auto final_path = intpath2rospath(reduced_path,grid);
+    final_path.poses.back().orientation = ros_goal.orientation;
+    path_reduced_pub->publish(final_path);
+    
+    auto send_goal_options = rclcpp_action::Client<Path>::SendGoalOptions();
+    auto goal_msg = Path::Goal();
+    goal_msg.pose = final_path;
+    //order_client->async_send_goal(goal_msg, send_goal_options);
+    path_client->async_send_goal(goal_msg);
+    
+
     goal_handle->succeed(result);
   }
   catch(...){

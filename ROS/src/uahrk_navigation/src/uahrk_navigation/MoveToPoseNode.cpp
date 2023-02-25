@@ -42,8 +42,7 @@ void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrde
 
 void MoveToPoseNode::control_cycle(){
   auto result = std::make_shared<Path::Result>();
-  float dist_precision  = 0.5;
-  float angle_precision = 10;
+
 
   switch (state)
   {
@@ -57,14 +56,19 @@ void MoveToPoseNode::control_cycle(){
       try {
         auto robot_pose = get_robot_pose();
         Pose2d goal_pose{path_goal->poses[actual_wp]};
-        if (robot_in_goal(robot_pose, goal_pose, dist_precision, angle_precision)){
+        if (robot_in_distance(robot_pose, goal_pose, dist_precision)){
           RCLCPP_INFO(this->get_logger(), "ROBOT IN WP %d GOAL SIZE %d", actual_wp, path_goal->poses.size());
           actual_wp++;
-          if(actual_wp >= path_goal->poses.size()){
-            actual_handle->succeed(result);
-            state = IDLE;
-            RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
-            return;
+          if(actual_wp == path_goal->poses.size()){
+            if(robot_in_angle(robot_pose, goal_pose, dist_precision)){
+              actual_handle->succeed(result);
+              state = IDLE;
+              RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
+              return;
+            }
+            else{
+              actual_wp--;
+            }
           }
           Pose2d goal_pose{path_goal->poses[actual_wp]};
           auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);

@@ -61,7 +61,20 @@ inline float angle_difference(const float &a1, const float &a2){
 }
 
 
-bool robot_in_goal(const Pose2d &robot, 
+bool robot_in_distance(const Pose2d &robot, 
+                 const Pose2d &goal, 
+                 float dist_precision){
+  float square_dist_precision = dist_precision * dist_precision;
+
+  return square_dist(robot,goal) < square_dist_precision;
+}
+
+bool robot_in_angle(const Pose2d &robot, 
+                 const Pose2d &goal, 
+                 float angle_precision){
+  return abs(angle_difference(robot.a,goal.a)) < angle_precision;
+}
+inline bool robot_in_goal(const Pose2d &robot, 
                  const Pose2d &goal, 
                  float dist_precision,
                  float angle_precision){
@@ -69,7 +82,7 @@ bool robot_in_goal(const Pose2d &robot,
   std::cerr << "Dist error " << square_dist(robot,goal) << " square dist precision " << square_dist_precision << " ";
   std::cerr << "Angle error " << abs(angle_difference(robot.a,goal.a)) << " angle precision " << angle_precision;
 
-  return square_dist(robot,goal) <= square_dist_precision && abs(angle_difference(robot.a,goal.a)) <= angle_precision;
+  return square_dist(robot,goal) < square_dist_precision && abs(angle_difference(robot.a,goal.a)) < angle_precision;
 }
 
 std::tuple<std::string, int> calculate_move(
@@ -80,12 +93,12 @@ std::tuple<std::string, int> calculate_move(
 
   auto dist = advance_to_goal(robot_pose, goal_pose);
   auto spin = spin_to_goal(robot_pose.a, goal_pose.a);
-  if(dist <= (dist_precision * 1000)){
-    if(abs(spin) <= angle_precision){
+  if(dist < (dist_precision * 1000)){
+    if(abs(spin) < angle_precision){
       std::stringstream error_msg;
       error_msg << "ERROR CALLING CALCULATE MOVE, GOAL ALREDY SATISFIED :";
-      error_msg << "DIST "  << dist      << " <= DIST CONDITION "  << dist_precision  * 1000 << " ";
-      error_msg << "ANGLE " << abs(spin) << " <= ANGLE CONDITION " << angle_precision;
+      error_msg << "DIST "  << dist      << " < DIST CONDITION "  << dist_precision  * 1000 << " ";
+      error_msg << "ANGLE " << abs(spin) << " < ANGLE CONDITION " << angle_precision;
       throw std::invalid_argument(error_msg.str());
     }
     else{

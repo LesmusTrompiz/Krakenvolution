@@ -22,6 +22,10 @@ using RequestHandleOrder = rclcpp_action::ClientGoalHandle<Order>;
 using Path  = uahrk_navigation_msgs::action::Path;
 using GoalHandlePath = rclcpp_action::ServerGoalHandle<Path>;
 
+constexpr float dist_precision  = 0.1;
+constexpr float angle_precision = 5.0;
+
+
 enum ControlState {IDLE, EXECUTING, NEXT_MOVE};
 
 

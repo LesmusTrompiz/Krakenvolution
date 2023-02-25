@@ -10,11 +10,16 @@
 #include "tf2_ros/buffer.h"
 #include "uahrk_navigation/pose2d.hpp"
 #include "uahrk_navigation/astar_ros.hpp"
+#include "uahrk_navigation_msgs/action/path.hpp"
 
 
 
 using GoToPose           = uahrk_navigation_msgs::action::GoToPose;
 using GoalHandleGoToPose = rclcpp_action::ServerGoalHandle<GoToPose>;
+
+using Path     = uahrk_navigation_msgs::action::Path;
+using RequestHandlePath = rclcpp_action::ClientGoalHandle<Path>;
+
 
 class PathFindingNode : public rclcpp::Node
 {
@@ -40,6 +45,7 @@ class PathFindingNode : public rclcpp::Node
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
 
     // Action client
+    rclcpp_action::Client<Path>::SharedPtr    path_client;
 
     // Pub path for debug purpose
     rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr path_pub;
