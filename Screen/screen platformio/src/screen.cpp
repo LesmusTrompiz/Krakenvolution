@@ -1,5 +1,6 @@
 #include <LCDWIKI_GUI.h> //Core graphics library
 #include <LCDWIKI_KBV.h> //Hardware-specific library
+#include "headers/protocol.hpp"
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
 LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
@@ -37,6 +38,37 @@ boolean estadoSecundario_4 = true;
 #define WHITE   0xFFFF
 
 int codigoInterrupcion = 0;
+
+ProtocolSM protocol_sm;
+uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
+
+#if defined(USART_RX_vect)
+  ISR(USART_RX_vect)
+#elif defined(USART0_RX_vect)
+  ISR(USART0_RX_vect)
+#elif defined(USART_RXC_vect)
+  ISR(USART_RXC_vect) // ATmega8
+#else
+  #error "Don't know what the Data Received vector is called for Serial"
+#endif
+  {
+    buffer._rx_complete_irq();
+  }
+
+#if defined(UART0_UDRE_vect)
+ISR(UART0_UDRE_vect)
+#elif defined(UART_UDRE_vect)
+ISR(UART_UDRE_vect)
+#elif defined(USART0_UDRE_vect)
+ISR(USART0_UDRE_vect)
+#elif defined(USART_UDRE_vect)
+ISR(USART_UDRE_vect)
+#else
+  #error "Don't know what the Data Register Empty vector is called for Serial"
+#endif
+{
+  buffer._tx_udr_empty_irq();
+}
 
 //Devolvemos el boton pulsado con prioridad de menor a mayor
 int mirarBotonesPrincipal() {
@@ -265,28 +297,28 @@ void ejecutarMenuCaballo() {
   switch(mirarBotonesSecundario()) {
     case 1:
       if(digitalRead(secundario_b1) != estadoSecundario_1) {
-        Serial.write("Robot listo para jugar");
+        //Serial.write("Robot listo para jugar");
         estadoSecundario_1 = !estadoSecundario_1;
       }
       break;
 
     case 2:
       if(digitalRead(secundario_b2) != estadoSecundario_2) {
-        Serial.write("Elección de equipo");
+        //Serial.write("Elección de equipo");
         estadoSecundario_2 = !estadoSecundario_2;
       }
       break;
 
     case 3:
       if(digitalRead(secundario_b3) != estadoSecundario_3) {
-        Serial.write("Elección de spawn");
+        //Serial.write("Elección de spawn");
         estadoSecundario_3 = !estadoSecundario_3;
       }
       break;
 
     case 4:
       if(digitalRead(secundario_b4) != estadoSecundario_4) {
-        Serial.write("Elección de plan");
+        //Serial.write("Elección de plan");
         estadoSecundario_4 = !estadoSecundario_4;
       }
       break;
@@ -304,13 +336,13 @@ void ejecutarMenuLidar() {
 void ejecutarMenuApagar() {
   switch(mirarBotonesSecundario()) {
     case 1:
-      Serial.write("Reiniciar robot");
+      //Serial.write("Reiniciar robot");
       delay(1000);
 
       break;
 
     case 2:
-      Serial.write("Apagar robot");
+      //Serial.write("Apagar robot");
       delay(1000);
 
       break;
