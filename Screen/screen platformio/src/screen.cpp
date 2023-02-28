@@ -89,8 +89,11 @@ int mirarLidar() {
     estadoSecundario_1 = !estadoSecundario_1;
     lidar = !lidar;
 
-    return 3;
-  }
+    return 4;
+  } else if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
+  menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+    return menuDevuelto;
+
   return 0;
 }
 
@@ -141,6 +144,7 @@ int ejecutarMenuLidar() {
   int coordY[6] = {8, 45, 82, 200, 237, 290};
   int tamanno = 4;
   uint16_t color = WHITE;
+  int devolver;
 
   for(int i = 0; i < 6; i++) {
     //Penultima y ultima vuelta
@@ -160,8 +164,8 @@ int ejecutarMenuLidar() {
     else
       display::escribirTexto(mylcd, color, tamanno, encender[i], coordX, coordY[i]);
 
-    if(mirarLidar() == 3)
-      return 3;
+    if((devolver = mirarLidar()) != 0)
+      return devolver;
   }
   return mirarLidar();
 }
