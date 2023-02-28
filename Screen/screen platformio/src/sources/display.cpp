@@ -15,6 +15,12 @@ namespace display {
         //Limpiar zona de escritura
         mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
 
+        //Limpiar menu secundario
+        mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+        mylcd.Fill_Rect(  121, 281, 113, 319, BLACK);
+        mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
+        mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
+
         //Fondo estadistica
         mylcd.Fill_Rect(432, 0, 48, 49, estadistica_c1);
         //Icono estadistica
@@ -113,7 +119,9 @@ namespace display {
     void marcoMenuPrincipal(LCDWIKI_KBV mylcd) {
         //Verticales menu principal
         mylcd.Fill_Rect(424, 0, 8, 280, WHITE);
-        mylcd.Fill_Rect(49, 273, 8, 56, WHITE);
+        mylcd.Fill_Rect(113, 273, 8, 56, WHITE);
+        mylcd.Fill_Rect(235, 273, 8, 56, WHITE);
+        mylcd.Fill_Rect(357, 273, 8, 56, WHITE);
 
         //Horizontales menu principal
         mylcd.Fill_Rect(424,  49,  56, 8, WHITE);
@@ -147,7 +155,7 @@ namespace display {
     */
     
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
-    uint8_t coordenada_X, uint8_t coordenada_Y) {
+    int coordenada_X, int coordenada_Y) {
         mylcd.Set_Text_colour(color);
         mylcd.Set_Text_Size(tamanno);
         mylcd.Print_String(texto, coordenada_X, coordenada_Y);
@@ -168,7 +176,6 @@ namespace display {
         mylcd.Set_Text_Size(tamanno);
 
         while(texto.length() > longitudLinea) {
-            
             linea = "";
             //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
             //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer

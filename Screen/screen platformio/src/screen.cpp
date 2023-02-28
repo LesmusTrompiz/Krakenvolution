@@ -9,6 +9,16 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 //if the IC model is not known and the modules is readable,you can use this constructed function
 //LCDWIKI_KBV mylcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
+//Colores
+#define BLACK   0x0000
+#define BLUE    0x001F
+#define RED     0xF800
+#define GREEN   0x07E0
+#define CYAN    0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW  0xFFE0
+#define WHITE   0xFFFF
+
 //Pines menu principal
 int menuEstadistica = 25;
 int menuCaballo = 24;
@@ -16,9 +26,6 @@ int menuBicho = 33;
 int menuLidar = 39;
 int menuApagar = 47;
 int menuActual = 1;
-
-//Variable para las interrupciones
-int menuDevuelto;
 
 //Pines menu secundario
 int secundario_b1 = 41;
@@ -32,17 +39,11 @@ boolean estadoSecundario_2 = true;
 boolean estadoSecundario_3 = true;
 boolean estadoSecundario_4 = true;
 
-//Colores
-#define BLACK   0x0000
-#define BLUE    0x001F
-#define RED     0xF800
-#define GREEN   0x07E0
-#define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
-#define WHITE   0xFFFF
-
+//Variables para las interrupciones
+int menuDevuelto;
 int codigoInterrupcion = 0;
+
+boolean lidar = true;
 
 /**ProtocolSM protocol_sm;
 uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
@@ -74,6 +75,24 @@ ISR(USART_UDRE_vect)
 {
   buffer._tx_udr_empty_irq();
 }*/
+
+int mirarLidar() {
+  if(digitalRead(secundario_b1) != estadoSecundario_1 && digitalRead(secundario_b1) == LOW) {
+    mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
+    mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+
+    if(lidar)
+      Serial.write("Apagar lidar");
+    else
+      Serial.write("Encender lidar");
+
+    estadoSecundario_1 = !estadoSecundario_1;
+    lidar = !lidar;
+
+    return 3;
+  }
+  return 0;
+}
 
 void ejecutarMenuEstadistica() {
   //Pendiente
@@ -115,8 +134,36 @@ int ejecutarMenuBicho() {
   return display::escribirErrores(mylcd, WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10, menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual);
 }
 
-void ejecutarMenuLidar() {
-  //Pendiente
+int ejecutarMenuLidar() {
+  String apagar[6] = {"Seleccione apagar", "para detener el", "lidar", "Estado del lidar:", "Encendido", "Apagar"};
+  String encender[6] = {"Seleccione", "encender para", "arrancar el lidar", "Estado del lidar:", "Apagado", "Encen."};
+  int coordX = 8;
+  int coordY[6] = {8, 45, 82, 200, 237, 290};
+  int tamanno = 4;
+  uint16_t color = WHITE;
+
+  for(int i = 0; i < 6; i++) {
+    //Penultima y ultima vuelta
+    if(i > 3 && i < 5) {
+      if(lidar)
+        color = GREEN;
+      else
+        color = RED;
+    } else if(i > 4) {
+      coordX = 4;
+      tamanno--;
+      color = WHITE;
+    }
+
+    if(lidar)
+      display::escribirTexto(mylcd, color, tamanno, apagar[i], coordX, coordY[i]);
+    else
+      display::escribirTexto(mylcd, color, tamanno, encender[i], coordX, coordY[i]);
+
+    if(mirarLidar() == 3)
+      return 3;
+  }
+  return mirarLidar();
 }
 
 void ejecutarMenuApagar() {
@@ -139,7 +186,7 @@ int seleccionarMenu(int eleccion) {
   codigoInterrupcion = 0;
 
   if(menuDevuelto != 0)
-  menuActual = menuDevuelto;
+    menuActual = menuDevuelto;
 
   if(digitalRead(secundario_b1))
     estadoSecundario_1 = true;
@@ -153,6 +200,7 @@ int seleccionarMenu(int eleccion) {
   switch(eleccion) {
     case 1:
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
+      display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
       ejecutarMenuEstadistica();
 
       mylcd.Set_Text_colour(WHITE);
@@ -168,6 +216,10 @@ int seleccionarMenu(int eleccion) {
 
     case 2:
       display::pintarIconos(mylcd, BLACK, GREEN, WHITE, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
+      display::escribirTexto(mylcd, WHITE, 3, "Listo", 12, 290);
+      display::escribirTexto(mylcd, WHITE, 3, "Equipo", 126, 290);
+      display::escribirTexto(mylcd, WHITE, 3, "Spawn", 256, 290);
+      display::escribirTexto(mylcd, WHITE, 3, "Plan", 388, 290);
       ejecutarMenuCaballo();
 
       mylcd.Set_Text_colour(WHITE);
@@ -177,12 +229,13 @@ int seleccionarMenu(int eleccion) {
       display::escribirTexto(mylcd, WHITE, 2, "Hello World!", 0, 40);
       display::escribirTexto(mylcd, WHITE, 3, "Hello World!", 0, 104);
       display::escribirTexto(mylcd, WHITE, 4, "Hello!", 0, 192);
-      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 224);
+      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 220);
 
       break;
 
     case 3:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
+      display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
       if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
@@ -192,12 +245,17 @@ int seleccionarMenu(int eleccion) {
 
     case 4:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
-      ejecutarMenuLidar();
+      if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
+        menuDevuelto = codigoInterrupcion;
+        return menuDevuelto;
+      }
 
       break;
 
     case 5:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, WHITE, BLACK);
+      display::escribirTexto(mylcd, WHITE, 3, "Apagar", 4, 290);
+      display::escribirTexto(mylcd, WHITE, 3, "Reini.", 127, 290);
       ejecutarMenuApagar();
 
       break;
@@ -255,6 +313,7 @@ void setup() {
   mylcd.Fill_Screen(BLACK);
 
   display::marcoMenuPrincipal(mylcd);
+  mylcd.Set_Text_Back_colour(BLACK);
   seleccionarMenu(1);
 }
 
