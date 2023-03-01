@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Action ID="GoToPose" a="0" x="1" y="1"/>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="GoToPose">
+            <input_port default="0" name="a"/>
+            <input_port default="0" name="x"/>
+            <input_port default="0" name="y"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

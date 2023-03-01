@@ -61,7 +61,11 @@ class PathFindingNode : public rclcpp::Node
   
     // Obstacle cb
     void grid_cb(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
-
+    std::shared_ptr<GoalHandleGoToPose> goal;
     Pose2d get_robot_pose();
+
+    void result_callback(const RequestHandlePath::WrappedResult & result);
+    void goal_response_callback(std::shared_future<RequestHandlePath::SharedPtr> future);
+
 
 };
