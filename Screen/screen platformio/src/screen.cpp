@@ -10,14 +10,14 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 //LCDWIKI_KBV mylcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
 //Colores
-#define BLACK   0x0000
-#define BLUE    0x001F
-#define RED     0xF800
-#define GREEN   0x07E0
-#define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
-#define WHITE   0xFFFF
+#define BLACK       0x0000
+#define BLUE        0x007E
+#define RED         0xF800
+#define GREEN       0x07E0
+#define CYAN        0x07FF
+#define MAGENTA     0xF81F
+#define YELLOW      0xFFE0
+#define WHITE       0xFFFF
 
 //Pines menu principal
 int menuEstadistica = 25;
@@ -43,6 +43,8 @@ boolean estadoSecundario_4 = true;
 int menuDevuelto;
 int codigoInterrupcion = 0;
 
+boolean campo = true;
+int spawn = 1;
 boolean lidar = true;
 
 /**ProtocolSM protocol_sm;
@@ -97,12 +99,25 @@ int mirarLidar() {
   return 0;
 }
 
-void ejecutarMenuEstadistica() {
-  //Pendiente
+int ejecutarMenuEstadistica() {
+  int devolver;
+  display::escribirTexto(mylcd, WHITE, 5, "Tiempo: 62s", 8, 8);
+  display::escribirTexto(mylcd, WHITE, 5, "Tartas: 4", 8, 55);
+
+  if((devolver = checkButtons::mirarBotonesPrincipal(menuEstadistica,
+  menuCaballo, menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+    return devolver;
+
+  display::escribirTexto(mylcd, WHITE, 5, "Puntos: 32", 8, 102);
+  display::escribirTexto(mylcd, MAGENTA, 6, "UAHRKrakens", 8, 223);
+
+  return 0;
 }
 
 void ejecutarMenuCaballo() {
-  switch(checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
+  int devolver;
+
+  switch(devolver = checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
     case 1:
       if(digitalRead(secundario_b1) != estadoSecundario_1) {
         Serial.write("Robot listo para jugar");
@@ -112,14 +127,17 @@ void ejecutarMenuCaballo() {
 
     case 2:
       if(digitalRead(secundario_b2) != estadoSecundario_2) {
-        Serial.write("Elección de equipo");
+        campo = !campo;
         estadoSecundario_2 = !estadoSecundario_2;
       }
       break;
 
     case 3:
       if(digitalRead(secundario_b3) != estadoSecundario_3) {
-        Serial.write("Elección de spawn");
+        if(spawn < 10)
+          spawn++;
+        else
+          spawn = 1;
         estadoSecundario_3 = !estadoSecundario_3;
       }
       break;
@@ -131,6 +149,9 @@ void ejecutarMenuCaballo() {
       }
       break;
   }
+
+  if(devolver == 2 || devolver == 3)
+    display::pintarCampo(mylcd, campo, spawn);
 }
 
 int ejecutarMenuBicho() {
@@ -173,13 +194,13 @@ int ejecutarMenuLidar() {
 void ejecutarMenuApagar() {
   switch(checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
     case 1:
-      Serial.write("Reiniciar robot");
+      Serial.write("Apagar robot");
       delay(1000);
 
       break;
 
     case 2:
-      Serial.write("Apagar robot");
+      Serial.write("Reiniciar robot");
       delay(1000);
 
       break;
@@ -205,41 +226,32 @@ int seleccionarMenu(int eleccion) {
     case 1:
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
-      ejecutarMenuEstadistica();
 
-      mylcd.Set_Text_colour(WHITE);
-      mylcd.Set_Text_Back_colour(BLACK);
-      mylcd.Set_Text_Size(1);
-      mylcd.Print_String("Hello World!", 0, 0);
-      display::escribirTexto(mylcd, WHITE, 2, "Hello World!", 0, 40);
-      display::escribirTexto(mylcd, WHITE, 3, "Hello World!", 0, 104);
-      display::escribirTexto(mylcd, WHITE, 4, "Hello!", 0, 192);
-      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 224);
+      if((codigoInterrupcion = ejecutarMenuEstadistica()) != 0) {
+        menuDevuelto = codigoInterrupcion;
+        return menuDevuelto;
+      }
 
       break;
 
     case 2:
       display::pintarIconos(mylcd, BLACK, GREEN, WHITE, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
+      mylcd.Set_Draw_color(WHITE);
+
+      display::pintarCampo(mylcd, campo, spawn);
+
       display::escribirTexto(mylcd, WHITE, 3, "Listo", 12, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Equipo", 126, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Spawn", 256, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Plan", 388, 290);
       ejecutarMenuCaballo();
 
-      mylcd.Set_Text_colour(WHITE);
-      mylcd.Set_Text_Back_colour(BLACK);
-      mylcd.Set_Text_Size(1);
-      mylcd.Print_String("Hola buenos días", 0, 0);
-      display::escribirTexto(mylcd, WHITE, 2, "Hello World!", 0, 40);
-      display::escribirTexto(mylcd, WHITE, 3, "Hello World!", 0, 104);
-      display::escribirTexto(mylcd, WHITE, 4, "Hello!", 0, 192);
-      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 220);
-
       break;
 
     case 3:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
+
       if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
@@ -249,6 +261,7 @@ int seleccionarMenu(int eleccion) {
 
     case 4:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
+
       if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
@@ -258,6 +271,10 @@ int seleccionarMenu(int eleccion) {
 
     case 5:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, WHITE, BLACK);
+      display::escribirTexto(mylcd, WHITE, 4, "Seleccione para", 8, 8);
+      display::escribirTexto(mylcd, WHITE, 4, "apagar o", 8, 45);
+      display::escribirTexto(mylcd, WHITE, 4, "reiniciar el", 8, 82);
+      display::escribirTexto(mylcd, WHITE, 4, "robot", 8, 119);
       display::escribirTexto(mylcd, WHITE, 3, "Apagar", 4, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 127, 290);
       ejecutarMenuApagar();
@@ -267,7 +284,11 @@ int seleccionarMenu(int eleccion) {
     default:
       switch(menuActual) {
         case 1:
-          ejecutarMenuEstadistica();
+          if((codigoInterrupcion = ejecutarMenuEstadistica()) != 0) {
+            menuDevuelto = codigoInterrupcion;
+            return menuDevuelto;
+          }
+
           break;
 
         case 2:
@@ -283,7 +304,11 @@ int seleccionarMenu(int eleccion) {
           break;
 
         case 4:
-          ejecutarMenuLidar();
+          if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
+            menuDevuelto = codigoInterrupcion;
+            return menuDevuelto;
+          }
+
           break;
 
         case 5:

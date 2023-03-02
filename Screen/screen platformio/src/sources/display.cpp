@@ -4,8 +4,10 @@
 #include "../../include/checkButtons.hpp"
 
 //Colores
-#define BLACK   0x0000
-#define WHITE   0xFFFF
+#define BLACK       0x0000
+#define DARKBLUE    0x000F
+#define DARKGREEN   0x00E0
+#define WHITE       0xFFFF
 
 namespace display {
     //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
@@ -118,10 +120,10 @@ namespace display {
 
     void marcoMenuPrincipal(LCDWIKI_KBV mylcd) {
         //Verticales menu principal
-        mylcd.Fill_Rect(424, 0, 8, 280, WHITE);
-        mylcd.Fill_Rect(113, 273, 8, 56, WHITE);
-        mylcd.Fill_Rect(235, 273, 8, 56, WHITE);
-        mylcd.Fill_Rect(357, 273, 8, 56, WHITE);
+        mylcd.Fill_Rect(424,   0, 8, 280, WHITE);
+        mylcd.Fill_Rect(113, 273, 8,  56, WHITE);
+        mylcd.Fill_Rect(235, 273, 8,  56, WHITE);
+        mylcd.Fill_Rect(357, 273, 8,  56, WHITE);
 
         //Horizontales menu principal
         mylcd.Fill_Rect(424,  49,  56, 8, WHITE);
@@ -131,28 +133,77 @@ namespace display {
         mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
     }
 
-    /**
-    void pintarIconosConexion() {
-    //Marco conexion
-    mylcd.Fill_Rect(47, 0, 8, 55, WHITE);
-    mylcd.Fill_Rect(0, 47, 47, 8, WHITE);
+    void pintarCampo(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+        mylcd.Fill_Rect(  8, 8, 416, 233, BLACK);
 
-    //Conexion router
-    mylcd.Fill_Rect(3, 30, 8, 13, GREY);
-    mylcd.Fill_Rect(19, 17, 8, 26, GREY);
-    mylcd.Fill_Rect(35, 4, 8, 39, GREY);
+        //Marco del campo
+        mylcd.Set_Draw_color(WHITE);
+        mylcd.Draw_Rectangle(8, 8, 416, 120);
+        mylcd.Draw_Rectangle(8, 121, 416, 233);
+
+        if(campo) {
+            mylcd.Set_Draw_color(DARKGREEN);
+            mylcd.Fill_Rectangle(9, 9, 415, 119);
+        } else {
+            mylcd.Set_Draw_color(DARKBLUE);
+            mylcd.Fill_Rectangle(9, 122, 415, 232);
+        }
+        mylcd.Set_Draw_color(WHITE);
+
+        //Marcos de los spawns
+        mylcd.Draw_Rectangle(  8,   8,  55,  55);
+        mylcd.Draw_Rectangle(128,   8, 183,  55);
+        mylcd.Draw_Rectangle(248,   8, 303,  55);
+        mylcd.Draw_Rectangle(369,   8, 416,  55);
+        mylcd.Draw_Rectangle(369,  65, 416, 112);
+        mylcd.Draw_Rectangle(369, 129, 416, 177);
+        mylcd.Draw_Rectangle(  8, 186,  55, 233);
+        mylcd.Draw_Rectangle(128, 186, 183, 233);
+        mylcd.Draw_Rectangle(248, 186, 303, 233);
+        mylcd.Draw_Rectangle(369, 186, 416, 233);
+
+        switch(spawn) {
+            case 1:
+                mylcd.Fill_Rectangle(  8,   8,  55,  55);
+                break;
+
+            case 2:
+                mylcd.Fill_Rectangle(128,   8, 183,  55);
+                break;
+
+            case 3:
+                mylcd.Fill_Rectangle(248,   8, 303,  55);
+                break;
+
+            case 4:
+                mylcd.Fill_Rectangle(369,   8, 416,  55);
+                break;
+
+            case 5:
+                mylcd.Fill_Rectangle(369,  65, 416, 112);
+                break;
+
+            case 6:
+                mylcd.Fill_Rectangle(369, 129, 416, 177);
+                break;
+
+            case 7:
+                mylcd.Fill_Rectangle(369, 186, 416, 233);
+                break;
+
+            case 8:
+                mylcd.Fill_Rectangle(248, 186, 303, 233);
+                break;
+
+            case 9:
+                mylcd.Fill_Rectangle(128, 186, 183, 233);
+                break;
+
+            case 10:
+                mylcd.Fill_Rectangle(  8, 186,  55, 233);
+                break;
+        }
     }
-
-    void pintarCampo() {
-    //Verticales campo
-    mylcd.Fill_Rect(416, 8, 8, 272, WHITE);
-    mylcd.Fill_Rect(  8, 8, 8, 272, WHITE);
-
-    //Horizontales campo
-    mylcd.Fill_Rect(  8,   8,  400, 8, WHITE);
-    mylcd.Fill_Rect(416, 416,  56, 8, WHITE);
-    }
-    */
     
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     int coordenada_X, int coordenada_Y) {

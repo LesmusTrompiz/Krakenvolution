@@ -10,6 +10,7 @@ namespace display {
     uint16_t lidar_c1, uint16_t lidar_c2, uint16_t apagar_c1, uint16_t apagar_c2);
 
     void marcoMenuPrincipal(LCDWIKI_KBV mylcd);
+    void pintarCampo(LCDWIKI_KBV mylcd, boolean campo, int spawn);
 
     /**
     void pintarIconosConexion();
