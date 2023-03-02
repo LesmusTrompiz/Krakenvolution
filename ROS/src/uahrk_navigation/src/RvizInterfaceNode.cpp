@@ -18,7 +18,6 @@
 
 using namespace std::chrono_literals;
 using GoToPose  = uahrk_navigation_msgs::action::GoToPose;
-
 using GoalHandleGoToPose = rclcpp_action::ClientGoalHandle<GoToPose>;
 
 
