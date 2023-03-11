@@ -45,6 +45,8 @@ int codigoInterrupcion = 0;
 
 boolean campo = true;
 int spawn = 1;
+int plan = 1;
+int numeroPlanes = 5;
 boolean lidar = true;
 
 /**ProtocolSM protocol_sm;
@@ -144,18 +146,25 @@ void ejecutarMenuCaballo() {
 
     case 4:
       if(digitalRead(secundario_b4) != estadoSecundario_4) {
-        Serial.write("Elección de plan");
+        if(plan < numeroPlanes)
+          plan++;
+        else
+          plan = 1;
         estadoSecundario_4 = !estadoSecundario_4;
       }
       break;
   }
 
-  if(devolver == 2 || devolver == 3)
+  if(devolver == 2)
     display::pintarCampo(mylcd, campo, spawn);
+  else if(devolver == 3)
+    display::pintarSpawn(mylcd, campo, spawn);
+  else if(devolver == 4)
+    display::pintarPlan(mylcd, plan);
 }
 
 int ejecutarMenuBicho() {
-  return display::escribirErrores(mylcd, WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10, menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual);
+  return display::escribirErrores(mylcd, WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10, menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
 }
 
 int ejecutarMenuLidar() {
@@ -239,6 +248,7 @@ int seleccionarMenu(int eleccion) {
       mylcd.Set_Draw_color(WHITE);
 
       display::pintarCampo(mylcd, campo, spawn);
+      display::pintarPlan(mylcd, plan);
 
       display::escribirTexto(mylcd, WHITE, 3, "Listo", 12, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Equipo", 126, 290);

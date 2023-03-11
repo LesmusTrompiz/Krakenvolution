@@ -162,6 +162,8 @@ namespace display {
         mylcd.Draw_Rectangle(248, 186, 303, 233);
         mylcd.Draw_Rectangle(369, 186, 416, 233);
 
+        mylcd.Draw_Circle(215, 120, 30);
+
         switch(spawn) {
             case 1:
                 mylcd.Fill_Rectangle(  8,   8,  55,  55);
@@ -204,6 +206,166 @@ namespace display {
                 break;
         }
     }
+
+    void pintarSpawn(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+        mylcd.Set_Draw_color(WHITE);
+
+        switch(spawn) {
+            case 1:
+                mylcd.Fill_Rectangle(  8,   8,  55,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                }
+
+                break;
+
+            case 2:
+                mylcd.Fill_Rectangle(128,   8, 183,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                }
+
+                break;
+
+            case 3:
+                mylcd.Fill_Rectangle(248,   8, 303,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                }
+
+                break;
+
+            case 4:
+                mylcd.Fill_Rectangle(369,   8, 416,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                }
+
+                break;
+
+            case 5:
+                mylcd.Fill_Rectangle(369,  65, 416, 112);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                }
+
+                break;
+
+            case 6:
+                mylcd.Fill_Rectangle(369, 129, 416, 177);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                }
+
+                break;
+
+            case 7:
+                mylcd.Fill_Rectangle(369, 186, 416, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                }
+
+                break;
+
+            case 8:
+                mylcd.Fill_Rectangle(248, 186, 303, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                }
+
+                break;
+
+            case 9:
+                mylcd.Fill_Rectangle(128, 186, 183, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                }
+
+                break;
+
+            case 10:
+                mylcd.Fill_Rectangle(  8, 186,  55, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                }
+
+                break;
+        }
+    }
+
+    void pintarPlan(LCDWIKI_KBV mylcd, int plan) {
+        mylcd.Set_Draw_color(BLACK);
+        mylcd.Fill_Rectangle(8, 241, 420, 265);
+        mylcd.Set_Draw_color(WHITE);
+
+        switch(plan) {
+            case 1:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Joder a Francia", 8, 241);
+                break;
+            case 2:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Comer patatas", 8, 241);
+                break;
+            case 3:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Hacer un while 1", 8, 241);
+                break;
+            case 4:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Echar la siesta", 8, 241);
+                break;
+            case 5:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Rush B y cegadora", 8, 241);
+                break;
+        }
+    }
     
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     int coordenada_X, int coordenada_Y) {
@@ -215,7 +377,9 @@ namespace display {
     //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
     int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
-    int menuBicho, int menuLidar, int menuApagar, int menuActual) {
+    int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1) {
+        boolean pausa = false;
+        boolean estadoSecundario_1 = false;
         //Variables para el parrafo
         String linea;
         int longitudLinea = 32;
@@ -241,6 +405,22 @@ namespace display {
                 if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
                 menuBicho, menuLidar, menuApagar, menuActual)) != 0)
                     return menuDevuelto;
+
+                if(digitalRead(secundario_b1))
+                    estadoSecundario_1 = false;
+
+                //Control de las dobles pulsaciones
+                if(!digitalRead(secundario_b1) && !pausa && !estadoSecundario_1) {
+                    pausa = true;
+                    estadoSecundario_1 = true;
+                } else if(!digitalRead(secundario_b1) && pausa && !estadoSecundario_1) {
+                    pausa = false;
+                    estadoSecundario_1 = true;
+                }
+
+                //Control de la pausa
+                if(pausa)
+                    inicio = millis();
             }
 
             //Pintar una linea

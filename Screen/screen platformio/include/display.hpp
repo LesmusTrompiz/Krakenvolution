@@ -11,20 +11,15 @@ namespace display {
 
     void marcoMenuPrincipal(LCDWIKI_KBV mylcd);
     void pintarCampo(LCDWIKI_KBV mylcd, boolean campo, int spawn);
-
-    /**
-    void pintarIconosConexion();
-
-    void pintarCampo();
-    */
-
+    void pintarSpawn(LCDWIKI_KBV mylcd, boolean campo, int spawn);
+    void pintarPlan(LCDWIKI_KBV mylcd, int plan);
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     int coordenada_X, int coordenada_Y);
 
     //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
     int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
-    int menuBicho, int menuLidar, int menuApagar, int menuActual);
+    int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1);
 }
 
 #endif
