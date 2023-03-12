@@ -20,18 +20,18 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 #define WHITE       0xFFFF
 
 //Pines menu principal
-int menuEstadistica = 25;
-int menuCaballo = 24;
-int menuBicho = 33;
-int menuLidar = 39;
-int menuApagar = 47;
+constexpr int menuEstadistica = 25;
+constexpr int menuCaballo = 24;
+constexpr int menuBicho = 33;
+constexpr int menuLidar = 39;
+constexpr int menuApagar = 47;
 int menuActual = 1;
 
 //Pines menu secundario
-int secundario_b1 = 41;
-int secundario_b2 = 53;
-int secundario_b3 = 51;
-int secundario_b4 = 52;
+constexpr int secundario_b1 = 41;
+constexpr int secundario_b2 = 53;
+constexpr int secundario_b3 = 51;
+constexpr int secundario_b4 = 52;
 
 //Estado botones secundarios
 boolean estadoSecundario_1 = true;
@@ -46,8 +46,15 @@ int codigoInterrupcion = 0;
 boolean campo = true;
 int spawn = 1;
 int plan = 1;
-int numeroPlanes = 5;
+constexpr int numeroPlanes = 5;
 boolean lidar = true;
+
+constexpr int maximoErrores = 5;
+String errores[maximoErrores];
+int leerPosicion = 0;
+int ultimaPosActualizada = 0;
+int lineasPintadas = 0;
+boolean diegoEstaTocandoCosas = false;
 
 /**ProtocolSM protocol_sm;
 uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
@@ -79,6 +86,15 @@ ISR(USART_UDRE_vect)
 {
   buffer._tx_udr_empty_irq();
 }*/
+
+void insertarError(String error) {
+  errores[ultimaPosActualizada] = error;
+  
+  if(ultimaPosActualizada < maximoErrores - 1)
+    ultimaPosActualizada++;
+  else
+    ultimaPosActualizada = 0;
+}
 
 int mirarLidar() {
   if(digitalRead(secundario_b1) != estadoSecundario_1 && digitalRead(secundario_b1) == LOW) {
@@ -131,15 +147,28 @@ void ejecutarMenuCaballo() {
       if(digitalRead(secundario_b2) != estadoSecundario_2) {
         campo = !campo;
         estadoSecundario_2 = !estadoSecundario_2;
+
+        if(spawn != 10)
+          spawn++;
+        else {
+          if(campo)
+            spawn = 1;
+          else
+            spawn = 2;
+        }
       }
       break;
 
     case 3:
       if(digitalRead(secundario_b3) != estadoSecundario_3) {
-        if(spawn < 10)
-          spawn++;
-        else
-          spawn = 1;
+        if(spawn < 9)
+          spawn += 2;
+        else {
+          if(campo)
+            spawn = 1;
+          else
+            spawn = 2;
+        }
         estadoSecundario_3 = !estadoSecundario_3;
       }
       break;
@@ -164,7 +193,11 @@ void ejecutarMenuCaballo() {
 }
 
 int ejecutarMenuBicho() {
-  return display::escribirErrores(mylcd, WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10, menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
+  String copiaErrores[maximoErrores];
+  copiaErrores[leerPosicion] = errores[leerPosicion];
+
+  return display::escribirErrores(mylcd, WHITE, 2, copiaErrores, maximoErrores, leerPosicion, 10, 10,
+  menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1, lineasPintadas);
 }
 
 int ejecutarMenuLidar() {
@@ -262,9 +295,14 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
 
-      if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
+      if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
+      } else if(codigoInterrupcion != -1) {
+        if(leerPosicion < maximoErrores - 1)
+          leerPosicion++;
+        else
+          leerPosicion = 0;
       }
 
       break;
@@ -306,9 +344,14 @@ int seleccionarMenu(int eleccion) {
           break;
 
         case 3:
-          if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
+          if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
             menuDevuelto = codigoInterrupcion;
             return menuDevuelto;
+          } else if(codigoInterrupcion != -1) {
+            if(leerPosicion < maximoErrores - 1)
+              leerPosicion++;
+            else
+              leerPosicion = 0;
           }
 
           break;
@@ -357,6 +400,9 @@ void setup() {
 }
 
 void loop() {
+  if(Serial.available())
+    insertarError(Serial.readString());
+
   seleccionarMenu(menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica,
   menuCaballo, menuBicho, menuLidar, menuApagar, menuActual));
   if(codigoInterrupcion != 0)
