@@ -49,12 +49,18 @@ int plan = 1;
 constexpr int numeroPlanes = 5;
 boolean lidar = true;
 
+/**
 constexpr int maximoErrores = 5;
 String errores[maximoErrores];
 int leerPosicion = 0;
 int ultimaPosActualizada = 0;
 int lineasPintadas = 0;
 boolean diegoEstaTocandoCosas = false;
+*/
+
+String errores[13];
+boolean nuevaLinea = false;
+int lineasPintadas = 0;
 
 /**ProtocolSM protocol_sm;
 uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
@@ -87,13 +93,18 @@ ISR(USART_UDRE_vect)
   buffer._tx_udr_empty_irq();
 }*/
 
-void insertarError(String error) {
+/**void insertarError(String error) {
   errores[ultimaPosActualizada] = error;
   
   if(ultimaPosActualizada < maximoErrores - 1)
     ultimaPosActualizada++;
   else
     ultimaPosActualizada = 0;
+}*/
+
+void insertarError(String error) {
+  display::ordenarErrores(errores, error);
+  nuevaLinea = true;
 }
 
 int mirarLidar() {
@@ -193,11 +204,17 @@ void ejecutarMenuCaballo() {
 }
 
 int ejecutarMenuBicho() {
-  String copiaErrores[maximoErrores];
-  copiaErrores[leerPosicion] = errores[leerPosicion];
+  /**String copiaErrores[maximoErrores];
+  copiaErrores[leerPosicion] = errores[leerPosicion];*/
 
-  return display::escribirErrores(mylcd, WHITE, 2, copiaErrores, maximoErrores, leerPosicion, 10, 10,
-  menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1, lineasPintadas);
+  /**return display::escribirErrores(mylcd, WHITE, 2, copiaErrores, maximoErrores, leerPosicion, 10, 10,
+  menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1, lineasPintadas);*/
+
+  if(nuevaLinea) {
+    nuevaLinea = false;
+    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
+    menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
+  }
 }
 
 int ejecutarMenuLidar() {
@@ -295,14 +312,17 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
 
+      return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
+      menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
+
       if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
       } else if(codigoInterrupcion != -1) {
-        if(leerPosicion < maximoErrores - 1)
+        /**if(leerPosicion < maximoErrores - 1)
           leerPosicion++;
         else
-          leerPosicion = 0;
+          leerPosicion = 0;*/
       }
 
       break;
@@ -348,10 +368,10 @@ int seleccionarMenu(int eleccion) {
             menuDevuelto = codigoInterrupcion;
             return menuDevuelto;
           } else if(codigoInterrupcion != -1) {
-            if(leerPosicion < maximoErrores - 1)
+            /**if(leerPosicion < maximoErrores - 1)
               leerPosicion++;
             else
-              leerPosicion = 0;
+              leerPosicion = 0;*/
           }
 
           break;

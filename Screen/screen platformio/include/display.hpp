@@ -15,11 +15,15 @@ namespace display {
     void pintarPlan(LCDWIKI_KBV mylcd, int plan);
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     int coordenada_X, int coordenada_Y);
+    void ordenarErrores(String errores[13], String error);
+
+    /**int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[5], int maximoErrores,
+    int leerPosicion, uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
+    int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1, int &lineasPintadas);*/
 
     //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
-    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[5], int maximoErrores,
-    int leerPosicion, uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
-    int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1, int &lineasPintadas);
+    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13], uint8_t coordenada_X, uint8_t coordenada_Y,
+    int menuEstadistica, int menuCaballo, int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1);
 }
 
 #endif

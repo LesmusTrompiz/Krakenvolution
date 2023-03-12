@@ -399,7 +399,7 @@ namespace display {
     }
 
     //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
-    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[],int maximoErrores,
+    /**int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[],int maximoErrores,
     int leerPosicion, uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
     int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1, int &lineasPintadas) {
         boolean pausa = false;
@@ -451,7 +451,7 @@ namespace display {
 
             //Pintar una linea
             mylcd.Set_Draw_color(BLACK);
-            mylcd.Fill_Rectangle(coordenada_X, coordenada_Y + lineasPintadas * interlineado, 423, coordenada_Y + lineasPintadas - 5);
+            mylcd.Fill_Rectangle(coordenada_X, coordenada_Y + lineasPintadas * interlineado, 423, coordenada_Y + lineasPintadas * interlineado + 15);
             mylcd.Print_String(linea, coordenada_X, coordenada_Y + lineasPintadas * interlineado);
             lineasPintadas++;
             if(lineasPintadas == lineasMaximas)
@@ -461,7 +461,7 @@ namespace display {
         //Pintar ultima linea
         if(errores[leerPosicion].length() > 0) {
             mylcd.Set_Draw_color(BLACK);
-            mylcd.Fill_Rectangle(coordenada_X, coordenada_Y + lineasPintadas * interlineado, 423, coordenada_Y + lineasPintadas - 5);
+            mylcd.Fill_Rectangle(coordenada_X, coordenada_Y + lineasPintadas * interlineado, 423, coordenada_Y + lineasPintadas * interlineado + 15);
             mylcd.Print_String(errores[leerPosicion], coordenada_X, coordenada_Y + lineasPintadas * interlineado);
             errores[leerPosicion].remove(0, errores[leerPosicion].length());
 
@@ -470,6 +470,87 @@ namespace display {
                 lineasPintadas = 0;
         }
         
+        return 0;
+    }*/
+
+    void ordenarErrores(String errores[13], String error) {
+        String linea;
+        int longitudLinea = 32;
+
+        while(error.length() > 0) {
+            linea = "";
+
+            //Ultima linea
+            if(error.length() < longitudLinea) {
+                linea += error.substring(0, error.length());
+                error.remove(0, error.length());
+            //Resto de lineas
+            } else {
+                //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
+                //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer
+                while(linea.length() + error.indexOf(" ") < longitudLinea && !(error.indexOf(" ") == -1)) {
+                    //Insertar la seccion del texto hasta el primer espacio en blanco en linea y borrarla de texto
+                    linea += error.substring(0, error.indexOf(" ") + 1);
+                    error.remove(0, error.indexOf(" ") + 1);
+                }
+            }
+
+            //Recolocación de las lineas para insertar nuevas, todas se desplazan una posicion
+            //hacia la izquierda en el array, si el array no esta lleno tan solo se insertan
+            for(int i = 0; i < 13; i++) {
+                if(errores[i] == "") {
+                    errores[i] = linea;
+                    i = 13;
+                } else if(i == 12) {
+                    for(int j = 0; j < 13; j++) {
+                        if(j != 12)
+                            errores[j] = errores[j + 1];
+                        else
+                            errores[j] = linea;
+                    }
+                }
+            }
+        }
+    }
+
+    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13], uint8_t coordenada_X, uint8_t coordenada_Y,
+    int menuEstadistica, int menuCaballo, int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1) {
+        boolean pausa = false;
+        boolean estadoSecundario_1 = false;
+        //Variables para el parrafo
+        int interlineado = 20;
+        int menuDevuelto;
+        mylcd.Set_Text_colour(color);
+        mylcd.Set_Text_Size(tamanno);
+
+        //Limpiar zona de escritura
+        mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
+
+        for(int i = 0; i < 13; i++) {
+            //Ventana de medio segundo antes de pintar cada linea para comprobar botones principales
+            for(uint32_t inicio = millis(); millis() - inicio < 500;) {
+                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
+                menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+                    return menuDevuelto;
+
+                if(digitalRead(secundario_b1))
+                    estadoSecundario_1 = false;
+
+                //Control de las dobles pulsaciones
+                if(!digitalRead(secundario_b1) && !pausa && !estadoSecundario_1) {
+                    pausa = true;
+                    estadoSecundario_1 = true;
+                } else if(!digitalRead(secundario_b1) && pausa && !estadoSecundario_1) {
+                    pausa = false;
+                    estadoSecundario_1 = true;
+                }
+
+                //Control de la pausa
+                if(pausa)
+                    inicio = millis();
+            }
+            mylcd.Print_String(errores[i], coordenada_X, coordenada_Y + i * interlineado);
+        }
         return 0;
     }
 }
