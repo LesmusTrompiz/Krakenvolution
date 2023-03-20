@@ -2,7 +2,7 @@
 #include <LCDWIKI_KBV.h>
 #include "../../include/display.hpp"
 #include "../../include/checkButtons.hpp"
-#include "headers/protocol.hpp"
+#include "protocol.hpp"
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
 LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
@@ -20,18 +20,18 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 #define WHITE       0xFFFF
 
 //Pines menu principal
-constexpr int menuEstadistica = 25;
-constexpr int menuCaballo = 24;
-constexpr int menuBicho = 33;
-constexpr int menuLidar = 39;
-constexpr int menuApagar = 47;
+constexpr int menuEstadistica = 43;
+constexpr int menuCaballo = 41;
+constexpr int menuBicho = 39;
+constexpr int menuLidar = 37;
+constexpr int menuApagar = 35;
 int menuActual = 1;
 
 //Pines menu secundario
-constexpr int secundario_b1 = 41;
-constexpr int secundario_b2 = 53;
+constexpr int secundario_b1 = 47;
+constexpr int secundario_b2 = 49;
 constexpr int secundario_b3 = 51;
-constexpr int secundario_b4 = 52;
+constexpr int secundario_b4 = 53;
 
 //Estado botones secundarios
 boolean estadoSecundario_1 = true;
@@ -48,59 +48,9 @@ int spawn = 1;
 int plan = 1;
 constexpr int numeroPlanes = 5;
 boolean lidar = true;
-
-/**
-constexpr int maximoErrores = 5;
-String errores[maximoErrores];
-int leerPosicion = 0;
-int ultimaPosActualizada = 0;
-int lineasPintadas = 0;
-boolean diegoEstaTocandoCosas = false;
-*/
-
 String errores[13];
 boolean nuevaLinea = false;
 int lineasPintadas = 0;
-
-/**ProtocolSM protocol_sm;
-uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
-
-#if defined(USART_RX_vect)
-  ISR(USART_RX_vect)
-#elif defined(USART0_RX_vect)
-  ISR(USART0_RX_vect)
-#elif defined(USART_RXC_vect)
-  ISR(USART_RXC_vect) // ATmega8
-#else
-  #error "Don't know what the Data Received vector is called for Serial"
-#endif
-  {
-    buffer._rx_complete_irq();
-  }
-
-#if defined(UART0_UDRE_vect)
-ISR(UART0_UDRE_vect)
-#elif defined(UART_UDRE_vect)
-ISR(UART_UDRE_vect)
-#elif defined(USART0_UDRE_vect)
-ISR(USART0_UDRE_vect)
-#elif defined(USART_UDRE_vect)
-ISR(USART_UDRE_vect)
-#else
-  #error "Don't know what the Data Register Empty vector is called for Serial"
-#endif
-{
-  buffer._tx_udr_empty_irq();
-}*/
-
-/**void insertarError(String error) {
-  errores[ultimaPosActualizada] = error;
-  
-  if(ultimaPosActualizada < maximoErrores - 1)
-    ultimaPosActualizada++;
-  else
-    ultimaPosActualizada = 0;
-}*/
 
 void insertarError(String error) {
   display::ordenarErrores(errores, error);
@@ -204,12 +154,6 @@ void ejecutarMenuCaballo() {
 }
 
 int ejecutarMenuBicho() {
-  /**String copiaErrores[maximoErrores];
-  copiaErrores[leerPosicion] = errores[leerPosicion];*/
-
-  /**return display::escribirErrores(mylcd, WHITE, 2, copiaErrores, maximoErrores, leerPosicion, 10, 10,
-  menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1, lineasPintadas);*/
-
   if(nuevaLinea) {
     nuevaLinea = false;
     return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
@@ -309,21 +253,17 @@ int seleccionarMenu(int eleccion) {
       break;
 
     case 3:
+      nuevaLinea = true;
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
-
-      return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
-      menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
 
       if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
         menuDevuelto = codigoInterrupcion;
         return menuDevuelto;
-      } else if(codigoInterrupcion != -1) {
-        /**if(leerPosicion < maximoErrores - 1)
-          leerPosicion++;
-        else
-          leerPosicion = 0;*/
       }
+
+      return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
+      menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
 
       break;
 
@@ -367,11 +307,6 @@ int seleccionarMenu(int eleccion) {
           if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
             menuDevuelto = codigoInterrupcion;
             return menuDevuelto;
-          } else if(codigoInterrupcion != -1) {
-            /**if(leerPosicion < maximoErrores - 1)
-              leerPosicion++;
-            else
-              leerPosicion = 0;*/
           }
 
           break;
@@ -417,6 +352,8 @@ void setup() {
   display::marcoMenuPrincipal(mylcd);
   mylcd.Set_Text_Back_colour(BLACK);
   seleccionarMenu(1);
+
+  uahruart::parser::Protocol protocol;
 }
 
 void loop() {
