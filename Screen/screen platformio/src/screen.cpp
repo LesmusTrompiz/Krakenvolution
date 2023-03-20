@@ -1,8 +1,7 @@
-#include <LCDWIKI_GUI.h>
-#include <LCDWIKI_KBV.h>
-#include "../../include/display.hpp"
-#include "../../include/checkButtons.hpp"
-#include "protocol.hpp"
+#include "LCDWIKI_KBV.h"
+#include "LCDWIKI_GUI.h"
+#include "display.hpp"
+#include "checkButtons.hpp"
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
 LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
@@ -353,7 +352,6 @@ void setup() {
   mylcd.Set_Text_Back_colour(BLACK);
   seleccionarMenu(1);
 
-  uahruart::parser::Protocol protocol;
 }
 
 void loop() {

@@ -1,0 +1,437 @@
+[
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/CDC.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/CDC.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/CDC.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/HardwareSerial.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/HardwareSerial0.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial0.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial0.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/HardwareSerial1.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial1.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial1.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/HardwareSerial2.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial2.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial2.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/HardwareSerial3.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial3.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial3.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/IPAddress.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/IPAddress.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/IPAddress.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/PluggableUSB.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/PluggableUSB.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/PluggableUSB.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/Print.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Print.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Print.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/Stream.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Stream.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Stream.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/Tone.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Tone.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/Tone.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/USBCore.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/USBCore.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/USBCore.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/WInterrupts.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WInterrupts.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WInterrupts.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/WMath.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WMath.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WMath.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/WString.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WString.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/WString.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/abi.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/abi.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/abi.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/hooks.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/hooks.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/hooks.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/main.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/main.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/main.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/FrameworkArduino/new.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/new.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/new.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/wiring.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/wiring_analog.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_analog.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_analog.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/wiring_digital.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_digital.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_digital.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-as -mmcu=atmega2560 -o .pio/build/megaatmega2560/FrameworkArduino/wiring_pulse.S.o /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.S",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.S"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/wiring_pulse.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/FrameworkArduino/wiring_shift.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega /home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_shift.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_shift.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/ArduinoSTL.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/ArduinoSTL.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/ArduinoSTL.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/abi/abi.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/abi/abi.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/abi/abi.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/algorithm.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/algorithm.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/algorithm.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/associative_base.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/associative_base.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/associative_base.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/bitset.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/bitset.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/bitset.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/char_traits.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/char_traits.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/char_traits.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/complex.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/complex.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/complex.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_op.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_op.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_op.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_opnt.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opnt.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opnt.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_ops.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_ops.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_ops.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_opv.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opv.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opv.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_opvnt.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opvnt.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opvnt.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/del_opvs.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opvs.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/del_opvs.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/deque.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/deque.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/deque.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/eh_alloc.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/eh_alloc.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/eh_alloc.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/eh_globals.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/eh_globals.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/eh_globals.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/exception.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/exception.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/exception.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/func_exception.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/func_exception.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/func_exception.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/iomanip.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/iomanip.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/iomanip.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/ios.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/ios.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/ios.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/iostream.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/iostream.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/iostream.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/istream.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/istream.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/istream.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/iterator.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/iterator.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/iterator.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/limits.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/limits.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/limits.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/list.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/list.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/list.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/locale.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/locale.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/locale.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/map.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/map.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/map.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/new_handler.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/new_handler.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/new_handler.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/new_op.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/new_op.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/new_op.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/new_opnt.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opnt.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opnt.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/new_opv.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opv.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opv.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/new_opvnt.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opvnt.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/new_opvnt.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/numeric.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/numeric.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/numeric.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/ostream.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/ostream.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/ostream.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/ostream_helpers.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/ostream_helpers.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/ostream_helpers.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/queue.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/queue.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/queue.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/set.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/set.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/set.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/sstream.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/sstream.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/sstream.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/stack.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/stack.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/stack.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/stdexcept.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/stdexcept.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/stdexcept.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/streambuf.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/streambuf.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/streambuf.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/string.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/string.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/string.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/support.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/support.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/support.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/typeinfo.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/typeinfo.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/typeinfo.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/utility.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/utility.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/utility.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/valarray.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/valarray.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/valarray.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib733/ArduinoSTL/vector.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega .pio/libdeps/megaatmega2560/ArduinoSTL/src/vector.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/.pio/libdeps/megaatmega2560/ArduinoSTL/src/vector.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/callback_store.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/callback_store.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/callback_store.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/messages.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/messages.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/messages.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/parser.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/parser.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/parser.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/parser_states/idle.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/parser_states/idle.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/parser_states/idle.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/parser_states/reading_body.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/parser_states/reading_body.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/parser_states/reading_body.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/parser_states/reading_header.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/parser_states/reading_header.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/parser_states/reading_header.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/parser_states/waiting_ack.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/parser_states/waiting_ack.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/parser_states/waiting_ack.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/primitives.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/primitives.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/primitives.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib4e5/comms/sources/serial.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/comms/src/sources/serial.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/comms/src/sources/serial.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib56a/lcdwiki_gui/LCDWIKI_GUI.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/lcdwiki_gui/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/lcdwiki_gui/src/LCDWIKI_GUI.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/lcdwiki_gui/src/LCDWIKI_GUI.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/megaatmega2560/lib56a/lcdwiki_gui/LCDWIKI_font.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/lcdwiki_gui/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/lcdwiki_gui/src/LCDWIKI_font.c",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/lcdwiki_gui/src/LCDWIKI_font.c"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/lib27d/lcdwiki_kbv/LCDWIKI_KBV.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/lcdwiki_kbv/src -Ilib/lcdwiki_gui/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega lib/lcdwiki_kbv/src/LCDWIKI_KBV.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/lib/lcdwiki_kbv/src/LCDWIKI_KBV.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/src/screen.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/lcdwiki_kbv/src -Ilib/lcdwiki_gui/src -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega src/screen.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/src/screen.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/src/sources/checkButtons.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/lcdwiki_kbv/src -Ilib/lcdwiki_gui/src -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega src/sources/checkButtons.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/src/sources/checkButtons.cpp"
+    },
+    {
+        "command": "/home/diego/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/megaatmega2560/src/sources/display.cpp.o -c -std=c++17 -fno-exceptions -fno-threadsafe-statics -fpermissive -mmcu=atmega2560 -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60105 -DARDUINO_AVR_MEGA2560 -DARDUINO_BUILD -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/lcdwiki_kbv/src -Ilib/lcdwiki_gui/src -Ilib/comms/src -I.pio/libdeps/megaatmega2560/ArduinoSTL/src -I/home/diego/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/diego/.platformio/packages/framework-arduino-avr/variants/mega src/sources/display.cpp",
+        "directory": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio",
+        "file": "/home/diego/Programaci\u00f3n/C++/Krakenvolution/Screen/screen platformio/src/sources/display.cpp"
+    }
+]

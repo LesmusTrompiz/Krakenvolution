@@ -1,7 +1,7 @@
 #ifndef DISPLAY_HPP
 #define DISPLAY_HPP
 
-#include <LCDWIKI_KBV.h>
+#include "LCDWIKI_KBV.h"
 
 namespace display {
     //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro

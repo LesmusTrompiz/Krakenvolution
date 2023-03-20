@@ -1,7 +1,7 @@
 #ifndef CHECKBUTTONS_HPP
 #define CHECKBUTTONS_HPP
 
-#include <LCDWIKI_KBV.h>
+#include "LCDWIKI_KBV.h"
 
 namespace checkButtons {
     //Devolvemos el boton pulsado con prioridad de menor a mayor

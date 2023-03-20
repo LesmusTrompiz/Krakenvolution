@@ -1,5 +1,5 @@
-#include <LCDWIKI_KBV.h>
-#include "../../include/checkButtons.hpp"
+#include "LCDWIKI_KBV.h"
+#include "checkButtons.hpp"
 
 namespace checkButtons {
     //Devolvemos el boton pulsado con prioridad de menor a mayor

@@ -1,7 +1,7 @@
-#include <LCDWIKI_GUI.h>
-#include <LCDWIKI_KBV.h>
-#include "../../include/display.hpp"
-#include "../../include/checkButtons.hpp"
+#include "LCDWIKI_KBV.h"
+#include "LCDWIKI_GUI.h"
+#include "display.hpp"
+#include "checkButtons.hpp"
 
 //Colores
 #define BLACK       0x0000
