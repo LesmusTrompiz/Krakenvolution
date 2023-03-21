@@ -13,18 +13,9 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 #define BLUE        0x007E
 #define RED         0xF800
 #define GREEN       0x07E0
-#define CYAN        0x07FF
 #define MAGENTA     0xF81F
 #define YELLOW      0xFFE0
 #define WHITE       0xFFFF
-
-//Pines menu principal
-constexpr int menuEstadistica = 43;
-constexpr int menuCaballo = 41;
-constexpr int menuBicho = 39;
-constexpr int menuLidar = 37;
-constexpr int menuApagar = 35;
-int menuActual = 1;
 
 //Pines menu secundario
 constexpr int secundario_b1 = 47;
@@ -38,22 +29,22 @@ boolean estadoSecundario_2 = true;
 boolean estadoSecundario_3 = true;
 boolean estadoSecundario_4 = true;
 
-//Variables para las interrupciones
-int menuDevuelto;
-int codigoInterrupcion = 0;
-
+//Variables para la logica
+int menuDevuelto = 0;
+int menuActual = 1;
 boolean campo = true;
 int spawn = 1;
 int plan = 1;
-constexpr int numeroPlanes = 5;
+constexpr int numeroPlanes = 5; //Esta variable será eliminada cuando se defina el numero definitivo
 boolean lidar = true;
 String errores[13];
-boolean nuevaLinea = false;
-int lineasPintadas = 0;
 
-void insertarError(String error) {
-  display::ordenarErrores(errores, error);
-  nuevaLinea = true;
+boolean recibirError() {
+  if(Serial.available()) {
+    display::ordenarErrores(errores, Serial.readString());
+    return true;
+  }
+  return false;
 }
 
 int mirarLidar() {
@@ -70,8 +61,7 @@ int mirarLidar() {
     lidar = !lidar;
 
     return 4;
-  } else if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
-  menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+  } else if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
     return menuDevuelto;
 
   return 0;
@@ -82,8 +72,7 @@ int ejecutarMenuEstadistica() {
   display::escribirTexto(mylcd, WHITE, 5, "Tiempo: 62s", 8, 8);
   display::escribirTexto(mylcd, WHITE, 5, "Tartas: 4", 8, 55);
 
-  if((devolver = checkButtons::mirarBotonesPrincipal(menuEstadistica,
-  menuCaballo, menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+  if((devolver = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
     return devolver;
 
   display::escribirTexto(mylcd, WHITE, 5, "Puntos: 32", 8, 102);
@@ -152,12 +141,9 @@ void ejecutarMenuCaballo() {
     display::pintarPlan(mylcd, plan);
 }
 
-int ejecutarMenuBicho() {
-  if(nuevaLinea) {
-    nuevaLinea = false;
-    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
-    menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
-  }
+int ejecutarMenuBicho(boolean primeraVuelta) {
+  if(recibirError() || primeraVuelta)
+    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuActual, secundario_b1);
 }
 
 int ejecutarMenuLidar() {
@@ -210,10 +196,9 @@ void ejecutarMenuApagar() {
 }
 
 int seleccionarMenu(int eleccion) {
-  codigoInterrupcion = 0;
-
   if(menuDevuelto != 0)
     menuActual = menuDevuelto;
+  menuDevuelto = 0;
 
   if(digitalRead(secundario_b1))
     estadoSecundario_1 = true;
@@ -229,10 +214,8 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
 
-      if((codigoInterrupcion = ejecutarMenuEstadistica()) != 0) {
-        menuDevuelto = codigoInterrupcion;
+      if((menuDevuelto = ejecutarMenuEstadistica()) != 0)
         return menuDevuelto;
-      }
 
       break;
 
@@ -252,27 +235,19 @@ int seleccionarMenu(int eleccion) {
       break;
 
     case 3:
-      nuevaLinea = true;
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
 
-      if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
-        menuDevuelto = codigoInterrupcion;
+      if((menuDevuelto = ejecutarMenuBicho(true)) != 0 && menuDevuelto != -1)
         return menuDevuelto;
-      }
-
-      return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuEstadistica,
-      menuCaballo, menuBicho, menuLidar, menuApagar, menuActual, secundario_b1);
 
       break;
 
     case 4:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
 
-      if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
-        menuDevuelto = codigoInterrupcion;
+      if((menuDevuelto = ejecutarMenuLidar()) != 0)
         return menuDevuelto;
-      }
 
       break;
 
@@ -291,10 +266,8 @@ int seleccionarMenu(int eleccion) {
     default:
       switch(menuActual) {
         case 1:
-          if((codigoInterrupcion = ejecutarMenuEstadistica()) != 0) {
-            menuDevuelto = codigoInterrupcion;
+          if((menuDevuelto = ejecutarMenuEstadistica()) != 0)
             return menuDevuelto;
-          }
 
           break;
 
@@ -303,18 +276,14 @@ int seleccionarMenu(int eleccion) {
           break;
 
         case 3:
-          if((codigoInterrupcion = ejecutarMenuBicho()) != 0 && codigoInterrupcion != -1) {
-            menuDevuelto = codigoInterrupcion;
+          if((menuDevuelto = ejecutarMenuBicho(false)) != 0 && menuDevuelto != -1)
             return menuDevuelto;
-          }
 
           break;
 
         case 4:
-          if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
-            menuDevuelto = codigoInterrupcion;
+          if((menuDevuelto = ejecutarMenuLidar()) != 0)
             return menuDevuelto;
-          }
 
           break;
 
@@ -329,11 +298,11 @@ int seleccionarMenu(int eleccion) {
 
 void setup() {
   //Configuracion botones menu principal
-  pinMode(menuEstadistica, INPUT_PULLUP);
-  pinMode(menuCaballo, INPUT_PULLUP);
-  pinMode(menuBicho, INPUT_PULLUP);
-  pinMode(menuLidar, INPUT_PULLUP);
-  pinMode(menuApagar, INPUT_PULLUP);
+  pinMode(43, INPUT_PULLUP); //Menu estadistica
+  pinMode(41, INPUT_PULLUP); //Menu caballo
+  pinMode(39, INPUT_PULLUP); //Menu bicho
+  pinMode(37, INPUT_PULLUP); //Menu lidar
+  pinMode(35, INPUT_PULLUP); //Menu apagar
 
   //Configuracion botones menu secundario
   pinMode(secundario_b1, INPUT_PULLUP);
@@ -355,11 +324,7 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available())
-    insertarError(Serial.readString());
-
-  seleccionarMenu(menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica,
-  menuCaballo, menuBicho, menuLidar, menuApagar, menuActual));
-  if(codigoInterrupcion != 0)
-    seleccionarMenu(codigoInterrupcion);
+  seleccionarMenu(menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual));
+  if(menuDevuelto != 0)
+    seleccionarMenu(menuDevuelto);
 }

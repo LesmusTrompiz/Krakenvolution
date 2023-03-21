@@ -18,7 +18,7 @@ namespace display {
         mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
 
         //Limpiar menu secundario
-        mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+        mylcd.Fill_Rect(    0, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  121, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
@@ -439,8 +439,8 @@ namespace display {
     }
 
     //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
-    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13], uint8_t coordenada_X, uint8_t coordenada_Y,
-    int menuEstadistica, int menuCaballo, int menuBicho, int menuLidar, int menuApagar, int menuActual, int secundario_b1) {
+    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13],
+    uint8_t coordenada_X, uint8_t coordenada_Y, int menuActual, int secundario_b1) {
         boolean pausa = false;
         boolean estadoSecundario_1 = false;
         //Variables para el parrafo
@@ -455,8 +455,7 @@ namespace display {
         for(int i = 0; i < 13; i++) {
             //Ventana de medio segundo antes de pintar cada linea para comprobar botones principales
             for(uint32_t inicio = millis(); millis() - inicio < 500;) {
-                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
-                menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
                     return menuDevuelto;
 
                 if(digitalRead(secundario_b1))
