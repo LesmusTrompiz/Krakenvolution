@@ -2,6 +2,7 @@
 #include "LCDWIKI_GUI.h"
 #include "display.hpp"
 #include "checkButtons.hpp"
+#include "logicalStates.hpp"
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
 LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
@@ -17,14 +18,6 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 #define YELLOW      0xFFE0
 #define WHITE       0xFFFF
 
-//Variables para la logica
-int menuDevuelto = 0;
-int menuActual = 1;
-boolean campo = true;
-int spawn = 1;
-int plan = 1;
-constexpr int numeroPlanes = 5; //Esta variable será eliminada cuando se defina el numero definitivo
-boolean lidar = true;
 String errores[13];
 
 boolean recibirError() {
@@ -35,33 +28,12 @@ boolean recibirError() {
   return false;
 }
 
-int mirarLidar() {
-  if(digitalRead(checkButtons::getSecundario_b1()) != (boolean) checkButtons::getEstadoSecundario_1() &&
-  digitalRead(checkButtons::getSecundario_b1()) == LOW) {
-    mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
-    mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
-
-    if(lidar)
-      Serial.write("Apagar lidar");
-    else
-      Serial.write("Encender lidar");
-
-    checkButtons::setEstadoSecundario_1(!checkButtons::getEstadoSecundario_1());
-    lidar = !lidar;
-
-    return 4;
-  } else if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
-    return menuDevuelto;
-
-  return 0;
-}
-
 int ejecutarMenuEstadistica() {
   int devolver;
   display::escribirTexto(mylcd, WHITE, 5, "Tiempo: 62s", 8, 8);
   display::escribirTexto(mylcd, WHITE, 5, "Tartas: 4", 8, 55);
 
-  if((devolver = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
+  if((devolver = checkButtons::mirarBotonesPrincipal(logicalStates::getMenuActual())) != 0)
     return devolver;
 
   display::escribirTexto(mylcd, WHITE, 5, "Puntos: 32", 8, 102);
@@ -83,56 +55,38 @@ void ejecutarMenuCaballo() {
 
     case 2:
       if(digitalRead(checkButtons::getSecundario_b2()) != checkButtons::getEstadoSecundario_2()) {
-        campo = !campo;
+        logicalStates::setCampo(!logicalStates::getCampo());
         checkButtons::setEstadoSecundario_2(!checkButtons::getEstadoSecundario_2());
-
-        if(spawn != 10)
-          spawn++;
-        else {
-          if(campo)
-            spawn = 1;
-          else
-            spawn = 2;
-        }
+        logicalStates::setSpawnB2();
       }
       break;
 
     case 3:
       if(digitalRead(checkButtons::getSecundario_b3()) != checkButtons::getEstadoSecundario_3()) {
-        if(spawn < 9)
-          spawn += 2;
-        else {
-          if(campo)
-            spawn = 1;
-          else
-            spawn = 2;
-        }
+        logicalStates::setSpawnB3();
         checkButtons::setEstadoSecundario_3(!checkButtons::getEstadoSecundario_3());
       }
       break;
 
     case 4:
       if(digitalRead(checkButtons::getSecundario_b4()) != checkButtons::getEstadoSecundario_4()) {
-        if(plan < numeroPlanes)
-          plan++;
-        else
-          plan = 1;
+        logicalStates::setPlan();
         checkButtons::setEstadoSecundario_4(!checkButtons::getEstadoSecundario_4());
       }
       break;
   }
 
   if(devolver == 2)
-    display::pintarCampo(mylcd, campo, spawn);
+    display::pintarCampo(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
   else if(devolver == 3)
-    display::pintarSpawn(mylcd, campo, spawn);
+    display::pintarSpawn(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
   else if(devolver == 4)
-    display::pintarPlan(mylcd, plan);
+    display::pintarPlan(mylcd, logicalStates::getPlan());
 }
 
 int ejecutarMenuBicho(boolean primeraVuelta) {
   if(recibirError() || primeraVuelta)
-    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuActual, checkButtons::getSecundario_b1());
+    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, logicalStates::getMenuActual(), checkButtons::getSecundario_b1());
   return 0;
 }
 
@@ -148,7 +102,7 @@ int ejecutarMenuLidar() {
   for(int i = 0; i < 6; i++) {
     //Penultima y ultima vuelta
     if(i > 3 && i < 5) {
-      if(lidar)
+      if(logicalStates::getLidar())
         color = GREEN;
       else
         color = RED;
@@ -158,15 +112,15 @@ int ejecutarMenuLidar() {
       color = WHITE;
     }
 
-    if(lidar)
+    if(logicalStates::getLidar())
       display::escribirTexto(mylcd, color, tamanno, apagar[i], coordX, coordY[i]);
     else
       display::escribirTexto(mylcd, color, tamanno, encender[i], coordX, coordY[i]);
 
-    if((devolver = mirarLidar()) != 0)
+    if((devolver = checkButtons::mirarLidar(mylcd, logicalStates::getMenuActual(), BLACK)) != 0)
       return devolver;
   }
-  return mirarLidar();
+  return checkButtons::mirarLidar(mylcd, logicalStates::getMenuActual(), BLACK);
 }
 
 void ejecutarMenuApagar() {
@@ -186,9 +140,9 @@ void ejecutarMenuApagar() {
 }
 
 int seleccionarMenu(int eleccion) {
-  if(menuDevuelto != 0)
-    menuActual = menuDevuelto;
-  menuDevuelto = 0;
+  if(logicalStates::getMenuDevuelto() != 0)
+    logicalStates::setMenuActual(logicalStates::getMenuDevuelto());
+  logicalStates::setMenuDevuelto(0);
 
   if(digitalRead(checkButtons::getSecundario_b1()))
     checkButtons::setEstadoSecundario_1(true);
@@ -204,8 +158,8 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
 
-      if((menuDevuelto = ejecutarMenuEstadistica()) != 0)
-        return menuDevuelto;
+      if(logicalStates::setMenuDevuelto(ejecutarMenuEstadistica()) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
@@ -213,8 +167,8 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, BLACK, GREEN, WHITE, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       mylcd.Set_Draw_color(WHITE);
 
-      display::pintarCampo(mylcd, campo, spawn);
-      display::pintarPlan(mylcd, plan);
+      display::pintarCampo(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
+      display::pintarPlan(mylcd, logicalStates::getPlan());
 
       display::escribirTexto(mylcd, WHITE, 3, "Listo", 12, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Equipo", 126, 290);
@@ -228,16 +182,16 @@ int seleccionarMenu(int eleccion) {
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
 
-      if((menuDevuelto = ejecutarMenuBicho(true)) != 0)
-        return menuDevuelto;
+      if(logicalStates::setMenuDevuelto(ejecutarMenuBicho(true)) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
     case 4:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
 
-      if((menuDevuelto = ejecutarMenuLidar()) != 0)
-        return menuDevuelto;
+      if(logicalStates::setMenuDevuelto(ejecutarMenuLidar()) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
@@ -254,10 +208,10 @@ int seleccionarMenu(int eleccion) {
       break;
 
     default:
-      switch(menuActual) {
+      switch(logicalStates::getMenuActual()) {
         case 1:
-          if((menuDevuelto = ejecutarMenuEstadistica()) != 0)
-            return menuDevuelto;
+          if(logicalStates::setMenuDevuelto(ejecutarMenuEstadistica()) != 0)
+            return logicalStates::getMenuDevuelto();
 
           break;
 
@@ -266,14 +220,14 @@ int seleccionarMenu(int eleccion) {
           break;
 
         case 3:
-          if((menuDevuelto = ejecutarMenuBicho(false)) != 0)
-            return menuDevuelto;
+          if(logicalStates::setMenuDevuelto(ejecutarMenuBicho(false)) != 0)
+            return logicalStates::getMenuDevuelto();
 
           break;
 
         case 4:
-          if((menuDevuelto = ejecutarMenuLidar()) != 0)
-            return menuDevuelto;
+          if(logicalStates::setMenuDevuelto(ejecutarMenuLidar()) != 0)
+            return logicalStates::getMenuDevuelto();
 
           break;
 
@@ -313,7 +267,7 @@ void setup() {
 }
 
 void loop() {
-  seleccionarMenu(menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual));
-  if(menuDevuelto != 0)
-    seleccionarMenu(menuDevuelto);
+  seleccionarMenu(logicalStates::setMenuDevuelto(checkButtons::mirarBotonesPrincipal(logicalStates::getMenuActual())));
+  if(logicalStates::getMenuDevuelto() != 0)
+    seleccionarMenu(logicalStates::getMenuDevuelto());
 }

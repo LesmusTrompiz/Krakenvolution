@@ -1,5 +1,6 @@
 #include "LCDWIKI_KBV.h"
 #include "checkButtons.hpp"
+#include "logicalStates.hpp"
 
 //Pines menu principal
 constexpr int menuEstadistica = 43;
@@ -49,6 +50,26 @@ namespace checkButtons {
             return 4;
         else
             return 0;
+    }
+
+    int mirarLidar(LCDWIKI_KBV mylcd, int menuActual, uint16_t BLACK) {
+        if(digitalRead(secundario_b1) != estadoSecundario_1 && digitalRead(secundario_b1) == LOW) {
+            mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
+            mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+
+            if(logicalStates::getLidar())
+            Serial.write("Apagar lidar");
+            else
+            Serial.write("Encender lidar");
+
+            estadoSecundario_1 = !estadoSecundario_1;
+            logicalStates::setLidar(!logicalStates::getLidar());
+
+            return 4;
+        } else if(logicalStates::setMenuDevuelto(mirarBotonesPrincipal(menuActual)) != 0)
+            return logicalStates::getMenuDevuelto();
+
+        return 0;
     }
 
     int getMenuEstadistica() {return menuEstadistica;}

@@ -1,13 +1,12 @@
 #ifndef CHECKBUTTONS_HPP
 #define CHECKBUTTONS_HPP
 
-#include "LCDWIKI_KBV.h"
-
 namespace checkButtons {
     //Devolvemos el boton pulsado con prioridad de menor a mayor
     int mirarBotonesPrincipal(int menuActual);
     //Hacemos lo mismo que en el metodo mirarBotonesPrincipal() pero con los botones del menu secundario
     int mirarBotonesSecundario();
+    int mirarLidar(LCDWIKI_KBV mylcd, int menuActual, uint16_t BLACK);
     int getMenuEstadistica();
     int getMenuCaballo();
     int getMenuBicho();
