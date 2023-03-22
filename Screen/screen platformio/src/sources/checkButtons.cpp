@@ -14,6 +14,12 @@ constexpr int secundario_b2 = 49;
 constexpr int secundario_b3 = 51;
 constexpr int secundario_b4 = 53;
 
+//Estado botones secundarios
+boolean estadoSecundario_1 = true;
+boolean estadoSecundario_2 = true;
+boolean estadoSecundario_3 = true;
+boolean estadoSecundario_4 = true;
+
 namespace checkButtons {
     //Devolvemos el boton pulsado con prioridad de menor a mayor
     int mirarBotonesPrincipal(int menuActual) {
@@ -54,4 +60,12 @@ namespace checkButtons {
     int getSecundario_b2() {return secundario_b2;}
     int getSecundario_b3() {return secundario_b3;}
     int getSecundario_b4() {return secundario_b4;}
+    boolean getEstadoSecundario_1() {return estadoSecundario_1;}
+    boolean getEstadoSecundario_2() {return estadoSecundario_2;}
+    boolean getEstadoSecundario_3() {return estadoSecundario_3;}
+    boolean getEstadoSecundario_4() {return estadoSecundario_4;}
+    void setEstadoSecundario_1(boolean b) {estadoSecundario_1 = b;}
+    void setEstadoSecundario_2(boolean b) {estadoSecundario_2 = b;}
+    void setEstadoSecundario_3(boolean b) {estadoSecundario_3 = b;}
+    void setEstadoSecundario_4(boolean b) {estadoSecundario_4 = b;}
 }

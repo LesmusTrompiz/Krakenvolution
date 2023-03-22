@@ -17,6 +17,14 @@ namespace checkButtons {
     int getSecundario_b2();
     int getSecundario_b3();
     int getSecundario_b4();
+    boolean getEstadoSecundario_1();
+    boolean getEstadoSecundario_2();
+    boolean getEstadoSecundario_3();
+    boolean getEstadoSecundario_4();
+    void setEstadoSecundario_1(boolean b);
+    void setEstadoSecundario_2(boolean b);
+    void setEstadoSecundario_3(boolean b);
+    void setEstadoSecundario_4(boolean b);
 }
 
 #endif
