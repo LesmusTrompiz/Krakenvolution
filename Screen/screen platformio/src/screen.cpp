@@ -17,12 +17,6 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 #define YELLOW      0xFFE0
 #define WHITE       0xFFFF
 
-//Pines menu secundario
-constexpr int secundario_b1 = 47;
-constexpr int secundario_b2 = 49;
-constexpr int secundario_b3 = 51;
-constexpr int secundario_b4 = 53;
-
 //Estado botones secundarios
 boolean estadoSecundario_1 = true;
 boolean estadoSecundario_2 = true;
@@ -48,7 +42,7 @@ boolean recibirError() {
 }
 
 int mirarLidar() {
-  if(digitalRead(secundario_b1) != estadoSecundario_1 && digitalRead(secundario_b1) == LOW) {
+  if(digitalRead((int) checkButtons::getSecundario_b1) != estadoSecundario_1 && digitalRead((int) checkButtons::getSecundario_b1) == LOW) {
     mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
     mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
 
@@ -84,16 +78,16 @@ int ejecutarMenuEstadistica() {
 void ejecutarMenuCaballo() {
   int devolver;
 
-  switch(devolver = checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
+  switch(devolver = checkButtons::mirarBotonesSecundario()) {
     case 1:
-      if(digitalRead(secundario_b1) != estadoSecundario_1) {
+      if(digitalRead((int) checkButtons::getSecundario_b1) != estadoSecundario_1) {
         Serial.write("Robot listo para jugar");
         estadoSecundario_1 = !estadoSecundario_1;
       }
       break;
 
     case 2:
-      if(digitalRead(secundario_b2) != estadoSecundario_2) {
+      if(digitalRead((int) checkButtons::getSecundario_b2) != estadoSecundario_2) {
         campo = !campo;
         estadoSecundario_2 = !estadoSecundario_2;
 
@@ -109,7 +103,7 @@ void ejecutarMenuCaballo() {
       break;
 
     case 3:
-      if(digitalRead(secundario_b3) != estadoSecundario_3) {
+      if(digitalRead((int) checkButtons::getSecundario_b3) != estadoSecundario_3) {
         if(spawn < 9)
           spawn += 2;
         else {
@@ -123,7 +117,7 @@ void ejecutarMenuCaballo() {
       break;
 
     case 4:
-      if(digitalRead(secundario_b4) != estadoSecundario_4) {
+      if(digitalRead((int) checkButtons::getSecundario_b4) != estadoSecundario_4) {
         if(plan < numeroPlanes)
           plan++;
         else
@@ -143,7 +137,8 @@ void ejecutarMenuCaballo() {
 
 int ejecutarMenuBicho(boolean primeraVuelta) {
   if(recibirError() || primeraVuelta)
-    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuActual, secundario_b1);
+    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, menuActual, (int) checkButtons::getSecundario_b1);
+  return 0;
 }
 
 int ejecutarMenuLidar() {
@@ -180,7 +175,7 @@ int ejecutarMenuLidar() {
 }
 
 void ejecutarMenuApagar() {
-  switch(checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
+  switch(checkButtons::mirarBotonesSecundario()) {
     case 1:
       Serial.write("Apagar robot");
       delay(1000);
@@ -200,13 +195,13 @@ int seleccionarMenu(int eleccion) {
     menuActual = menuDevuelto;
   menuDevuelto = 0;
 
-  if(digitalRead(secundario_b1))
+  if(digitalRead((int) checkButtons::getSecundario_b1))
     estadoSecundario_1 = true;
-  if(digitalRead(secundario_b2))
+  if(digitalRead((int) checkButtons::getSecundario_b2))
     estadoSecundario_2 = true;
-  if(digitalRead(secundario_b3))
+  if(digitalRead((int) checkButtons::getSecundario_b3))
     estadoSecundario_3 = true;
-  if(digitalRead(secundario_b4))
+  if(digitalRead((int) checkButtons::getSecundario_b4))
     estadoSecundario_4 = true;
 
   switch(eleccion) {
@@ -298,17 +293,17 @@ int seleccionarMenu(int eleccion) {
 
 void setup() {
   //Configuracion botones menu principal
-  pinMode(43, INPUT_PULLUP); //Menu estadistica
-  pinMode(41, INPUT_PULLUP); //Menu caballo
-  pinMode(39, INPUT_PULLUP); //Menu bicho
-  pinMode(37, INPUT_PULLUP); //Menu lidar
-  pinMode(35, INPUT_PULLUP); //Menu apagar
+  pinMode((int) checkButtons::getMenuEstadistica, INPUT_PULLUP);
+  pinMode((int) checkButtons::getMenuCaballo, INPUT_PULLUP);
+  pinMode((int) checkButtons::getMenuBicho, INPUT_PULLUP);
+  pinMode((int) checkButtons::getMenuLidar, INPUT_PULLUP);
+  pinMode((int) checkButtons::getMenuApagar, INPUT_PULLUP);
 
   //Configuracion botones menu secundario
-  pinMode(secundario_b1, INPUT_PULLUP);
-  pinMode(secundario_b2, INPUT_PULLUP);
-  pinMode(secundario_b3, INPUT_PULLUP);
-  pinMode(secundario_b4, INPUT_PULLUP);
+  pinMode((int) checkButtons::getSecundario_b1, INPUT_PULLUP);
+  pinMode((int) checkButtons::getSecundario_b2, INPUT_PULLUP);
+  pinMode((int) checkButtons::getSecundario_b3, INPUT_PULLUP);
+  pinMode((int) checkButtons::getSecundario_b4, INPUT_PULLUP);
 
   //Configuracion pantalla
   Serial.begin(9600);
@@ -320,7 +315,6 @@ void setup() {
   display::marcoMenuPrincipal(mylcd);
   mylcd.Set_Text_Back_colour(BLACK);
   seleccionarMenu(1);
-
 }
 
 void loop() {

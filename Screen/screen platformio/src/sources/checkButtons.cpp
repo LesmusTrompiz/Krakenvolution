@@ -8,6 +8,12 @@ constexpr int menuBicho = 39;
 constexpr int menuLidar = 37;
 constexpr int menuApagar = 35;
 
+//Pines menu secundario
+constexpr int secundario_b1 = 47;
+constexpr int secundario_b2 = 49;
+constexpr int secundario_b3 = 51;
+constexpr int secundario_b4 = 53;
+
 namespace checkButtons {
     //Devolvemos el boton pulsado con prioridad de menor a mayor
     int mirarBotonesPrincipal(int menuActual) {
@@ -26,7 +32,7 @@ namespace checkButtons {
     }
 
     //Hacemos lo mismo que en el metodo mirarBotonesPrincipal() pero con los botones del menu secundario
-    int mirarBotonesSecundario(int secundario_b1, int secundario_b2, int secundario_b3, int secundario_b4) {
+    int mirarBotonesSecundario() {
         if(!digitalRead(secundario_b1))
             return 1;
         else if(!digitalRead(secundario_b2))
@@ -38,4 +44,14 @@ namespace checkButtons {
         else
             return 0;
     }
+
+    int getMenuEstadistica() {return menuEstadistica;}
+    int getMenuCaballo() {return menuCaballo;}
+    int getMenuBicho() {return menuBicho;}
+    int getMenuLidar() {return menuLidar;}
+    int getMenuApagar() {return menuApagar;}
+    int getSecundario_b1() {return secundario_b1;}
+    int getSecundario_b2() {return secundario_b2;}
+    int getSecundario_b3() {return secundario_b3;}
+    int getSecundario_b4() {return secundario_b4;}
 }
