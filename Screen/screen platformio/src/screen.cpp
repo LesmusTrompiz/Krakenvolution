@@ -44,11 +44,16 @@ int ejecutarMenuEstadistica() {
 
 void ejecutarMenuCaballo() {
   int devolver;
+  String colorCampo = "green";
 
   switch(devolver = checkButtons::mirarBotonesSecundario()) {
     case 1:
+      if(!logicalStates::getCampo())
+        colorCampo = "blue";
+
       if(digitalRead(checkButtons::getSecundario_b1()) != checkButtons::getEstadoSecundario_1()) {
-        Serial.write("Robot listo para jugar");
+        Serial.print("{\"info\":{\"field\":" + colorCampo + String(",\"spawn\":") + logicalStates::getSpawn() +
+        String(",\"plan\":") + logicalStates::getPlan() + String("}}"));
         checkButtons::setEstadoSecundario_1(!checkButtons::getEstadoSecundario_1());
       }
       break;
@@ -112,10 +117,13 @@ int ejecutarMenuLidar() {
       color = WHITE;
     }
 
-    if(logicalStates::getLidar())
+    if(logicalStates::getLidar()) {
+      Serial.write("{\"command\":{\"name\":turn_lidar,\"arg\":false}}");
       display::escribirTexto(mylcd, color, tamanno, apagar[i], coordX, coordY[i]);
-    else
+    } else  {
+      Serial.write("{\"command\":{\"name\":turn_lidar,\"arg\":true}}");
       display::escribirTexto(mylcd, color, tamanno, encender[i], coordX, coordY[i]);
+    }
 
     if((devolver = checkButtons::mirarLidar(mylcd, logicalStates::getMenuActual(), BLACK)) != 0)
       return devolver;
@@ -126,13 +134,13 @@ int ejecutarMenuLidar() {
 void ejecutarMenuApagar() {
   switch(checkButtons::mirarBotonesSecundario()) {
     case 1:
-      Serial.write("Apagar robot");
+      Serial.write("{\"command\":{\"name\":turn_robot,\"arg\":true}}");
       delay(1000);
 
       break;
 
     case 2:
-      Serial.write("Reiniciar robot");
+      Serial.write("{\"command\":{\"name\":reboot_robot,\"arg\":true}}");
       delay(1000);
 
       break;
