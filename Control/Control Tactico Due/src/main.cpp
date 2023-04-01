@@ -79,7 +79,7 @@ void setup()
 {
 	// Serial conf
 	Serial.begin(115200);
-    setup_serial();
+  setup_serial();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
