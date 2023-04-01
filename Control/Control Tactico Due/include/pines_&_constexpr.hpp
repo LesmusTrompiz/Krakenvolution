@@ -18,9 +18,9 @@
 #define Enc_D 		25
 
 // Parámetros mecánicos
-constexpr float tactico_reductora = 26; 
-constexpr float tactico_diametro = 72; //67; 
-constexpr float tactico_vel_eje_max = 8100 / tactico_reductora;																										
+constexpr float tactico_reductora = 26;
+constexpr float tactico_diametro = 72; //67;
+constexpr float tactico_vel_eje_max = 8100 / tactico_reductora;
 constexpr float tactico_vel_max = tactico_vel_eje_max * PI / 30;
 constexpr float tactico_pulsos_por_rev = 256;
 constexpr float tactico_L = 264;
@@ -32,3 +32,16 @@ constexpr float vel_freno_tactico         = 0.8;
 constexpr float vel_giro_tactico          = 8;
 constexpr float ajuste_dist_recta_tactico = 0.25;
 constexpr float ajuste_dist_giro_tactico  = 0.1;
+
+// Servos
+enum
+{
+	pwm_disparador,
+	pwm_carter_izq, 		// Trucado
+	pwm_carter_der,			// Trucado
+	pwm_carter_apertura,
+	pwm_toldo_izq,
+	pwm_toldo_der,
+	pwm_toldo_move
+};
+

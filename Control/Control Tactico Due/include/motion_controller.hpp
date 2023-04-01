@@ -9,6 +9,7 @@
 
 #include <Arduino.h>
 #include <protocol.hpp>
+#include <pines_&_constexpr.hpp>
 
 void on_finished(functor<void()> callback);
 

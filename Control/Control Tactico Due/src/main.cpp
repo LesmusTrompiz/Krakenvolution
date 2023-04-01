@@ -1,12 +1,20 @@
 // #define debug_mode
 
 #include <Arduino.h>
+#include <RobotServos.hpp>
+#include <Adafruit_PWMServoDriver.h>
 #include <eurouart.hpp>
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
 
-/* Definición completa del robot */
+/* Servos */
+
+Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
+
+auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
+
+/* Definición completa de la mecánica del robot */
 
 Param_mecanicos mecanica_tactico(
  tactico_acel,

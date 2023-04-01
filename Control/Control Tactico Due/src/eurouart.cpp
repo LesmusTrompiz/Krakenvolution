@@ -1,10 +1,9 @@
-#include "eurouart.hpp"
-#include <Arduino.h>
-#include "motion_controller.hpp"
-#include <protocol.hpp>
+#include <eurouart.hpp>
 
+/* Tracción */
 extern motion_controller controlador_tactico;
-
+/* Servos */
+extern RobotServo servo_disparador;
 
 uahruart::parser::Protocol protocol;
 
@@ -26,6 +25,10 @@ void setup_serial() {
 
     protocol.register_method("admin", "reset", [](int32_t arg) {
         rstc_start_software_reset(RSTC);
+    });
+
+    protocol.register_method("actuadores", "servo_disparador", [](int32_t arg) {
+        servo_disparador.set_angle(arg);
     });
 
     on_finished([]() {
