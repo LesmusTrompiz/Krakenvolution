@@ -5,10 +5,15 @@
  * de control de tracción del robot.
 */
 
-#define debug_controller
+// #define debug_controller
 
 #include <motion_controller.hpp>
 #include <pines_&_constexpr.hpp>
+
+functor<void()> on_finished_callback;
+void on_finished(functor<void ()> callback) {
+    on_finished_callback = callback;
+}
 
 /* Odom */
 void Odom::act_odom(Param_mecanicos mecanica)
@@ -310,10 +315,7 @@ void motion_controller::move_control()
   if((giro_en_curso || recta_en_curso) && odom.parado_absoluto
       && motores.lmotor_vel == 0 && motores.rmotor_vel == 0)
   {
-    Serial.println("Parada..."); 
-    Serial.print("X: ");Serial.println(odom.pose_actual.x);
-    Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    on_finished_callback();
     parado = true;
     odom.parado = true;
     odom.parado_absoluto = true;

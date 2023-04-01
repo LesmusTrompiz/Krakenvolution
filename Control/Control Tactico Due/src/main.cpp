@@ -1,4 +1,4 @@
-#define debug_mode
+// #define debug_mode
 
 #include <Arduino.h>
 #include <eurouart.hpp>
@@ -71,6 +71,7 @@ void setup()
 {
 	// Serial conf
 	Serial.begin(115200);
+    setup_serial();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
@@ -97,7 +98,6 @@ void setup()
 	controlador_tactico.motores.encender_motores();
 
 	// Check...
-	Serial.println("Configuration done...");
 }
 
 void loop() 

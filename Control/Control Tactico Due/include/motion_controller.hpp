@@ -8,6 +8,9 @@
 #pragma once
 
 #include <Arduino.h>
+#include <protocol.hpp>
+
+void on_finished(functor<void()> callback);
 
 /* Estructuras y funciones auxiliares */
 inline int digitalReadDirect(int pin){
