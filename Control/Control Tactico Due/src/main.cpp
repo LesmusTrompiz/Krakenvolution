@@ -126,12 +126,7 @@ void TC2_Handler(void)
 		{
 			Serial.print("CR: ");Serial.println(controlador_tactico.odom.cuentas_derecha);
 			Serial.print("CL: ");Serial.println(controlador_tactico.odom.cuentas_izquierda);
-			// if(controlador_tactico.recta_en_curso)
-			// Serial.println("Recta en curso...");	
-			// if(controlador_tactico.giro_en_curso)
-			// Serial.println("Giro en curso...");
-			// if(controlador_tactico.parado)
-			// Serial.println("Robot parado...")
+
 			Serial.print("X: ");Serial.println(controlador_tactico.odom.pose_actual.x);
 			Serial.print("Y: ");Serial.println(controlador_tactico.odom.pose_actual.y);
 			Serial.print("O: ");Serial.println(controlador_tactico.odom.pose_actual.alfa);
