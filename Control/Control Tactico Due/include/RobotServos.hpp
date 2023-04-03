@@ -7,8 +7,8 @@ class RobotServo
 {
   public:
     // Constructores
-    RobotServo(const uint8_t _ID_AnalogRead, const uint8_t PWM_ID, Adafruit_PWMServoDriver _ServoHandler);
-    RobotServo(const uint8_t PWM_ID, Adafruit_PWMServoDriver _ServoHandler);
+    RobotServo(const uint8_t _ID_AnalogRead, const uint8_t _PWM_ID, Adafruit_PWMServoDriver* _ServoHandler);
+    RobotServo(const uint8_t _PWM_ID, Adafruit_PWMServoDriver* _ServoHandler);
     // Calibración
     void calibration(float angle_init, float angle_final);
     // Método
@@ -20,7 +20,7 @@ class RobotServo
     // Pin de salida PWM
     const uint8_t PWM_ID;
     // Servos handler 
-    Adafruit_PWMServoDriver ServoHandler;
+    Adafruit_PWMServoDriver* ServoHandler;
     // Función de transferencia nominal
     float m      = 2;
     float n      = 100;

@@ -10,7 +10,7 @@
 
 /* Servos */
 
-Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
+Adafruit_PWMServoDriver* ServoHandlerMaster;
 
 auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
 
@@ -80,7 +80,9 @@ void setup()
 	// Serial conf
 	Serial.begin(115200);
   setup_serial();
-
+	// Adafruit driver conf
+  ServoHandlerMaster->begin();
+  ServoHandlerMaster->setPWMFreq(50);
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
 	pinMode(I_EN, OUTPUT);
