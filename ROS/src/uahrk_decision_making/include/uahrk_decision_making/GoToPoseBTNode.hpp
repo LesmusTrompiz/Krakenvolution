@@ -35,6 +35,4 @@ class GoToPoseBTNode : public BT::ActionNodeBase
         void goal_response_callback(std::shared_future<GoalHandleGoToPose::SharedPtr> future);
         rclcpp_action::ResultCode order_result;
         void sendGoal(float x, float y, float a);
-
-
 };

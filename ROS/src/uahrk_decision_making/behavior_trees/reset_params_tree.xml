@@ -2,11 +2,15 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Action ID="Hello"/>
+        <Action ID="Reset_params"/>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
-        <Action ID="Hello"/>
+        <Action ID="Get_params"/>
+        <Action ID="Reset_params"/>
+        <Action ID="Run_Loaded_Tree"/>
+        <Action ID="Update_init_state"/>
+        <Action ID="Wait_start_signal"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
