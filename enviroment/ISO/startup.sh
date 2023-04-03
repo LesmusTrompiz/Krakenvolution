@@ -5,4 +5,4 @@ source /opt/ros/foxy/setup.bash
 source  /ros_ws/install/setup.bash
 
 # Load nodes
-ros2 launch bring_up_pkg roboot.launch.py
+ros2 launch uahrk_bring_up roboot.py
