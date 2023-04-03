@@ -7,6 +7,10 @@ extern "C"{
     #include <math.h>
 }
 
+constexpr float ANGLE_PRECISION = 5;
+constexpr float DIST_PRECISION = 0.2;
+
+
 int spin_to_goal(float robot_alfa, float goal_alfa);
 int spin_to_wp(const Pose2d origin, const Pose2d goal);
 
@@ -28,6 +32,9 @@ std::tuple<std::string, int> calculate_move(
                     const float dist_precision,
                     const float angle_precision);
 
+bool in_wp(const Pose2d &robot, const Pose2d &goal);
+bool robot_in_angle(const Pose2d &robot, const Pose2d &goal);
+bool in_wp_and_angle(const Pose2d &robot, const Pose2d &goal);
 
 
 

@@ -69,6 +69,19 @@ bool robot_in_distance(const Pose2d &robot,
   return square_dist(robot,goal) < square_dist_precision;
 }
 
+bool in_wp(const Pose2d &robot, const Pose2d &goal){
+  constexpr float SQUARE_DIST_PRECISION = DIST_PRECISION * DIST_PRECISION;
+  return square_dist(robot,goal) < SQUARE_DIST_PRECISION;
+}
+
+bool in_wp_and_angle(const Pose2d &robot, const Pose2d &goal){
+  return in_wp(robot,goal) && robot_in_angle(robot,goal);
+}
+
+bool robot_in_angle(const Pose2d &robot, const Pose2d &goal){
+  return abs(angle_difference(robot.a,goal.a)) < ANGLE_PRECISION;
+}
+
 bool robot_in_angle(const Pose2d &robot, 
                  const Pose2d &goal, 
                  float angle_precision){
@@ -94,16 +107,16 @@ std::tuple<std::string, int> calculate_move(
   auto dist = advance_to_goal(robot_pose, goal_pose);
   auto spin = spin_to_goal(robot_pose.a, goal_pose.a);
   if(dist < (dist_precision * 1000)){
-    if(abs(spin) < angle_precision){
-      std::stringstream error_msg;
-      error_msg << "ERROR CALLING CALCULATE MOVE, GOAL ALREDY SATISFIED :";
-      error_msg << "DIST "  << dist      << " < DIST CONDITION "  << dist_precision  * 1000 << " ";
-      error_msg << "ANGLE " << abs(spin) << " < ANGLE CONDITION " << angle_precision;
-      throw std::invalid_argument(error_msg.str());
-    }
-    else{
-      return {"spin",spin};
-    }
+    //if(abs(spin) < angle_precision){
+    //  std::stringstream error_msg;
+    //  error_msg << "ERROR CALLING CALCULATE MOVE, GOAL ALREDY SATISFIED :";
+    //  error_msg << "DIST "  << dist      << " < DIST CONDITION "  << dist_precision  * 1000 << " ";
+    //  error_msg << "ANGLE " << abs(spin) << " < ANGLE CONDITION " << angle_precision;
+    //  throw std::invalid_argument(error_msg.str());
+    //}
+    //else{
+    return {"spin",spin};
+    //}
   }
   else{
     spin = spin_to_wp(robot_pose, goal_pose);
@@ -115,4 +128,3 @@ std::tuple<std::string, int> calculate_move(
     }
   }
 }
-

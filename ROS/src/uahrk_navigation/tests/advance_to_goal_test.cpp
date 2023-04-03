@@ -13,7 +13,7 @@ TEST(AdvanceTest, From00To20){
   Pose2d goal  {2,0,0};
   int advance;
   advance = advance_to_goal(robot, goal);
-  ASSERT_EQ(advance, 2);
+  ASSERT_EQ(advance, 2000);
 }
 
 
@@ -40,7 +40,7 @@ TEST(AdvanceTest, From00To05){
   Pose2d goal  {0,5};
   int advance;
   advance = advance_to_goal(robot, goal);
-  ASSERT_EQ(advance, 5);
+  ASSERT_EQ(advance, 5000);
 }
 
 TEST(AdvanceTest, From00To34){
@@ -53,7 +53,7 @@ TEST(AdvanceTest, From00To34){
   Pose2d goal  {3,4};
   int advance;
   advance = advance_to_goal(robot, goal);
-  ASSERT_EQ(advance, 5);
+  ASSERT_EQ(advance, 5000);
 }
 
 TEST(AdvanceTest, FromMinus1Minus1To23){
@@ -66,7 +66,7 @@ TEST(AdvanceTest, FromMinus1Minus1To23){
   Pose2d goal  { 2, 3};
   int advance;
   advance = advance_to_goal(robot, goal);
-  ASSERT_EQ(advance, 5);
+  ASSERT_EQ(advance, 5000);
 }
 
 

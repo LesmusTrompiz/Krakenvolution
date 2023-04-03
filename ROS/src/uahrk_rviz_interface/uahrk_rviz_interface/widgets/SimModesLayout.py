@@ -1,9 +1,9 @@
 from PyQt5.QtCore	 	  import Qt
 from PyQt5.QtGui	 	  import QIntValidator
 from PyQt5.QtWidgets 	  import *
-from copy import deepcopy
 from typing import List,Tuple
 from functools import partial
+
 class SimModesLayout(QWidget):
     def __init__(self, title : str,  modes : List[Tuple[str,str]]):
         super().__init__()
@@ -34,6 +34,5 @@ class SimModesLayout(QWidget):
         self.setLayout(self.layout)
 
     def cb_pb(self,n):
-        print(f"Modo {n}")
         self.mode = n
 

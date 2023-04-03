@@ -3,6 +3,31 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
+// Utils:
+ControlState analize_order(rclcpp_action::ResultCode order_result){
+  switch (order_result){
+    case rclcpp_action::ResultCode::SUCCEEDED:
+      return NEXT_MOVE;
+
+    case rclcpp_action::ResultCode::ABORTED:
+      return IDLE;
+    
+    case rclcpp_action::ResultCode::CANCELED:
+      return IDLE;
+
+    default:
+      return WAITING_RESULT;
+  }
+}
+
+bool new_goal(std::shared_ptr<GoalHandlePath> actual_handle){
+  return (actual_handle != nullptr && actual_handle->is_active());
+}
+
+bool last_wp(std::vector<geometry_msgs::msg::Pose> poses, int actual_wp){
+  return (actual_wp == (poses.size() -1));
+}
+
 
 MoveToPoseNode::MoveToPoseNode()
   : Node("move_to_pose_node")
@@ -11,8 +36,6 @@ MoveToPoseNode::MoveToPoseNode()
 
     tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-    
-
     order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
     
     go_to_pose_server = rclcpp_action::create_server<Path>(
@@ -30,64 +53,39 @@ MoveToPoseNode::MoveToPoseNode()
     
   }
 
-void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future)
-{
-  auto goal_handle = future.get();
-  if (!goal_handle) {
-    RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
-  } else {
-    RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
-  }
-}
-
 void MoveToPoseNode::control_cycle(){
   auto result = std::make_shared<Path::Result>();
 
-
-  switch (state)
+  switch(state)
   {
     case IDLE:
-      if (actual_handle != nullptr && actual_handle->is_active()){
+      if (new_goal(actual_handle)){
         state = NEXT_MOVE;
         RCLCPP_INFO(this->get_logger(), "IDLE -> NEXT MOVE");
       }
-    break;
+      return;
     case NEXT_MOVE:
-      try {
+      try{
         auto robot_pose = get_robot_pose();
         Pose2d goal_pose{path_goal->poses[actual_wp]};
-        if (robot_in_distance(robot_pose, goal_pose, dist_precision)){
-          RCLCPP_INFO(this->get_logger(), "ROBOT IN WP %d GOAL SIZE %d", actual_wp, path_goal->poses.size());
+        if(last_wp(path_goal->poses, actual_wp) && in_wp_and_angle(robot_pose,goal_pose)){
+          actual_handle->succeed(result);
+          state = IDLE;
+          return;
+        }
+        else if(!last_wp(path_goal->poses, actual_wp) && in_wp(robot_pose,goal_pose)){
           actual_wp++;
-          if(actual_wp == path_goal->poses.size()){
-            if(robot_in_angle(robot_pose, goal_pose, dist_precision)){
-              actual_handle->succeed(result);
-              state = IDLE;
-              RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
-              return;
-            }
-            else{
-              actual_wp--;
-            }
-          }
-          Pose2d goal_pose{path_goal->poses[actual_wp]};
-          auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
-          send_order(std::get<0>(move),std::get<1>(move));
-          state = EXECUTING;
-          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> EXECUTING");
+          goal_pose = {path_goal->poses[actual_wp]};
         }
-        else{
-          auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
-          send_order(std::get<0>(move),std::get<1>(move));
-          state = EXECUTING;
-          RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> EXECUTING");
-        }
+        auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
+        send_order(std::get<0>(move),std::get<1>(move));
+        state = WAITING_RESULT;
+        return;
       }
-      catch (tf2::TransformException & ex) {
-        RCLCPP_WARN(get_logger(), "Obstacle transform not found: %s", ex.what());
+      catch (tf2::TransformException & ex){
+        RCLCPP_WARN(get_logger(), "Robot transform not found: %s", ex.what());
         actual_handle->abort(result);
         state = IDLE;
-        RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
         return;
       }
       catch (const std::exception &exc)
@@ -95,36 +93,19 @@ void MoveToPoseNode::control_cycle(){
         // catch anything thrown within try block that derives from std::exception
         std::cerr << exc.what();
         RCLCPP_ERROR(get_logger(), "Unknown Exception not found: %s", exc.what());
-        RCLCPP_INFO(this->get_logger(), "NEXT MOVE -> IDLE");
         actual_handle->abort(result);
         state = IDLE;
         return;
       }
-    break;
-    case EXECUTING:
-      // Check out if the order to serial
-      // Node has finished
-      switch (order_result) {
-        case rclcpp_action::ResultCode::SUCCEEDED:
-          state = NEXT_MOVE;
-          RCLCPP_INFO(this->get_logger(), "EXECUTING -> NEXT_MOVE");
-          break;
-        case rclcpp_action::ResultCode::ABORTED:
-          actual_handle->abort(result);
-          state = IDLE;
-          RCLCPP_ERROR(this->get_logger(), "Goal was aborted");
-          RCLCPP_INFO(this->get_logger(), "EXECUTING -> IDLE");
-          break;
-        case rclcpp_action::ResultCode::CANCELED:
-          actual_handle->abort(result);
-          state = IDLE;
-          RCLCPP_ERROR(this->get_logger(), "Goal was canceled");
-          RCLCPP_INFO(this->get_logger(), "EXECUTING -> IDLE");
-          break;
-        default:
-          break;
+    case WAITING_RESULT:
+      // Check out if the order to serial Node has finished
+      state = analize_order(order_result);
+
+      // If we pass to IDLE we must abort the actual goal.
+      if(state == IDLE){
+        actual_handle->abort(result);
       }
-    break;
+      return;
   default:
     RCLCPP_ERROR(get_logger(), "Unknown state %i in the control cycle loop", state);
     RCLCPP_INFO(this->get_logger(), "UNKNOWN -> IDLE");
@@ -137,6 +118,17 @@ void MoveToPoseNode::control_cycle(){
 /*
   Client Functions:
 */
+
+
+void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future)
+{
+  auto goal_handle = future.get();
+  if (!goal_handle) {
+    RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
+  } else {
+    RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
+  }
+}
 
 void MoveToPoseNode::send_order(std::string id, int16_t arg)
 {
@@ -156,38 +148,15 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
   order_client->async_send_goal(goal_msg, send_goal_options);
 }
 
-void MoveToPoseNode::result_callback(const RequestHandleOrder::WrappedResult & result)
-{
+void MoveToPoseNode::result_callback(const RequestHandleOrder::WrappedResult & result){
   order_result = result.code;
-  RCLCPP_INFO(this->get_logger(), "Resultado CB");
-
-  switch (result.code) {
-    case rclcpp_action::ResultCode::SUCCEEDED:
-      break;
-    case rclcpp_action::ResultCode::ABORTED:
-      RCLCPP_ERROR(this->get_logger(), "Goal was aborted");
-      return;
-    case rclcpp_action::ResultCode::CANCELED:
-      RCLCPP_ERROR(this->get_logger(), "Goal was canceled");
-      return;
-    default:
-      RCLCPP_ERROR(this->get_logger(), "Unknown result code");
-      return;
-  }
-  std::stringstream ss;
-  ss << "Result received: " << result.result->ret;
-  RCLCPP_INFO(this->get_logger(), ss.str().c_str());
 }
-
-
 
 
 /*
   SERVER FUNCS:
 
 */
-
-
 rclcpp_action::GoalResponse MoveToPoseNode::handle_goal(
     const rclcpp_action::GoalUUID & uuid,
     std::shared_ptr<const Path::Goal> goal){
@@ -218,10 +187,11 @@ void MoveToPoseNode::handle_accepted(const std::shared_ptr<GoalHandlePath> goal_
 }
 
 Pose2d MoveToPoseNode::get_robot_pose(){
-    rclcpp::Time now = this->get_clock()->now();
-    geometry_msgs::msg::TransformStamped robot_tf = tf_buffer_->lookupTransform(
+  rclcpp::Time now = this->get_clock()->now();
+  geometry_msgs::msg::TransformStamped robot_tf = tf_buffer_->lookupTransform(
       "map", "robot", now, 100ms);
-    return {robot_tf};
+  return {robot_tf};
 }
+
 
 

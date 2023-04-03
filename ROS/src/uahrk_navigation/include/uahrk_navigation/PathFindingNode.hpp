@@ -66,6 +66,4 @@ class PathFindingNode : public rclcpp::Node
 
     void result_callback(const RequestHandlePath::WrappedResult & result);
     void goal_response_callback(std::shared_future<RequestHandlePath::SharedPtr> future);
-
-
 };

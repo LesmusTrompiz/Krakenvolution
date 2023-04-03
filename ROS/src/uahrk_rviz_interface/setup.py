@@ -21,7 +21,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'rviz_interface_main = uahrk_rviz_interface.App:main'
+            'rviz_interface_main = uahrk_rviz_interface.App:main',
+            'map_markers_main = uahrk_rviz_interface.MapMarkers:main',
+            'represent_robot_main = uahrk_rviz_interface.RepresentRobot:main',
+            'represent_enemy_obstacles_main = uahrk_rviz_interface.RepresentEnemyObstacles:main'
         ],
     },
 )
