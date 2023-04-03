@@ -1,8 +1,8 @@
-#include <LCDWIKI_GUI.h>
-#include <LCDWIKI_KBV.h>
-#include "../../include/display.hpp"
-#include "../../include/checkButtons.hpp"
-#include "headers/protocol.hpp"
+#include "LCDWIKI_KBV.h"
+#include "LCDWIKI_GUI.h"
+#include "display.hpp"
+#include "checkButtons.hpp"
+#include "logicalStates.hpp"
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
 LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
@@ -10,131 +10,89 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 //LCDWIKI_KBV mylcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
 //Colores
-#define BLACK   0x0000
-#define BLUE    0x001F
-#define RED     0xF800
-#define GREEN   0x07E0
-#define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
-#define WHITE   0xFFFF
+#define BLACK       0x0000
+#define BLUE        0x007E
+#define RED         0xF800
+#define GREEN       0x07E0
+#define MAGENTA     0xF81F
+#define YELLOW      0xFFE0
+#define WHITE       0xFFFF
 
-//Pines menu principal
-int menuEstadistica = 25;
-int menuCaballo = 24;
-int menuBicho = 33;
-int menuLidar = 39;
-int menuApagar = 47;
-int menuActual = 1;
+String errores[13];
 
-//Pines menu secundario
-int secundario_b1 = 41;
-int secundario_b2 = 53;
-int secundario_b3 = 51;
-int secundario_b4 = 52;
-
-//Estado botones secundarios
-boolean estadoSecundario_1 = true;
-boolean estadoSecundario_2 = true;
-boolean estadoSecundario_3 = true;
-boolean estadoSecundario_4 = true;
-
-//Variables para las interrupciones
-int menuDevuelto;
-int codigoInterrupcion = 0;
-
-boolean lidar = true;
-
-/**ProtocolSM protocol_sm;
-uahruart::serial::ClientProtocolBuffer buffer(&protocol_sm);
-
-#if defined(USART_RX_vect)
-  ISR(USART_RX_vect)
-#elif defined(USART0_RX_vect)
-  ISR(USART0_RX_vect)
-#elif defined(USART_RXC_vect)
-  ISR(USART_RXC_vect) // ATmega8
-#else
-  #error "Don't know what the Data Received vector is called for Serial"
-#endif
-  {
-    buffer._rx_complete_irq();
+boolean recibirError() {
+  if(Serial.available()) {
+    display::ordenarErrores(errores, Serial.readString());
+    return true;
   }
+  return false;
+}
 
-#if defined(UART0_UDRE_vect)
-ISR(UART0_UDRE_vect)
-#elif defined(UART_UDRE_vect)
-ISR(UART_UDRE_vect)
-#elif defined(USART0_UDRE_vect)
-ISR(USART0_UDRE_vect)
-#elif defined(USART_UDRE_vect)
-ISR(USART_UDRE_vect)
-#else
-  #error "Don't know what the Data Register Empty vector is called for Serial"
-#endif
-{
-  buffer._tx_udr_empty_irq();
-}*/
+int ejecutarMenuEstadistica() {
+  int devolver;
+  display::escribirTexto(mylcd, WHITE, 5, "Tiempo: 62s", 8, 8);
+  display::escribirTexto(mylcd, WHITE, 5, "Tartas: 4", 8, 55);
 
-int mirarLidar() {
-  if(digitalRead(secundario_b1) != estadoSecundario_1 && digitalRead(secundario_b1) == LOW) {
-    mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
-    mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+  if((devolver = checkButtons::mirarBotonesPrincipal(logicalStates::getMenuActual())) != 0)
+    return devolver;
 
-    if(lidar)
-      Serial.write("Apagar lidar");
-    else
-      Serial.write("Encender lidar");
-
-    estadoSecundario_1 = !estadoSecundario_1;
-    lidar = !lidar;
-
-    return 4;
-  } else if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
-  menuBicho, menuLidar, menuApagar, menuActual)) != 0)
-    return menuDevuelto;
+  display::escribirTexto(mylcd, WHITE, 5, "Puntos: 32", 8, 102);
+  display::escribirTexto(mylcd, MAGENTA, 6, "UAHRKrakens", 8, 223);
 
   return 0;
 }
 
-void ejecutarMenuEstadistica() {
-  //Pendiente
-}
-
 void ejecutarMenuCaballo() {
-  switch(checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
+  int devolver;
+  String colorCampo = "green";
+
+  switch(devolver = checkButtons::mirarBotonesSecundario()) {
     case 1:
-      if(digitalRead(secundario_b1) != estadoSecundario_1) {
-        Serial.write("Robot listo para jugar");
-        estadoSecundario_1 = !estadoSecundario_1;
+      if(!logicalStates::getCampo())
+        colorCampo = "blue";
+
+      if(digitalRead(checkButtons::getSecundario_b1()) != checkButtons::getEstadoSecundario_1()) {
+        Serial.print("{\"info\":{\"field\":" + colorCampo + String(",\"spawn\":") + logicalStates::getSpawn() +
+        String(",\"plan\":") + logicalStates::getPlan() + String("}}"));
+        checkButtons::setEstadoSecundario_1(!checkButtons::getEstadoSecundario_1());
       }
       break;
 
     case 2:
-      if(digitalRead(secundario_b2) != estadoSecundario_2) {
-        Serial.write("Elección de equipo");
-        estadoSecundario_2 = !estadoSecundario_2;
+      if(digitalRead(checkButtons::getSecundario_b2()) != checkButtons::getEstadoSecundario_2()) {
+        logicalStates::setCampo(!logicalStates::getCampo());
+        checkButtons::setEstadoSecundario_2(!checkButtons::getEstadoSecundario_2());
+        logicalStates::setSpawnB2();
       }
       break;
 
     case 3:
-      if(digitalRead(secundario_b3) != estadoSecundario_3) {
-        Serial.write("Elección de spawn");
-        estadoSecundario_3 = !estadoSecundario_3;
+      if(digitalRead(checkButtons::getSecundario_b3()) != checkButtons::getEstadoSecundario_3()) {
+        logicalStates::setSpawnB3();
+        checkButtons::setEstadoSecundario_3(!checkButtons::getEstadoSecundario_3());
       }
       break;
 
     case 4:
-      if(digitalRead(secundario_b4) != estadoSecundario_4) {
-        Serial.write("Elección de plan");
-        estadoSecundario_4 = !estadoSecundario_4;
+      if(digitalRead(checkButtons::getSecundario_b4()) != checkButtons::getEstadoSecundario_4()) {
+        logicalStates::setPlan();
+        checkButtons::setEstadoSecundario_4(!checkButtons::getEstadoSecundario_4());
       }
       break;
   }
+
+  if(devolver == 2)
+    display::pintarCampo(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
+  else if(devolver == 3)
+    display::pintarSpawn(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
+  else if(devolver == 4)
+    display::pintarPlan(mylcd, logicalStates::getPlan());
 }
 
-int ejecutarMenuBicho() {
-  return display::escribirErrores(mylcd, WHITE, 2, "Albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusion en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion", 10, 10, menuEstadistica, menuCaballo, menuBicho, menuLidar, menuApagar, menuActual);
+int ejecutarMenuBicho(boolean primeraVuelta) {
+  if(recibirError() || primeraVuelta)
+    return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, logicalStates::getMenuActual(), checkButtons::getSecundario_b1());
+  return 0;
 }
 
 int ejecutarMenuLidar() {
@@ -149,7 +107,7 @@ int ejecutarMenuLidar() {
   for(int i = 0; i < 6; i++) {
     //Penultima y ultima vuelta
     if(i > 3 && i < 5) {
-      if(lidar)
+      if(logicalStates::getLidar())
         color = GREEN;
       else
         color = RED;
@@ -159,27 +117,30 @@ int ejecutarMenuLidar() {
       color = WHITE;
     }
 
-    if(lidar)
+    if(logicalStates::getLidar()) {
+      Serial.write("{\"command\":{\"name\":turn_lidar,\"arg\":false}}");
       display::escribirTexto(mylcd, color, tamanno, apagar[i], coordX, coordY[i]);
-    else
+    } else  {
+      Serial.write("{\"command\":{\"name\":turn_lidar,\"arg\":true}}");
       display::escribirTexto(mylcd, color, tamanno, encender[i], coordX, coordY[i]);
+    }
 
-    if((devolver = mirarLidar()) != 0)
+    if((devolver = checkButtons::mirarLidar(mylcd, logicalStates::getMenuActual(), BLACK)) != 0)
       return devolver;
   }
-  return mirarLidar();
+  return checkButtons::mirarLidar(mylcd, logicalStates::getMenuActual(), BLACK);
 }
 
 void ejecutarMenuApagar() {
-  switch(checkButtons::mirarBotonesSecundario(secundario_b1, secundario_b2, secundario_b3, secundario_b4)) {
+  switch(checkButtons::mirarBotonesSecundario()) {
     case 1:
-      Serial.write("Reiniciar robot");
+      Serial.write("{\"command\":{\"name\":turn_robot,\"arg\":true}}");
       delay(1000);
 
       break;
 
     case 2:
-      Serial.write("Apagar robot");
+      Serial.write("{\"command\":{\"name\":reboot_robot,\"arg\":true}}");
       delay(1000);
 
       break;
@@ -187,77 +148,67 @@ void ejecutarMenuApagar() {
 }
 
 int seleccionarMenu(int eleccion) {
-  codigoInterrupcion = 0;
+  if(logicalStates::getMenuDevuelto() != 0)
+    logicalStates::setMenuActual(logicalStates::getMenuDevuelto());
+  logicalStates::setMenuDevuelto(0);
 
-  if(menuDevuelto != 0)
-    menuActual = menuDevuelto;
-
-  if(digitalRead(secundario_b1))
-    estadoSecundario_1 = true;
-  if(digitalRead(secundario_b2))
-    estadoSecundario_2 = true;
-  if(digitalRead(secundario_b3))
-    estadoSecundario_3 = true;
-  if(digitalRead(secundario_b4))
-    estadoSecundario_4 = true;
+  if(digitalRead(checkButtons::getSecundario_b1()))
+    checkButtons::setEstadoSecundario_1(true);
+  if(digitalRead(checkButtons::getSecundario_b2()))
+    checkButtons::setEstadoSecundario_2(true);
+  if(digitalRead(checkButtons::getSecundario_b3()))
+    checkButtons::setEstadoSecundario_3(true);
+  if(digitalRead(checkButtons::getSecundario_b4()))
+    checkButtons::setEstadoSecundario_4(true);
 
   switch(eleccion) {
     case 1:
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
-      ejecutarMenuEstadistica();
 
-      mylcd.Set_Text_colour(WHITE);
-      mylcd.Set_Text_Back_colour(BLACK);
-      mylcd.Set_Text_Size(1);
-      mylcd.Print_String("Hello World!", 0, 0);
-      display::escribirTexto(mylcd, WHITE, 2, "Hello World!", 0, 40);
-      display::escribirTexto(mylcd, WHITE, 3, "Hello World!", 0, 104);
-      display::escribirTexto(mylcd, WHITE, 4, "Hello!", 0, 192);
-      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 224);
+      if(logicalStates::setMenuDevuelto(ejecutarMenuEstadistica()) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
     case 2:
       display::pintarIconos(mylcd, BLACK, GREEN, WHITE, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
+      mylcd.Set_Draw_color(WHITE);
+
+      display::pintarCampo(mylcd, logicalStates::getCampo(), logicalStates::getSpawn());
+      display::pintarPlan(mylcd, logicalStates::getPlan());
+
       display::escribirTexto(mylcd, WHITE, 3, "Listo", 12, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Equipo", 126, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Spawn", 256, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Plan", 388, 290);
       ejecutarMenuCaballo();
 
-      mylcd.Set_Text_colour(WHITE);
-      mylcd.Set_Text_Back_colour(BLACK);
-      mylcd.Set_Text_Size(1);
-      mylcd.Print_String("Hola buenos días", 0, 0);
-      display::escribirTexto(mylcd, WHITE, 2, "Hello World!", 0, 40);
-      display::escribirTexto(mylcd, WHITE, 3, "Hello World!", 0, 104);
-      display::escribirTexto(mylcd, WHITE, 4, "Hello!", 0, 192);
-      display::escribirTexto(mylcd, WHITE, 5, "Hello!", 0, 220);
-
       break;
 
     case 3:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, WHITE, YELLOW, BLACK, RED, BLACK, WHITE);
       display::escribirTexto(mylcd, WHITE, 3, "Pausa", 13, 290);
-      if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
-        menuDevuelto = codigoInterrupcion;
-        return menuDevuelto;
-      }
+
+      if(logicalStates::setMenuDevuelto(ejecutarMenuBicho(true)) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
     case 4:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, WHITE, RED, BLACK, WHITE);
-      if((codigoInterrupcion = ejecutarMenuLidar()) != 0) {
-        menuDevuelto = codigoInterrupcion;
-        return menuDevuelto;
-      }
+
+      if(logicalStates::setMenuDevuelto(ejecutarMenuLidar()) != 0)
+        return logicalStates::getMenuDevuelto();
 
       break;
 
     case 5:
       display::pintarIconos(mylcd, BLACK, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, WHITE, BLACK);
+      display::escribirTexto(mylcd, WHITE, 4, "Seleccione para", 8, 8);
+      display::escribirTexto(mylcd, WHITE, 4, "apagar o", 8, 45);
+      display::escribirTexto(mylcd, WHITE, 4, "reiniciar el", 8, 82);
+      display::escribirTexto(mylcd, WHITE, 4, "robot", 8, 119);
       display::escribirTexto(mylcd, WHITE, 3, "Apagar", 4, 290);
       display::escribirTexto(mylcd, WHITE, 3, "Reini.", 127, 290);
       ejecutarMenuApagar();
@@ -265,9 +216,11 @@ int seleccionarMenu(int eleccion) {
       break;
 
     default:
-      switch(menuActual) {
+      switch(logicalStates::getMenuActual()) {
         case 1:
-          ejecutarMenuEstadistica();
+          if(logicalStates::setMenuDevuelto(ejecutarMenuEstadistica()) != 0)
+            return logicalStates::getMenuDevuelto();
+
           break;
 
         case 2:
@@ -275,15 +228,15 @@ int seleccionarMenu(int eleccion) {
           break;
 
         case 3:
-          if((codigoInterrupcion = ejecutarMenuBicho()) != 0) {
-            menuDevuelto = codigoInterrupcion;
-            return menuDevuelto;
-          }
+          if(logicalStates::setMenuDevuelto(ejecutarMenuBicho(false)) != 0)
+            return logicalStates::getMenuDevuelto();
 
           break;
 
         case 4:
-          ejecutarMenuLidar();
+          if(logicalStates::setMenuDevuelto(ejecutarMenuLidar()) != 0)
+            return logicalStates::getMenuDevuelto();
+
           break;
 
         case 5:
@@ -297,17 +250,17 @@ int seleccionarMenu(int eleccion) {
 
 void setup() {
   //Configuracion botones menu principal
-  pinMode(menuEstadistica, INPUT_PULLUP);
-  pinMode(menuCaballo, INPUT_PULLUP);
-  pinMode(menuBicho, INPUT_PULLUP);
-  pinMode(menuLidar, INPUT_PULLUP);
-  pinMode(menuApagar, INPUT_PULLUP);
+  pinMode(checkButtons::getMenuEstadistica(), INPUT_PULLUP);
+  pinMode(checkButtons::getMenuCaballo(), INPUT_PULLUP);
+  pinMode(checkButtons::getMenuBicho(), INPUT_PULLUP);
+  pinMode(checkButtons::getMenuLidar(), INPUT_PULLUP);
+  pinMode(checkButtons::getMenuApagar(), INPUT_PULLUP);
 
   //Configuracion botones menu secundario
-  pinMode(secundario_b1, INPUT_PULLUP);
-  pinMode(secundario_b2, INPUT_PULLUP);
-  pinMode(secundario_b3, INPUT_PULLUP);
-  pinMode(secundario_b4, INPUT_PULLUP);
+  pinMode(checkButtons::getSecundario_b1(), INPUT_PULLUP);
+  pinMode(checkButtons::getSecundario_b2(), INPUT_PULLUP);
+  pinMode(checkButtons::getSecundario_b3(), INPUT_PULLUP);
+  pinMode(checkButtons::getSecundario_b4(), INPUT_PULLUP);
 
   //Configuracion pantalla
   Serial.begin(9600);
@@ -322,8 +275,7 @@ void setup() {
 }
 
 void loop() {
-  seleccionarMenu(menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica,
-  menuCaballo, menuBicho, menuLidar, menuApagar, menuActual));
-  if(codigoInterrupcion != 0)
-    seleccionarMenu(codigoInterrupcion);
+  seleccionarMenu(logicalStates::setMenuDevuelto(checkButtons::mirarBotonesPrincipal(logicalStates::getMenuActual())));
+  if(logicalStates::getMenuDevuelto() != 0)
+    seleccionarMenu(logicalStates::getMenuDevuelto());
 }

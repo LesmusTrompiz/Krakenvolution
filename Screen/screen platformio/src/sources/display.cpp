@@ -1,11 +1,13 @@
-#include <LCDWIKI_GUI.h>
-#include <LCDWIKI_KBV.h>
-#include "../../include/display.hpp"
-#include "../../include/checkButtons.hpp"
+#include "LCDWIKI_KBV.h"
+#include "LCDWIKI_GUI.h"
+#include "display.hpp"
+#include "checkButtons.hpp"
 
 //Colores
-#define BLACK   0x0000
-#define WHITE   0xFFFF
+#define BLACK       0x0000
+#define DARKBLUE    0x000F
+#define DARKGREEN   0x00E0
+#define WHITE       0xFFFF
 
 namespace display {
     //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
@@ -16,7 +18,7 @@ namespace display {
         mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
 
         //Limpiar menu secundario
-        mylcd.Fill_Rect(  0, 281, 113, 319, BLACK);
+        mylcd.Fill_Rect(    0, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  121, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
@@ -118,10 +120,10 @@ namespace display {
 
     void marcoMenuPrincipal(LCDWIKI_KBV mylcd) {
         //Verticales menu principal
-        mylcd.Fill_Rect(424, 0, 8, 280, WHITE);
-        mylcd.Fill_Rect(113, 273, 8, 56, WHITE);
-        mylcd.Fill_Rect(235, 273, 8, 56, WHITE);
-        mylcd.Fill_Rect(357, 273, 8, 56, WHITE);
+        mylcd.Fill_Rect(424,   0, 8, 280, WHITE);
+        mylcd.Fill_Rect(113, 273, 8,  56, WHITE);
+        mylcd.Fill_Rect(235, 273, 8,  56, WHITE);
+        mylcd.Fill_Rect(357, 273, 8,  56, WHITE);
 
         //Horizontales menu principal
         mylcd.Fill_Rect(424,  49,  56, 8, WHITE);
@@ -131,28 +133,263 @@ namespace display {
         mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
     }
 
-    /**
-    void pintarIconosConexion() {
-    //Marco conexion
-    mylcd.Fill_Rect(47, 0, 8, 55, WHITE);
-    mylcd.Fill_Rect(0, 47, 47, 8, WHITE);
+    void pintarCampo(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+        mylcd.Fill_Rect(  8, 8, 416, 233, BLACK);
 
-    //Conexion router
-    mylcd.Fill_Rect(3, 30, 8, 13, GREY);
-    mylcd.Fill_Rect(19, 17, 8, 26, GREY);
-    mylcd.Fill_Rect(35, 4, 8, 39, GREY);
+        //Marco del campo
+        mylcd.Set_Draw_color(WHITE);
+        mylcd.Draw_Rectangle(8, 8, 416, 120);
+        mylcd.Draw_Rectangle(8, 121, 416, 233);
+
+        if(campo) {
+            mylcd.Set_Draw_color(DARKGREEN);
+            mylcd.Fill_Rectangle(9, 9, 415, 119);
+        } else {
+            mylcd.Set_Draw_color(DARKBLUE);
+            mylcd.Fill_Rectangle(9, 122, 415, 232);
+        }
+        mylcd.Set_Draw_color(WHITE);
+
+        //Marcos de los spawns
+        mylcd.Draw_Rectangle(  8,   8,  55,  55);
+        mylcd.Draw_Rectangle(128,   8, 183,  55);
+        mylcd.Draw_Rectangle(248,   8, 303,  55);
+        mylcd.Draw_Rectangle(369,   8, 416,  55);
+        mylcd.Draw_Rectangle(369,  65, 416, 112);
+        mylcd.Draw_Rectangle(369, 129, 416, 177);
+        mylcd.Draw_Rectangle(  8, 186,  55, 233);
+        mylcd.Draw_Rectangle(128, 186, 183, 233);
+        mylcd.Draw_Rectangle(248, 186, 303, 233);
+        mylcd.Draw_Rectangle(369, 186, 416, 233);
+
+        mylcd.Draw_Circle(215, 120, 30);
+
+        switch(spawn) {
+            case 1:
+                mylcd.Fill_Rectangle(  8,   8,  55,  55);
+                break;
+
+            case 2:
+                mylcd.Fill_Rectangle(128,   8, 183,  55);
+                break;
+
+            case 3:
+                mylcd.Fill_Rectangle(248,   8, 303,  55);
+                break;
+
+            case 4:
+                mylcd.Fill_Rectangle(369,   8, 416,  55);
+                break;
+
+            case 5:
+                mylcd.Fill_Rectangle(369,  65, 416, 112);
+                break;
+
+            case 6:
+                mylcd.Fill_Rectangle(369, 129, 416, 177);
+                break;
+
+            case 7:
+                mylcd.Fill_Rectangle(369, 186, 416, 233);
+                break;
+
+            case 8:
+                mylcd.Fill_Rectangle(248, 186, 303, 233);
+                break;
+
+            case 9:
+                mylcd.Fill_Rectangle(128, 186, 183, 233);
+                break;
+
+            case 10:
+                mylcd.Fill_Rectangle(  8, 186,  55, 233);
+                break;
+        }
     }
 
-    void pintarCampo() {
-    //Verticales campo
-    mylcd.Fill_Rect(416, 8, 8, 272, WHITE);
-    mylcd.Fill_Rect(  8, 8, 8, 272, WHITE);
+    void pintarSpawn(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+        mylcd.Set_Draw_color(WHITE);
 
-    //Horizontales campo
-    mylcd.Fill_Rect(  8,   8,  400, 8, WHITE);
-    mylcd.Fill_Rect(416, 416,  56, 8, WHITE);
+        switch(spawn) {
+            case 1:
+                mylcd.Fill_Rectangle(  8,   8,  55,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                }
+
+                break;
+
+            case 2:
+                mylcd.Fill_Rectangle(128,   8, 183,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(  9, 187,  54, 232);
+                }
+
+                break;
+
+            case 3:
+                mylcd.Fill_Rectangle(248,   8, 303,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                    mylcd.Fill_Rectangle(  9,   9,  54,  54);
+                }
+
+                break;
+
+            case 4:
+                mylcd.Fill_Rectangle(369,   8, 416,  55);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                    mylcd.Fill_Rectangle(129,   9, 182,  54);
+                }
+
+                break;
+
+            case 5:
+                mylcd.Fill_Rectangle(369,  65, 416, 112);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                    mylcd.Fill_Rectangle(249,   9, 302,  54);
+                }
+
+                break;
+
+            case 6:
+                mylcd.Fill_Rectangle(369, 129, 416, 177);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                } else {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                    mylcd.Fill_Rectangle(370,   9, 415,  54);
+                }
+
+                break;
+
+            case 7:
+                mylcd.Fill_Rectangle(369, 186, 416, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370,  66, 415, 111);
+                }
+
+                break;
+
+            case 8:
+                mylcd.Fill_Rectangle(248, 186, 303, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                    mylcd.Fill_Rectangle(370, 130, 415, 176);
+                }
+
+                break;
+
+            case 9:
+                mylcd.Fill_Rectangle(128, 186, 183, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                    mylcd.Fill_Rectangle(370, 187, 415, 232);
+                }
+
+                break;
+
+            case 10:
+                mylcd.Fill_Rectangle(  8, 186,  55, 233);
+
+                if(campo) {
+                    mylcd.Set_Draw_color(BLACK);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                } else {
+                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Fill_Rectangle(129, 187, 182, 232);
+                    mylcd.Fill_Rectangle(249, 187, 302, 232);
+                }
+
+                break;
+        }
     }
-    */
+
+    void pintarPlan(LCDWIKI_KBV mylcd, int plan) {
+        mylcd.Set_Draw_color(BLACK);
+        mylcd.Fill_Rectangle(8, 241, 420, 265);
+        mylcd.Set_Draw_color(WHITE);
+
+        switch(plan) {
+            case 1:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Joder a Francia", 8, 241);
+                break;
+            case 2:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Comer patatas", 8, 241);
+                break;
+            case 3:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Hacer un while 1", 8, 241);
+                break;
+            case 4:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Echar la siesta", 8, 241);
+                break;
+            case 5:
+                escribirTexto(mylcd, WHITE, 3, "Plan: Rush B y cegadora", 8, 241);
+                break;
+        }
+    }
     
     void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
     int coordenada_X, int coordenada_Y) {
@@ -161,48 +398,84 @@ namespace display {
         mylcd.Print_String(texto, coordenada_X, coordenada_Y);
     }
 
-    //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
-    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
-    uint8_t coordenada_X, uint8_t coordenada_Y, int menuEstadistica, int menuCaballo,
-    int menuBicho, int menuLidar, int menuApagar, int menuActual) {
-        //Variables para el parrafo
+    void ordenarErrores(String errores[13], String error) {
         String linea;
         int longitudLinea = 32;
+
+        while(error.length() > 0) {
+            linea = "";
+
+            //Ultima linea
+            if(error.length() < longitudLinea) {
+                linea += error.substring(0, error.length());
+                error.remove(0, error.length());
+            //Resto de lineas
+            } else {
+                //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
+                //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer
+                while(linea.length() + error.indexOf(" ") < longitudLinea && !(error.indexOf(" ") == -1)) {
+                    //Insertar la seccion del texto hasta el primer espacio en blanco en linea y borrarla de texto
+                    linea += error.substring(0, error.indexOf(" ") + 1);
+                    error.remove(0, error.indexOf(" ") + 1);
+                }
+            }
+
+            //Recolocación de las lineas para insertar nuevas, todas se desplazan una posicion
+            //hacia la izquierda en el array, si el array no esta lleno tan solo se insertan
+            for(int i = 0; i < 13; i++) {
+                if(errores[i] == "") {
+                    errores[i] = linea;
+                    i = 13;
+                } else if(i == 12) {
+                    for(int j = 0; j < 13; j++) {
+                        if(j != 12)
+                            errores[j] = errores[j + 1];
+                        else
+                            errores[j] = linea;
+                    }
+                }
+            }
+        }
+    }
+
+    //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
+    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13],
+    uint8_t coordenada_X, uint8_t coordenada_Y, int menuActual, int secundario_b1) {
+        boolean pausa = false;
+        boolean estadoSecundario_1 = false;
+        //Variables para el parrafo
         int interlineado = 20;
-        int lineasPintadas = 0;
-        int lineasMaximas = 13;
         int menuDevuelto;
         mylcd.Set_Text_colour(color);
         mylcd.Set_Text_Size(tamanno);
 
-        while(texto.length() > longitudLinea) {
-            linea = "";
-            //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
-            //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer
-            while(linea.length() + texto.indexOf(" ") < longitudLinea && !(texto.indexOf(" ") == -1)) {
-                //Insertar la seccion del texto hasta el primer espacio en blanco en linea y borrarla de texto
-                linea += texto.substring(0, texto.indexOf(" ") + 1);
-                texto.remove(0, texto.indexOf(" ") + 1);
-            }
+        //Limpiar zona de escritura
+        mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
 
+        for(int i = 0; i < 13; i++) {
             //Ventana de medio segundo antes de pintar cada linea para comprobar botones principales
             for(uint32_t inicio = millis(); millis() - inicio < 500;) {
-                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuEstadistica, menuCaballo,
-                menuBicho, menuLidar, menuApagar, menuActual)) != 0)
+                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
                     return menuDevuelto;
+
+                if(digitalRead(secundario_b1))
+                    estadoSecundario_1 = false;
+
+                //Control de las dobles pulsaciones
+                if(!digitalRead(secundario_b1) && !pausa && !estadoSecundario_1) {
+                    pausa = true;
+                    estadoSecundario_1 = true;
+                } else if(!digitalRead(secundario_b1) && pausa && !estadoSecundario_1) {
+                    pausa = false;
+                    estadoSecundario_1 = true;
+                }
+
+                //Control de la pausa
+                if(pausa)
+                    inicio = millis();
             }
-
-            //Pintar una linea
-            mylcd.Print_String(linea, coordenada_X, coordenada_Y + lineasPintadas * interlineado);
-            lineasPintadas++;
-            if(lineasPintadas == lineasMaximas)
-                lineasPintadas = 0;
+            mylcd.Print_String(errores[i], coordenada_X, coordenada_Y + i * interlineado);
         }
-
-        //Pintar ultima linea
-        if(texto.length() > 0)
-            mylcd.Print_String(texto, coordenada_X, coordenada_Y + lineasPintadas * interlineado);
-        
         return 0;
     }
 }
