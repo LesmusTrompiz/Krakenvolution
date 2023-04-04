@@ -2,6 +2,7 @@
 
 /* Tracción */
 extern motion_controller controlador_tactico;
+
 /* Servos */
 extern RobotServo servo_disparador;
 
@@ -32,7 +33,7 @@ void setup_serial() {
     });
 
     on_finished([]() {
-        uahruart::primitives::Int test = 1234;
+        uahruart::primitives::Bool test = true;
         protocol.send(test);
     });
 }

@@ -1,8 +1,7 @@
 // #define debug_mode
-
-#include <Arduino.h>
 #include <RobotServos.hpp>
 #include <Adafruit_PWMServoDriver.h>
+#include <Arduino.h>
 #include <eurouart.hpp>
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
@@ -10,8 +9,7 @@
 
 /* Servos */
 
-Adafruit_PWMServoDriver* ServoHandlerMaster;
-
+Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
 auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
 
 /* Definición completa de la mecánica del robot */
@@ -77,12 +75,12 @@ void int_odom_izquierda()
 /* Configuraciones y bucle de control */
 void setup() 
 {
+	// Adafruit driver conf
+	ServoHandlerMaster.begin();
+	ServoHandlerMaster.setPWMFreq(50);
 	// Serial conf
 	Serial.begin(115200);
   setup_serial();
-	// Adafruit driver conf
-  ServoHandlerMaster->begin();
-  ServoHandlerMaster->setPWMFreq(50);
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
 	pinMode(I_EN, OUTPUT);

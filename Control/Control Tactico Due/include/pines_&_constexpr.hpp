@@ -12,10 +12,10 @@
 #define D_EN 			47
 #define D_PWM 		45
 // Pines de encoder de motores
-#define Enc_I 		26
-#define PCInt_I 	24
-#define PCInt_D 	27
-#define Enc_D 		25
+#define Enc_I 		50
+#define PCInt_I 	52
+#define PCInt_D 	51
+#define Enc_D 		53
 
 // Parámetros mecánicos
 constexpr float tactico_reductora = 26;

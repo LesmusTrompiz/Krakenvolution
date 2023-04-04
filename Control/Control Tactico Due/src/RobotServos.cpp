@@ -1,13 +1,13 @@
 #include "RobotServos.hpp"
 
-RobotServo::RobotServo(const uint8_t _ID_AnalogRead, const uint8_t _PWM_ID, Adafruit_PWMServoDriver* _ServoHandler)
+RobotServo::RobotServo(const uint8_t _ID_AnalogRead, const uint8_t _PWM_ID, Adafruit_PWMServoDriver _ServoHandler)
 : ID_AnalogRead(_ID_AnalogRead), PWM_ID(_PWM_ID), ServoHandler(_ServoHandler)
 {
   // Lectura analógica
   pinMode(ID_AnalogRead, INPUT);
 }
 
-RobotServo::RobotServo(const uint8_t _PWM_ID, Adafruit_PWMServoDriver* _ServoHandler)
+RobotServo::RobotServo(const uint8_t _PWM_ID, Adafruit_PWMServoDriver _ServoHandler)
 : ID_AnalogRead(-1), PWM_ID(_PWM_ID), ServoHandler(_ServoHandler)
 {
   // Sin lectura analógica.
@@ -42,7 +42,7 @@ void RobotServo::set_angle(float angle)
   // 1. Ticks nominal
   float nominal_tick_value = m*angle + n;
   // 2. Mandar la señal y esperar a que se estabilice la posiciónd el servo
-  ServoHandler->setPWM(PWM_ID, 0, (int)(nominal_tick_value));
+  ServoHandler.setPWM(PWM_ID, 0, (int)(nominal_tick_value));
 }
 
 void RobotServo::calibration(float angle_init, float angle_final)
