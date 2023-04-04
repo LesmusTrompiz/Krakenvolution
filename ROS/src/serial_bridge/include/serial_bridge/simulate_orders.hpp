@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include <functional>
 #include "serial_bridge/pose2d.hpp"
+#include "serial_bridge/geometry_utils.hpp"
+
 extern "C"{
     #include <math.h>
 }
@@ -27,12 +29,6 @@ extern const std::unordered_map<std::string, std::function<bool(Pose2d &, int16_
 // Funciones de smulación
 bool advance_thread(Pose2d &p, int16_t &distance);
 bool spin_thread(Pose2d &p, int16_t &distance);
-
-// Función que convierte de grados a radianes.
-inline float DEG2RAD(const float deg)
-{
-  return deg* M_PI / 180;
-}
 
 
 

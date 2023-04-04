@@ -21,6 +21,8 @@
 // Own Libraries
 #include "serial_bridge/pose2d.hpp"
 #include "serial_bridge/simulate_orders.hpp"
+#include "serial_bridge/geometry_utils.hpp"
+
 
 
 // Typedefs and using to improve readibility
@@ -32,7 +34,6 @@ using GoalOrder = rclcpp_action::ServerGoalHandle<Order>;
 class DummySerialBridgeNode : public rclcpp::Node
 {
   public:
-    // Constructor and destructor
     DummySerialBridgeNode(std::string port_name);
     ~DummySerialBridgeNode();
 

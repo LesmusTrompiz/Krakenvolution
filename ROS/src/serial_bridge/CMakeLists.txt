@@ -49,6 +49,8 @@ add_library(${PROJECT_NAME} SHARED
   src/serial_bridge/SerialBridgeNode.cpp
   src/serial_bridge/DummySerialNode.cpp
   src/serial_bridge/simulate_orders.cpp
+  src/serial_bridge/geometry_utils.cpp
+
   ${PROTOCOL_SRC}
 )
 
