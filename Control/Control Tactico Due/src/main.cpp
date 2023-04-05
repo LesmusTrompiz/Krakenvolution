@@ -3,14 +3,18 @@
 #include <Adafruit_PWMServoDriver.h>
 #include <Arduino.h>
 #include <eurouart.hpp>
+#include <protocol.hpp>
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
 
-/* Servos */
+/* Iniciamos el protocolo */
+uahruart::parser::Protocol protocol;
 
+/* Servos */
 Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
 auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
+//auto servo_...
 
 /* Definición completa de la mecánica del robot */
 
@@ -72,6 +76,44 @@ void int_odom_izquierda()
 		controlador_tactico.odom.cuentas_izquierda--;
 }
 
+/* Registro de métodos en el protocolo de comunicación */
+void setup_serial_protocol() 
+{
+    protocol.on_write([](const char* msg) 
+		{
+        Serial.println(msg);
+    });
+
+    // Register methods
+    protocol.register_method("traction", "turn", [](int32_t arg)
+		{
+        controlador_tactico.ref_ang = static_cast<float>(arg);
+        controlador_tactico.prev_move_calculus(0);
+    });
+
+    protocol.register_method("traction", "advance", [](int32_t arg)
+		{
+        controlador_tactico.ref_distancia = static_cast<float>(arg);
+        controlador_tactico.prev_move_calculus(1);
+    });
+
+    protocol.register_method("admin", "reset", [](int32_t arg) 
+		{
+        rstc_start_software_reset(RSTC);
+    });
+
+    protocol.register_method("actuadores", "servo_disparador", [](int32_t arg) 
+		{
+        servo_disparador.set_angle(arg);
+    });
+
+    on_finished([]() 
+		{
+        uahruart::primitives::Bool test = true;
+        protocol.send(test);
+    });
+}
+
 /* Configuraciones y bucle de control */
 void setup() 
 {
@@ -80,7 +122,7 @@ void setup()
 	ServoHandlerMaster.setPWMFreq(50);
 	// Serial conf
 	Serial.begin(115200);
-  setup_serial();
+  setup_serial_protocol();
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
 	pinMode(I_EN, OUTPUT);
