@@ -1,11 +1,14 @@
 #include "serial_bridge/SerialBridgeNode.hpp"
+#include "SharedKrakenUART/protocol.hpp"
+#include "serial_bridge/serial_port.hpp"
+#include <thread>
+#include <unistd.h>
+#include "rclcpp/rclcpp.hpp"
 
-
-
+uahruart::parser::Protocol protocol;
 
 SerialBridgeNode::SerialBridgeNode(std::string port_name)
 : Node("serial_bridge_node"){
-  
   // Topic donde se publica el valor de la odometría.
   publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("robot_odom", 10);
 
@@ -23,8 +26,40 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
     std::bind(&SerialBridgeNode::handle_cancel,   this, _1),
     std::bind(&SerialBridgeNode::handle_accepted, this, _1));
 
-  //** TODO: Entiendo que por aqui se configura el protocolo....
+  // Configuración básica del protocolo
+    // Abrir el puerto serie
+  auto port = open_serial(port_name.c_str());
+  if (port == -1) {
+    RCLCPP_ERROR(this->get_logger(), "Could not open port %s", port_name.c_str());
+    rclcpp::shutdown();
+  }
 
+  RCLCPP_INFO(this->get_logger(), "Opened serial port %s", port_name.c_str());
+
+    // Configure thread for reading port
+  auto read_thread = std::thread([&]() {
+    string str;
+    while (true) {
+        char c;
+        read(port, &c, 1);
+        if (c == '\0' || c == '\n') {
+            std::cout << "Read string: " << str << '\n';
+            protocol.receive(str);
+            str = "";
+        } else {
+            str += c;
+
+        }
+      }
+  });
+
+  protocol.on_write([port](const char* buff) {
+    size_t ammount = strlen(buff);
+    write(port, buff, ammount);
+    write(port, "\n\0", 2); // Flush 
+  });
+
+  read_thread.detach(); // Run thread in daemon mode
   
   // Timer que ejecuta la función control_cycle cada 500ms 
   // A lo mejor te interesa crear tu propio hilo...
@@ -46,18 +81,13 @@ void SerialBridgeNode::control_cycle(){
       - Publicar la odometria.
   */
   
-  // TODO: Leer del protocolo
-
     // TODO: En caso de que haya acabado alguna acción avisar de que ha acabado
     // Para ello extraer de alguna estructura de la clase el goal handle y
     // llamar al metodo succed o al fail
   
 
-    // TODO: Actualizar la odometría
-
-
-  // Publicar la odometria
-  publisher_->publish(Pose2dtoPose(odom));
+  // // Publicar la odometria
+  // publisher_->publish(Pose2dtoPose(odom));
 }
 
 
@@ -145,7 +175,7 @@ void SerialBridgeNode::handle_accepted(const
   RCLCPP_INFO(this->get_logger(), "RMI ORDER: Id %s, Arg %d", goal->id.c_str(), goal->arg);
   
   // TODO Enviar la instrucción al protocolo
-  
+  goal->succeed(0);
 
   // Almacenar el goal handle en alguna estructura para
   // indicar que ha terminado 

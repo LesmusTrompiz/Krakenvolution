@@ -6,9 +6,17 @@ RUN apt install -y vim iputils-ping screen iproute2 x11-apps build-essential
 # Configure packages
 RUN echo "defshell -bash" >> /etc/screenrc
 # Install opencv
-RUN apt install -y libopencv-dev python3-opencv
+RUN apt install -y \
+  libopencv-dev\
+  python3-opencv
 # Install ros utils
-RUN apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action ros-foxy-ros-testing
+RUN apt install -y                  \
+  python3-colcon-common-extensions  \
+  ros-foxy-rclcpp-action            \
+  ros-foxy-ros-testing              \
+  ros-foxy-tf2-tools                \
+  ros-foxy-tf-transformations       \
+  ros-foxy-tf2-geometry-msgs
 
 # Display configuration
 ENV DISPLAY=:0
