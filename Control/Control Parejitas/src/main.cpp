@@ -13,28 +13,28 @@ uahruart::parser::Protocol protocol;
 
 /* Servos */
 Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
-auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
-//auto servo_...
+auto servo_brazo_derecha 		= RobotServo(brazo_derecho, ServoHandlerMaster);
+auto servo_brazo_izquierda	= RobotServo(brazo_izquierdo, ServoHandlerMaster);
+//... auto servo_
 
 /* Definición completa de la mecánica del robot */
-
-Param_mecanicos mecanica_tactico(
- tactico_acel,
- tactico_decel,
- tactico_reductora,
- tactico_vel_eje_max,
- tactico_vel_max,
- vel_giro_tactico,
- vel_freno_tactico,
- tactico_pulsos_por_rev,
- tactico_L,
- tactico_diametro
+Param_mecanicos mecanica_parejitas(
+ parejitas_acel,
+ parejitas_decel,
+ parejitas_reductora,
+ parejitas_vel_eje_max,
+ parejitas_vel_max,
+ vel_giro_parejitas,
+ vel_freno_parejitas,
+ parejitas_pulsos_por_rev,
+ parejitas_L,
+ parejitas_diametro
 );
 
-Odom odom_tactico;
+Odom odom_parejitas;
 
-Motores motores_tactico(
-	tactico_vel_max,
+Motores motores_parejitas(
+	parejitas_vel_max,
 	D_EN,
 	D_DIR,
 	PWM6_SetDuty,
@@ -43,37 +43,37 @@ Motores motores_tactico(
 	PWM5_SetDuty
 );
 
-PerfilVelocidad perfilador_tactico(
-	ajuste_dist_recta_tactico,
-	ajuste_dist_giro_tactico,
-	mecanica_tactico
+PerfilVelocidad perfilador_parejitas(
+	ajuste_dist_recta_parejitas,
+	ajuste_dist_giro_parejitas,
+	mecanica_parejitas
 );
 
-motion_controller controlador_tactico(
-	mecanica_tactico,
-	odom_tactico,
-	motores_tactico,
-	perfilador_tactico
+motion_controller controlador_parejitas(
+	mecanica_parejitas,
+	odom_parejitas,
+	motores_parejitas,
+	perfilador_parejitas
 );
 
 /* Interrupciones para odometría */
 void int_odom_derecha()
 {
-	// controlador_tactico.odom.cuentas_derecha_total++;
+	// controlador_parejitas.odom.cuentas_derecha_total++;
 
 	if(digitalReadDirect(Enc_D))
-		controlador_tactico.odom.cuentas_derecha--;
+		controlador_parejitas.odom.cuentas_derecha--;
 	else
-		controlador_tactico.odom.cuentas_derecha++;
+		controlador_parejitas.odom.cuentas_derecha++;
 }
 void int_odom_izquierda()
 {
-	// controlador_tactico.odom.cuentas_izquierda_total++;
+	// controlador_parejitas.odom.cuentas_izquierda_total++;
 
 	if(digitalReadDirect(Enc_I))
-		controlador_tactico.odom.cuentas_izquierda++;
+		controlador_parejitas.odom.cuentas_izquierda++;
 	else
-		controlador_tactico.odom.cuentas_izquierda--;
+		controlador_parejitas.odom.cuentas_izquierda--;
 }
 
 /* Registro de métodos en el protocolo de comunicación */
@@ -87,14 +87,14 @@ void setup_serial_protocol()
     // Register methods
     protocol.register_method("traction", "turn", [](int32_t arg)
 		{
-        controlador_tactico.ref_ang = static_cast<float>(arg);
-        controlador_tactico.prev_move_calculus(0);
+        controlador_parejitas.ref_ang = static_cast<float>(arg);
+        controlador_parejitas.prev_move_calculus(0);
     });
 
     protocol.register_method("traction", "advance", [](int32_t arg)
 		{
-        controlador_tactico.ref_distancia = static_cast<float>(arg);
-        controlador_tactico.prev_move_calculus(1);
+        controlador_parejitas.ref_distancia = static_cast<float>(arg);
+        controlador_parejitas.prev_move_calculus(1);
     });
 
     protocol.register_method("admin", "reset", [](int32_t arg) 
@@ -102,9 +102,9 @@ void setup_serial_protocol()
         rstc_start_software_reset(RSTC);
     });
 
-    protocol.register_method("actuadores", "servo_disparador", [](int32_t arg) 
+    protocol.register_method("actuadores", "servo_brazo_derecha", [](int32_t arg) 
 		{
-        servo_disparador.set_angle(arg);
+        servo_brazo_derecha.set_angle(arg);
     });
 
     on_finished([]() 
@@ -142,10 +142,10 @@ void setup()
 	config_timer(TC0, 2, TC2_IRQn, 50);
 
 	// Reset de odometría para empezar
-	controlador_tactico.odom.reset_odom();
+	controlador_parejitas.odom.reset_odom();
 
 	// Habilitar las controladoras
-	controlador_tactico.motores.encender_motores();
+	controlador_parejitas.motores.encender_motores();
 
 	// Check...
 }
@@ -164,17 +164,17 @@ void TC2_Handler(void)
 		static int debugger = 0;
 		if(debugger >= 1*(50))
 		{
-			Serial.print("CR: ");Serial.println(controlador_tactico.odom.cuentas_derecha);
-			Serial.print("CL: ");Serial.println(controlador_tactico.odom.cuentas_izquierda);
+			Serial.print("CR: ");Serial.println(controlador_parejitas.odom.cuentas_derecha);
+			Serial.print("CL: ");Serial.println(controlador_parejitas.odom.cuentas_izquierda);
 
-			Serial.print("X: ");Serial.println(controlador_tactico.odom.pose_actual.x);
-			Serial.print("Y: ");Serial.println(controlador_tactico.odom.pose_actual.y);
-			Serial.print("O: ");Serial.println(controlador_tactico.odom.pose_actual.alfa);
+			Serial.print("X: ");Serial.println(controlador_parejitas.odom.pose_actual.x);
+			Serial.print("Y: ");Serial.println(controlador_parejitas.odom.pose_actual.y);
+			Serial.print("O: ");Serial.println(controlador_parejitas.odom.pose_actual.alfa);
 			debugger = 0;
 		}
 		debugger++;
 	#endif
 
 	// Ejecutar control
-  controlador_tactico.move_control();
+  controlador_parejitas.move_control();
 }
