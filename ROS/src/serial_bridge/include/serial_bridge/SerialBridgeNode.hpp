@@ -59,6 +59,8 @@ class SerialBridgeNode : public rclcpp::Node
     rclcpp_action::Server<serial_bridge_actions::action::Order>::SharedPtr order_server;
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr publisher_;
     rclcpp::Service<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr reset_service;
+
+    // Protocol utility attributes
 };
 
 
