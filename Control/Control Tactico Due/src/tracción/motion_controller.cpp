@@ -265,7 +265,6 @@ void motion_controller::move_control()
     }
     else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad)*(param_mecanicos.diam_rueda/2))
     {
-      Serial.println("F");
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
       motores.set_vel_rmotor();
@@ -275,7 +274,6 @@ void motion_controller::move_control()
     else
     {    
       // Parar los motores
-      Serial.println("P");
       motores.rmotor_vel = 0;
       motores.set_vel_rmotor();
       motores.lmotor_vel = 0;

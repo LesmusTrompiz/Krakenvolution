@@ -7,7 +7,7 @@ void serialEvent()
     static string input_string;
     while(Serial.available()>0)
     {
-        input_string = string(Serial.readStringUntil('\n').c_str());
+        input_string = string(Serial.readStringUntil('\0').c_str());
 
         if(input_string != "")
         {
