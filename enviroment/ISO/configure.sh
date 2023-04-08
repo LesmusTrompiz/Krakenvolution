@@ -27,7 +27,7 @@ apt install -y libopencv-dev python3-opencv
 apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action ros-foxy-ros-testing
 
 # Create ROS WS
-#mkdir -p ~/ros_ws/src
+mkdir -p ~/ros_ws/src
 
 # Copy udev rules 
 cp /root/Krakenvolution/enviroment/ISO/10-uahrkudev.rules /etc/udev/rules.d/
