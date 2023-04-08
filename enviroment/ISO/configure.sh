@@ -46,16 +46,16 @@ systemctl start roboot.service
 #echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
 
 # Enables root login in ssh 
-sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Enables ssh conection
-sudo apt install openssh-server
-sudo systemctl enable ssh
-sudo systemctl start ssh
+apt install -y openssh-server
+systemctl enable ssh
+systemctl start ssh
 
 # Install things
-sudo apt install kitty
-sudo apt install python3-pip
+apt install -y kitty
+apt install -y python3-pip
 
 
 
