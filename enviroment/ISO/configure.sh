@@ -29,6 +29,10 @@ apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action ros-foxy-
 # Create ROS WS
 mkdir -p ~/ros_ws/src
 
+# Copy udev rules 
+cp /root/Krakenvolution/enviroment/10-uahrkudev.rules /etc/udev/rules.d/
+
+
 # Create start service
 cp ./roboot.service /etc/systemd/system 
 mkdir /etc/eurobot
@@ -48,3 +52,10 @@ sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh
 sudo apt install openssh-server
 sudo systemctl enable ssh
 sudo systemctl start ssh
+
+# Install things
+sudo apt install kitty
+sudo apt install python-pip
+
+
+

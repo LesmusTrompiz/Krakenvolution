@@ -1,0 +1,8 @@
+# Arduino DUE RULE
+KERNEL=="ttyACM*", MODE:="0666", SYMLINK+="arduino"
+# Lidar driver
+KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", MODE:="0666", SYMLINK+="lidar"
+# Pendrive actions
+KERNEL=="sda", SUBSYSTEM=="block", ACTION=="add", SYMLINK+="pendrive", RUN+="/usr/bin/mkdir -p /media/pendrive"
+KERNEL=="sda", SUBSYSTEM=="block", ACTION=="remove", RUN+="/usr/bin/rm -r /media/pendrive"
+
