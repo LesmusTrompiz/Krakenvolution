@@ -36,8 +36,8 @@ class OrderClient(Node):
         self.get_logger().info('Sending Goal')        
         goal_msg = order
         self._action_client.wait_for_server()
-        return self._action_client.send_goal_async(goal_msg)
-    
+        return self._action_client.send_goal(goal_msg)
+
 
     def user_loop(self):
         '''
@@ -48,9 +48,11 @@ class OrderClient(Node):
         exit_ = int(input("Exit? - 0: To exit - Any other number : Keep sending orders "))
         while exit_ != 0:
             g     = Order.Goal()
+            g.device = input("Device >UwU< ")
             g.id  = input("Order ID? ")
             g.arg = int(input("Order ARG? "))
-            self.send_goal(g)
+            res = self.send_goal(g)
+            print('Ha llegado! :3', res)
             exit_ = int(input("Exit? - 0: To exit - Any other number : Keep sending orders "))
         return
 

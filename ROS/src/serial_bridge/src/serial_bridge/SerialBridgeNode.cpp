@@ -1,5 +1,4 @@
 #include "serial_bridge/SerialBridgeNode.hpp"
-#include "SharedKrakenUART/protocol.hpp"
 #include "serial_bridge/serial_port.hpp"
 #include <thread>
 #include <unistd.h>
@@ -37,9 +36,9 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
   RCLCPP_INFO(this->get_logger(), "Opened serial port %s", port_name.c_str());
 
     // Configure thread for reading port
-  auto read_thread = std::thread([&]() {
+  read_thread = std::thread([&, port]() {
     string str;
-    while (true) {
+    while (rclcpp::ok()) {
         char c;
         read(port, &c, 1);
         if (c == '\0' || c == '\n') {
@@ -53,13 +52,36 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
       }
   });
 
+  // read_thread.detach(); // Run thread in daemon mode
+
   protocol.on_write([port](const char* buff) {
+      std::cout << "Writing: " << buff << '\n';
     size_t ammount = strlen(buff);
     write(port, buff, ammount);
     write(port, "\n\0", 2); // Flush 
   });
 
-  read_thread.detach(); // Run thread in daemon mode
+  protocol.on_type(uahruart::IDs::RPC_RESPONSE, std::function<void(const uahruart::messages::RPCResponse&)>{[&](auto msg) {
+    std::cout << "Response of type: " << msg.ret.to_underlying() << '\n';
+    if (m_pending_handles.size()) {
+      std::cout << "Added handle to list\n";
+      auto handle = m_pending_handles.front();
+      m_pending_handles.pop_front();
+
+      m_handles[msg.ret.to_underlying()] = handle;
+    }
+  }});
+
+  protocol.on_type(uahruart::IDs::ACTION_FINISHED, std::function<void(const uahruart::messages::ActionFinished&)>{[&](auto msg) {
+      std::cout << "You dun goofed\n";
+      std::cout << "Finished action of type: " << msg.action.to_underlying() << '\n';
+      if (m_handles[msg.action.to_underlying()]) {
+        auto result   = std::make_shared<Order::Result>();
+        m_handles[msg.action.to_underlying()]->succeed(result);
+        m_handles[msg.action.to_underlying()] = nullptr;
+      }
+  }});
+
   
   // Timer que ejecuta la función control_cycle cada 500ms 
   // A lo mejor te interesa crear tu propio hilo...
@@ -173,9 +195,17 @@ void SerialBridgeNode::handle_accepted(const
 
   const auto goal = goal_handle->get_goal();
   RCLCPP_INFO(this->get_logger(), "RMI ORDER: Id %s, Arg %d", goal->id.c_str(), goal->arg);
+  m_pending_handles.push_back(goal_handle);
   
   // TODO Enviar la instrucción al protocolo
-  goal->succeed(0);
+  
+  // goal->succeed(0);
+  uahruart::messages::RPCCall call;
+  call.function_hash = uahruart::utils::hash_string(goal->id.c_str()) ^ uahruart::utils::hash_string(goal->device.c_str());
+  call.call_uuid = 0;
+  call.arg = goal->arg;
+  protocol.send(call);
+
 
   // Almacenar el goal handle en alguna estructura para
   // indicar que ha terminado 

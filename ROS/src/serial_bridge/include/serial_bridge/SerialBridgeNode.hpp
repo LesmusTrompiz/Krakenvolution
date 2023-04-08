@@ -8,6 +8,7 @@
 #include <string>
 #include <functional>
 #include <iostream>
+#include <array>
 
 // ROS Libraries
 #include "rclcpp/rclcpp.hpp"
@@ -22,6 +23,9 @@
 // Own Libraries
 #include "serial_bridge/pose2d.hpp"
 #include "serial_bridge/geometry_utils.hpp"
+
+// Protocol
+#include "SharedKrakenUART/protocol.hpp"
 
 
 // Cuestión de legibiliad
@@ -61,6 +65,9 @@ class SerialBridgeNode : public rclcpp::Node
     rclcpp::Service<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr reset_service;
 
     // Protocol utility attributes
+    std::array<std::shared_ptr<GoalOrder>, uahruart::messages::ActionFinished::SIZE> m_handles;
+    std::list<std::shared_ptr<GoalOrder>> m_pending_handles;
+    std::thread read_thread;
 };
 
 
