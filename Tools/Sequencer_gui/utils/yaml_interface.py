@@ -21,7 +21,7 @@ def load_yaml_routine(file : str) -> list:
     routine = []
     start = 0
     while start < len(yaml_content):
-        routine += [(yaml_content[start], yaml_content[start+1])]
-        start += 2
+        routine += [(yaml_content[start], yaml_content[start+1], yaml_content[start+2])]
+        start += 3
     yaml_file.close()
     return routine

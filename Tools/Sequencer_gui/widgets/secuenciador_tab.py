@@ -65,8 +65,8 @@ class SecuenciadorTab(QWidget):
 		self.routTable.setFixedHeight(400)
 		self.index = 0
 		self.routTable.setRowCount(0)
-		self.routTable.setColumnCount(2)
-		self.routTable.setHorizontalHeaderLabels(('Acción', 'Atributo'))
+		self.routTable.setColumnCount(3)
+		self.routTable.setHorizontalHeaderLabels(('Acción','Arg', 'Device'))
 		self.routTable.setColumnWidth(0, 334)
 		self.routTable.setColumnWidth(1, 120)
 
@@ -149,6 +149,7 @@ class SecuenciadorTab(QWidget):
 		for key in self.loadedActions.keys():
 			self.chooseRoutCombo.addItem(key)
 			self.reversedDict[self.loadedActions[key]["id_ros"]] = key
+		
 		# Log the user
 		log_msg = "Acciones cargadas: \n"
 		for key in self.loadedActions.keys():
@@ -163,7 +164,7 @@ class SecuenciadorTab(QWidget):
 		for i in range(0, self.index):
 			itemRout = self.routTable.item(i, 0)
 			attrRout = self.routTable.item(i, 1)
-			routines += [self.loadedActions[itemRout.text()]["id_ros"] , int(attrRout.text())]
+			routines += [self.loadedActions[itemRout.text()]["device"] ,self.loadedActions[itemRout.text()]["id_ros"] , int(attrRout.text())]
 		dump_yaml_routine("sequence_generated.yaml", routines)
 		log_msg += f"{routines}"
 		self.logToUser(log_msg)
@@ -172,7 +173,7 @@ class SecuenciadorTab(QWidget):
 		try:
 			raw_routine = load_yaml_routine("sequence_generated.yaml")
 		except:
-			log_msg = "No se encuentra la última secuencia generada, recuerde que es necesario que exista el fichero sequence_generated.yaml en la carpeta del ejecutable"
+			log_msg = "No se encuentra la última secuencia generada o ha ocurrido un error, recuerde que es necesario que exista el fichero sequence_generated.yaml en la carpeta del ejecutable"
 			self.logToUser(log_msg)
 			return
 		self.routTable.clear()
@@ -182,10 +183,11 @@ class SecuenciadorTab(QWidget):
 			self.logToUser(log_msg)
 			return
 		for routine in raw_routine:
-			action,arg = routine
+			device,action,arg = routine
 			self.routTable.setRowCount(self.index + 1)
 			self.routTable.setItem(self.index, 0, QTableWidgetItem(self.reversedDict[action]))
 			self.routTable.setItem(self.index, 1, QTableWidgetItem(str(arg)))
+			self.routTable.setItem(self.index, 2, QTableWidgetItem(device))
 			self.index += 1
 		return
 
@@ -224,6 +226,7 @@ class SecuenciadorTab(QWidget):
 		self.routTable.setRowCount(self.index + 1)
 		self.routTable.setItem(line, 0, QTableWidgetItem(action))
 		self.routTable.setItem(line, 1, QTableWidgetItem(str(arg)))
+		self.routTable.setItem(line, 2, QTableWidgetItem(self.loadedActions[action]["device"]))
 		self.index += 1
 
 		log_msg = f"Rutina {str(self.chooseRoutCombo.currentText())} con argumento {self.chooseAttrLine.text()} añadida en la posición {self.index}"
