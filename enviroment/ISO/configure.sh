@@ -55,7 +55,7 @@ sudo systemctl start ssh
 
 # Install things
 sudo apt install kitty
-sudo apt install python-pip
+sudo apt install python3-pip
 
 
 
