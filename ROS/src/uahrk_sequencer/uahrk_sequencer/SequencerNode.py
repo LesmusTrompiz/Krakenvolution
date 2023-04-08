@@ -34,15 +34,15 @@ class SequencerNode(Node):
         return response
 
     def send_goal(self, order):
-        self.get_logger().info('Sending Goal')
+        self.get_logger().info('Waiting Server')
         self.action_in_progress = True
         self._action_client.wait_for_server()
+        self.get_logger().info('Sending Goal')
         self._send_goal_future = self._action_client.send_goal_async(order)
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
 
     def read_and_execute(self):
-        
         if not self.request_flag : return    
         if not self.orders:
             try:
@@ -50,6 +50,7 @@ class SequencerNode(Node):
             except:
                 self.get_logger().info('Not sequence found')
         else:
+            self.get_logger().info('Yalm loaded')
             if self.action_in_progress: return
             order = self.orders.pop(0)
             device,id,arg = order
