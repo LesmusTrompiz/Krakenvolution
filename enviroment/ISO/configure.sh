@@ -62,5 +62,8 @@ systemctl start ssh
 apt install -y kitty
 apt install -y python3-pip
 
+# Install extern ROS PACKAGES
+apt install ros-$ROS_DISTRO-behaviortree-cpp-v3
+git clone https://github.com/ldrobotSensorTeam/ldlidar_stl_ros2.git /root/Krakenvolution/ROS/src/
 
 

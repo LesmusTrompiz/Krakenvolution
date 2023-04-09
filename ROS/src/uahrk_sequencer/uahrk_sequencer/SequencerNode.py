@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from rclpy.action import ActionClient
 from serial_bridge_actions.action import Order
 from yaml import load, SafeLoader
-from std_srvs.srv import Empty
+from std_srvs.srv import SetBool
 
 def load_yaml_routine(file : str) -> list:
     yaml_file = open(file, 'r')
@@ -12,8 +12,8 @@ def load_yaml_routine(file : str) -> list:
     routine = []
     start = 0
     while start < len(yaml_content):
-        routine += [(yaml_content[start], yaml_content[start+1])]
-        start += 2
+        routine += [(yaml_content[start], yaml_content[start+1], yaml_content[start+2])]
+        start += 3
     yaml_file.close()
     return routine
 
@@ -25,24 +25,27 @@ class SequencerNode(Node):
         self.action_in_progress = False
         timer_period = 0.5  # seconds
 
-        self.srv = self.create_service(Empty, 'load_sequence', self.update_request)
+        self.srv = self.create_service(SetBool, 'pendrive_status', self.update_request)
         self._action_client = ActionClient(self, Order, 'serial_bridge_server')
         self.timer = self.create_timer(timer_period, self.read_and_execute)
         
-    def update_request(self,request, response):
-        self.request_flag = True
+    def update_request(self,request : SetBool.Request, response):
+        #if request.data:
+            #self.request_flag = True
+        self.get_logger().info(f'Pendrive up {request.data}')
+        
         return response
 
     def send_goal(self, order):
-        self.get_logger().info('Sending Goal')
+        self.get_logger().info('Waiting Server')
         self.action_in_progress = True
         self._action_client.wait_for_server()
+        self.get_logger().info('Sending Goal')
         self._send_goal_future = self._action_client.send_goal_async(order)
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
 
     def read_and_execute(self):
-        
         if not self.request_flag : return    
         if not self.orders:
             try:
@@ -50,10 +53,13 @@ class SequencerNode(Node):
             except:
                 self.get_logger().info('Not sequence found')
         else:
+            self.get_logger().info('Yalm loaded')
             if self.action_in_progress: return
             order = self.orders.pop(0)
-            id,arg = order
+            device,id,arg = order
             ros_order = Order.Goal()
+            ros_order.device = device
+            ros_order.id = id
             ros_order.id = id
             ros_order.arg = arg
             self.send_goal(ros_order)
