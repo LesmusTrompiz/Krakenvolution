@@ -51,8 +51,9 @@ class SequencerNode(Node):
 
 
     def read_and_execute(self):
-        if not self.request_flag : return    
-        if not self.orders:        return
+        if not self.request_flag :  return 
+        if not self.orders:         return
+        if self.action_in_progress: return
         order = self.orders.pop(0)
         device,id,arg = order
         ros_order = Order.Goal()
