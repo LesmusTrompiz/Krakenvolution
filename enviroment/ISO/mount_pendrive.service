@@ -1,0 +1,11 @@
+[Unit]
+Description= Mount the top pendrive into the filesystem
+[Service]
+#User=ubuntu 
+#Can be the path to an executable or code itself
+#WorkingDirectory=/home/tromp/workspaces/noetic_ws/src/bring_up_pkg/scripts
+ExecStart=/bin/bash /usr/local/bin/mount_pendrive.sh sda
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

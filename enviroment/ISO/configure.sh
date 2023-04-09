@@ -31,6 +31,11 @@ mkdir -p ~/ros_ws/src
 
 # Copy udev rules 
 cp /root/Krakenvolution/enviroment/ISO/10-uahrkudev.rules /etc/udev/rules.d/
+cp /root/Krakenvolution/enviroment/ISO/mount_pendrive.sh /usr/local/bin/
+cp /root/Krakenvolution/enviroment/ISO/mount_pendrive.service /etc/systemd/system/
+cp /root/Krakenvolution/enviroment/ISO/pendrive_disconnect.sh /usr/local/bin/
+chmod +x /usr/local/bin/mount_pendrive.sh
+chmod +x /usr/local/bin/pendrive_disconnect.sh
 
 
 # Create start service
