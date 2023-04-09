@@ -30,10 +30,15 @@ class SequencerNode(Node):
         self.timer = self.create_timer(timer_period, self.read_and_execute)
         
     def update_request(self,request : SetBool.Request, response):
-        #if request.data:
-            #self.request_flag = True
-        self.get_logger().info(f'Pendrive up {request.data}')
-        
+        if request.data:
+            try:
+                self.orders = load_yaml_routine("/media/pendrive/sequence_generated.yaml")
+                self.get_logger().info('Yalm loaded')
+            except:
+                self.get_logger().error('Not sequence found')
+        else:
+            self.request_flag = True
+            self.get_logger().info(f'Pendrive pull out {request.data}')
         return response
 
     def send_goal(self, order):
@@ -47,23 +52,16 @@ class SequencerNode(Node):
 
     def read_and_execute(self):
         if not self.request_flag : return    
-        if not self.orders:
-            try:
-                self.orders = load_yaml_routine("/media/pendrive/sequence_generated.yaml")
-            except:
-                self.get_logger().info('Not sequence found')
-        else:
-            self.get_logger().info('Yalm loaded')
-            if self.action_in_progress: return
-            order = self.orders.pop(0)
-            device,id,arg = order
-            ros_order = Order.Goal()
-            ros_order.device = device
-            ros_order.id = id
-            ros_order.id = id
-            ros_order.arg = arg
-            self.send_goal(ros_order)
-            if not self.orders: self.request_flag = False
+        if not self.orders:        return
+        order = self.orders.pop(0)
+        device,id,arg = order
+        ros_order = Order.Goal()
+        ros_order.device = device
+        ros_order.id = id
+        ros_order.id = id
+        ros_order.arg = arg
+        self.send_goal(ros_order)
+        if not self.orders: self.request_flag = False
     
     def goal_response_callback(self, future):
         goal_handle = future.result()
