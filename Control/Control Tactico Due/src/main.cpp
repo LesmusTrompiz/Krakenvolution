@@ -183,6 +183,7 @@ void loop()
 	}
 }
 
+// 50Hz
 /* Bucle de control -> TC2 Handler*/
 void TC2_Handler(void)
 {

@@ -204,7 +204,7 @@ void SerialBridgeNode::handle_accepted(const
   call.function_hash = uahruart::utils::hash_string(goal->id.c_str()) ^ uahruart::utils::hash_string(goal->device.c_str());
   call.call_uuid = 0;
   call.arg = goal->arg;
-  protocol.send(call);
+  while(!protocol.send(call)) {usleep(1000);}
 
 
   // Almacenar el goal handle en alguna estructura para
