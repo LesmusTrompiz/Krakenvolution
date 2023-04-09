@@ -32,7 +32,7 @@ class SequencerNode(Node):
     def update_request(self,request : SetBool.Request, response):
         #if request.data:
             #self.request_flag = True
-        self.get_logger().info('Pendrive up')
+        self.get_logger().info(f'Pendrive up {request.data}')
         
         return response
 
