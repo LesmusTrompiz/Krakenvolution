@@ -1,5 +1,6 @@
 #include "serial_bridge/SerialBridgeNode.hpp"
 #include "serial_bridge/serial_port.hpp"
+#include "serial_bridge/Shared/KrakenUART/serial_port"
 #include <thread>
 #include <unistd.h>
 #include "rclcpp/rclcpp.hpp"
