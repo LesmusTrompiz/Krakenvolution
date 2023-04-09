@@ -32,7 +32,7 @@ class SequencerNode(Node):
     def update_request(self,request : SetBool.Request, response):
         if request.data:
             try:
-                self.orders = load_yaml_routine("/media/pendrive/sequence_generated.yaml")
+                self.orders = load_yaml_routine("/root/pendrive_config/sequence_generated.yaml")
                 self.get_logger().info('Yalm loaded')
             except:
                 self.get_logger().error('Not sequence found')
@@ -51,8 +51,9 @@ class SequencerNode(Node):
 
 
     def read_and_execute(self):
-        if not self.request_flag : return    
-        if not self.orders:        return
+        if not self.request_flag :  return 
+        if not self.orders:         return
+        if self.action_in_progress: return
         order = self.orders.pop(0)
         device,id,arg = order
         ros_order = Order.Goal()
