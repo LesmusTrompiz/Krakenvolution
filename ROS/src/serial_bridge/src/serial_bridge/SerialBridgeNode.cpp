@@ -92,7 +92,8 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
       static_cast<float>(msg.o.to_underlying())
     );
     publisher_->publish(Pose2dtoPose(odom));
-    if (m_handles[uahruart::messages::ActionFinished::TRACTION]) {
+    if ((m_handles[uahruart::messages::ActionFinished::TRACTION] != nullptr) && m_pending_last_odom) {
+      m_pending_last_odom = false;
       auto result   = std::make_shared<Order::Result>();
       m_handles[uahruart::messages::ActionFinished::TRACTION]->succeed(result);
       m_handles[uahruart::messages::ActionFinished::TRACTION] = nullptr;
