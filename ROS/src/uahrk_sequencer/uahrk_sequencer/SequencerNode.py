@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from rclpy.action import ActionClient
 from serial_bridge_actions.action import Order
 from yaml import load, SafeLoader
-from std_srvs.srv import Empty
+from std_srvs.srv import SetBool
 
 def load_yaml_routine(file : str) -> list:
     yaml_file = open(file, 'r')
@@ -25,12 +25,15 @@ class SequencerNode(Node):
         self.action_in_progress = False
         timer_period = 0.5  # seconds
 
-        self.srv = self.create_service(Empty, 'load_sequence', self.update_request)
+        self.srv = self.create_service(SetBool, 'pendrive_status', self.update_request)
         self._action_client = ActionClient(self, Order, 'serial_bridge_server')
         self.timer = self.create_timer(timer_period, self.read_and_execute)
         
-    def update_request(self,request, response):
-        self.request_flag = True
+    def update_request(self,request : SetBool.Request, response):
+        #if request.data:
+            #self.request_flag = True
+        self.get_logger().info('Pendrive up')
+        
         return response
 
     def send_goal(self, order):
