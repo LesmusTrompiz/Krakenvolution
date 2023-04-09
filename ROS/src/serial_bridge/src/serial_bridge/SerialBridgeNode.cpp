@@ -73,15 +73,31 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
   }});
 
   protocol.on_type(uahruart::IDs::ACTION_FINISHED, std::function<void(const uahruart::messages::ActionFinished&)>{[&](auto msg) {
-      std::cout << "You dun goofed\n";
-      std::cout << "Finished action of type: " << msg.action.to_underlying() << '\n';
-      if (m_handles[msg.action.to_underlying()]) {
-        auto result   = std::make_shared<Order::Result>();
-        m_handles[msg.action.to_underlying()]->succeed(result);
-        m_handles[msg.action.to_underlying()] = nullptr;
-      }
+    std::cout << "You dun goofed\n";
+    std::cout << "Finished action of type: " << msg.action.to_underlying() << '\n';
+    if (msg.action.to_underlying() == uahruart::messages::ActionFinished::TRACTION) {
+      m_pending_last_odom = true;
+    }
+    else if (m_handles[msg.action.to_underlying()]) {
+      auto result   = std::make_shared<Order::Result>();
+      m_handles[msg.action.to_underlying()]->succeed(result);
+      m_handles[msg.action.to_underlying()] = nullptr;
+    }
   }});
 
+  protocol.on_type(uahruart::IDs::ODOMETRY, std::function<void(const uahruart::messages::Odometry&)>{[&](auto msg) {
+    auto pose = Pose2d(
+      static_cast<float>(msg.x.to_underlying()),
+      static_cast<float>(msg.y.to_underlying()),
+      static_cast<float>(msg.o.to_underlying())
+    );
+    publisher_->publish(Pose2dtoPose(odom));
+    if (m_handles[uahruart::messages::ActionFinished::TRACTION]) {
+      auto result   = std::make_shared<Order::Result>();
+      m_handles[uahruart::messages::ActionFinished::TRACTION]->succeed(result);
+      m_handles[uahruart::messages::ActionFinished::TRACTION] = nullptr;
+    }
+  }});
   
   // Timer que ejecuta la función control_cycle cada 500ms 
   // A lo mejor te interesa crear tu propio hilo...

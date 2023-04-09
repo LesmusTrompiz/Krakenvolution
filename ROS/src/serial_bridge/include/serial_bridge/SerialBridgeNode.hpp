@@ -68,6 +68,7 @@ class SerialBridgeNode : public rclcpp::Node
     std::array<std::shared_ptr<GoalOrder>, uahruart::messages::ActionFinished::SIZE> m_handles;
     std::list<std::shared_ptr<GoalOrder>> m_pending_handles;
     std::thread read_thread;
+    bool m_pending_last_odom = false;
 };
 
 
