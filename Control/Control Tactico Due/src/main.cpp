@@ -32,6 +32,7 @@ Param_mecanicos mecanica_tactico(
 );
 
 Odom odom_tactico;
+bool pending_last_odom = true;
 
 Motores motores_tactico(
 	tactico_vel_max,
@@ -116,6 +117,8 @@ void setup_serial_protocol()
 			uahruart::messages::ActionFinished action;
 			action.action = uahruart::messages::ActionFinished::TRACTION;
       protocol.send(action);
+      odom_tactico = controlador_tactico.odom;
+      pending_last_odom = true;
     });
 }
 
@@ -155,9 +158,29 @@ void setup()
 	// Check...
 }
 
+unsigned long long last_odom_update = millis();
+constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
 void loop() 
 {
 	serialEvent();
+	// Update odometry
+	if (pending_last_odom) {
+		uahruart::messages::Odometry odom;
+		odom.x = odom_tactico.pose_actual.x;
+		odom.y = odom_tactico.pose_actual.y;
+		odom.o = odom_tactico.pose_actual.alfa;
+		if (protocol.send(odom))
+			pending_last_odom = false;
+	}
+	unsigned long long current_time = millis();
+	if (current_time > (last_odom_update + ODOM_UPDATE_TIME)) {
+		last_odom_update = current_time;
+		uahruart::messages::Odometry odom;
+		odom.x = controlador_tactico.odom.pose_actual.x;
+		odom.y = controlador_tactico.odom.pose_actual.y;
+		odom.o = controlador_tactico.odom.pose_actual.alfa;
+		protocol.send(odom);
+	}
 }
 
 /* Bucle de control -> TC2 Handler*/
