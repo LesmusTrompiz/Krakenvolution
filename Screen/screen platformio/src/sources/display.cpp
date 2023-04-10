@@ -374,19 +374,19 @@ namespace display {
 
         switch(plan) {
             case 1:
-                escribirTexto(mylcd, WHITE, 3, "Plan: Joder a Francia", 8, 241);
+                escribirTexto(mylcd, WHITE, 3, "Plan agresivo", 8, 241);
                 break;
             case 2:
-                escribirTexto(mylcd, WHITE, 3, "Plan: Comer patatas", 8, 241);
+                escribirTexto(mylcd, WHITE, 3, "Plan defensivo", 8, 241);
                 break;
             case 3:
-                escribirTexto(mylcd, WHITE, 3, "Plan: Hacer un while 1", 8, 241);
+                escribirTexto(mylcd, WHITE, 3, "Plan a medio campo", 8, 241);
                 break;
             case 4:
-                escribirTexto(mylcd, WHITE, 3, "Plan: Echar la siesta", 8, 241);
+                escribirTexto(mylcd, WHITE, 3, "Plan cuarto de campo", 8, 241);
                 break;
             case 5:
-                escribirTexto(mylcd, WHITE, 3, "Plan: Rush B y cegadora", 8, 241);
+                escribirTexto(mylcd, WHITE, 3, "Explotar robot", 8, 241);
                 break;
         }
     }
