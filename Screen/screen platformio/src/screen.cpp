@@ -20,12 +20,18 @@ LCDWIKI_KBV mylcd(ILI9488, A3, A2, A1, A0, A4); //model,cs,cd,wr,rd,reset
 
 String errores[13];
 
-boolean recibirError() {
+int recibirMensajes() {
+  String mensaje;
+
   if(Serial.available()) {
-    display::ordenarErrores(errores, Serial.readString());
-    return true;
+    mensaje = Serial.readStringUntil(':');
+
+    if(mensaje.equals("error")) {
+      display::ordenarErrores(errores, Serial.readStringUntil('\n'));
+      return 1;
+    }
   }
-  return false;
+  return 0;
 }
 
 int ejecutarMenuEstadistica() {
@@ -90,7 +96,7 @@ void ejecutarMenuCaballo() {
 }
 
 int ejecutarMenuBicho(boolean primeraVuelta) {
-  if(recibirError() || primeraVuelta)
+  if(recibirMensajes() == 1 || primeraVuelta)
     return display::escribirErrores(mylcd, WHITE, 2, errores, 10, 10, logicalStates::getMenuActual(), checkButtons::getSecundario_b1());
   return 0;
 }
@@ -164,7 +170,6 @@ int seleccionarMenu(int eleccion) {
   switch(eleccion) {
     case 1:
       display::pintarIconos(mylcd, WHITE, GREEN, BLACK, BLUE, BLACK, YELLOW, BLACK, RED, BLACK, WHITE);
-      display::escribirTexto(mylcd, WHITE, 3, "Reini.", 5, 290);
 
       if(logicalStates::setMenuDevuelto(ejecutarMenuEstadistica()) != 0)
         return logicalStates::getMenuDevuelto();

@@ -43,11 +43,7 @@ class TabManager(QWidget):
 		self.tabM.resize(WIDTH, HEIGHT) 
 
 		# Add tabs, choose icon and name
-		#self.tabM.addTab(HomeTab(), QIcon("img/boat.png"),("Inicio")) 
-		#self.tabM.addTab(ParamTab(), QIcon("img/compass.png"), ("Parámetros"))
-		#self.tabM.addTab(PointsTab(), QIcon("img/crab.png"), ("Puntuación")) 
 		self.tabM.addTab(SecuenciadorTab(), "Secuenciador") 
-
 
 		# Add tabs to widget 
 		self.layout.addWidget(self.tabM) 
