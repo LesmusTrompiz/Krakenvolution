@@ -33,15 +33,13 @@ BT::NodeStatus WaitStartBTNode::tick(){
     std::string ally_tree = 
         node_->get_parameter("ally_tree").get_parameter_value().get<std::string>();
     
-    std::string start = 
-        node_->get_parameter("start").get_parameter_value().get<std::string>();
+
 
 
     // Params with default value
-    if(start     == "default")     return BT::NodeStatus::FAILURE;
     if(play_side == "default") return BT::NodeStatus::FAILURE;
-    if(key_pose  == "default")  return BT::NodeStatus::FAILURE;
-    if(tree      == "default")      return BT::NodeStatus::FAILURE;
+    if(key_pose  == "default") return BT::NodeStatus::FAILURE;
+    if(tree      == "default") return BT::NodeStatus::FAILURE;
 
     // Set blackboard signals
     setOutput("tree", tree );
