@@ -26,7 +26,7 @@ constexpr float dist_precision  = 0.1;
 constexpr float angle_precision = 5.0;
 
 
-enum ControlState {IDLE, EXECUTING, NEXT_MOVE};
+enum ControlState {IDLE, WAITING_RESULT, NEXT_MOVE};
 
 
 class MoveToPoseNode : public rclcpp::Node

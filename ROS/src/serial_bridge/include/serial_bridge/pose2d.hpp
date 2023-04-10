@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+    Este struct permite manejar comodamete la posición del robot,
+    es lo que antes se conocia como geometry_msg::msg::Pose2D
+*/
 struct Pose2d
 {
     float x;

@@ -44,7 +44,7 @@ add_library(${PROJECT_NAME} SHARED
   src/uahrk_navigation/PathFindingNode.cpp
   src/uahrk_navigation/move_utils.cpp
   src/uahrk_navigation/astar_ros.cpp
-
+  src/uahrk_navigation/next_move.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -97,6 +97,10 @@ if(BUILD_TESTING)
   ament_add_gtest(advance_to_goal_test tests/advance_to_goal_test.cpp)
   ament_target_dependencies(advance_to_goal_test ${dependencies})
   target_link_libraries(advance_to_goal_test ${PROJECT_NAME})
+
+  ament_add_gtest(move_flowgram_test tests/move_flowgram_test.cpp)
+  ament_target_dependencies(move_flowgram_test ${dependencies})
+  target_link_libraries(move_flowgram_test ${PROJECT_NAME})
 endif()
 
 

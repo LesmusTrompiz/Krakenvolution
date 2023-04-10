@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from rclpy.action import ActionClient
 from serial_bridge_actions.action import Order
 from yaml import load, SafeLoader
-from std_srvs.srv import Empty
+from std_srvs.srv import SetBool
 
 def load_yaml_routine(file : str) -> list:
     yaml_file = open(file, 'r')
@@ -12,8 +12,8 @@ def load_yaml_routine(file : str) -> list:
     routine = []
     start = 0
     while start < len(yaml_content):
-        routine += [(yaml_content[start], yaml_content[start+1])]
-        start += 2
+        routine += [(yaml_content[start], yaml_content[start+1], yaml_content[start+2])]
+        start += 3
     yaml_file.close()
     return routine
 
@@ -25,39 +25,44 @@ class SequencerNode(Node):
         self.action_in_progress = False
         timer_period = 0.5  # seconds
 
-        self.srv = self.create_service(Empty, 'load_sequence', self.update_request)
+        self.srv = self.create_service(SetBool, 'pendrive_status', self.update_request)
         self._action_client = ActionClient(self, Order, 'serial_bridge_server')
         self.timer = self.create_timer(timer_period, self.read_and_execute)
         
-    def update_request(self,request, response):
-        self.request_flag = True
+    def update_request(self,request : SetBool.Request, response):
+        if request.data:
+            try:
+                self.orders = load_yaml_routine("/root/pendrive_config/sequence_generated.yaml")
+                self.get_logger().info('Yalm loaded')
+            except:
+                self.get_logger().error('Not sequence found')
+        else:
+            self.request_flag = True
+            self.get_logger().info(f'Pendrive pull out {request.data}')
         return response
 
     def send_goal(self, order):
-        self.get_logger().info('Sending Goal')
+        self.get_logger().info('Waiting Server')
         self.action_in_progress = True
         self._action_client.wait_for_server()
+        self.get_logger().info('Sending Goal')
         self._send_goal_future = self._action_client.send_goal_async(order)
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
 
     def read_and_execute(self):
-        
-        if not self.request_flag : return    
-        if not self.orders:
-            try:
-                self.orders = load_yaml_routine("/media/pendrive/sequence_generated.yaml")
-            except:
-                self.get_logger().info('Not sequence found')
-        else:
-            if self.action_in_progress: return
-            order = self.orders.pop(0)
-            id,arg = order
-            ros_order = Order.Goal()
-            ros_order.id = id
-            ros_order.arg = arg
-            self.send_goal(ros_order)
-            if not self.orders: self.request_flag = False
+        if not self.request_flag :  return 
+        if not self.orders:         return
+        if self.action_in_progress: return
+        order = self.orders.pop(0)
+        device,id,arg = order
+        ros_order = Order.Goal()
+        ros_order.device = device
+        ros_order.id = id
+        ros_order.id = id
+        ros_order.arg = arg
+        self.send_goal(ros_order)
+        if not self.orders: self.request_flag = False
     
     def goal_response_callback(self, future):
         goal_handle = future.result()
@@ -72,7 +77,7 @@ class SequencerNode(Node):
 
     def get_result_callback(self, future):
         result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.ret))
+        self.get_logger().info('GOAL FINISHED Result: {0}'.format(result.ret))
         self.action_in_progress = False
 
 

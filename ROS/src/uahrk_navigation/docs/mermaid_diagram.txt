@@ -1,0 +1,28 @@
+flowchart TD
+    Start[Start] --> InWp{Estoy en <br/> el wp?}
+    
+    InWp --> |No| Aproximacion[Aproximarme al WP]
+    InWp --> |Si| EsNecesarioCorregirAngulo{Es necesario <br/> corregir el <br/> angulo}
+    EsNecesarioCorregirAngulo --> |Si|CorrectAngle[Corregir en ángulo]
+    EsNecesarioCorregirAngulo --> |No|LanzarError[Levantar excepcion]
+    Aproximacion --> Alineado{Estoy bien <br/> alineado?}
+    Alineado --> |Si| Avanzar([Avanzo])
+    Avanzar --> AvanceLargoOCorto{Es una avance <br/> o retroceso <br/> superior a 0.1m}
+    AvanceLargoOCorto --> |Es superior|AvanceLargo([Avanzar])
+    AvanceLargoOCorto --> |Es inferior|AvanceCorto([Retroceder <br/> 0.3m])
+    Alineado --> |No| CorrectAngle[Corregir ángulo]
+    CorrectAngle --> ParedCerca{Hay alguna <br/> pared cerca?} 
+    ParedCerca --> |Si| EsUnaParedOEsquina{Es una pared <br/> o es una <br/> esquina?}
+    EsUnaParedOEsquina --> |Pared|UnaPared{La pendiente <br/> respecto <br/> a la pared <br/> es mayor <br/> que 20º}
+    UnaPared --> |EsMayor|AvanzarParaSalir([Avanzar 0.5 para salir])
+    UnaPared --> |EsMenor|AumentarPendiente([Realizar el giro seguro que maximice la pendiente])
+    EsUnaParedOEsquina --> |Esquina|HuirEsquina([Avanzo/Retroced hasta salir <br/> o puedo convertirlo en una sola esquina])
+    ParedCerca --> |No| SmallSpin{Es un giro <br/> muy pequeño?} 
+    SmallSpin --> |No| Spin([Realizar el giro])
+    SmallSpin --> |Si| SpinOffsetSigno{Es un giro <br/> positivo <br/> o <br/> negativo}
+    SpinOffsetSigno --> |Positivo| SpinOffsetSignoPos([Realizar el giro +10])
+    SpinOffsetSigno --> |Negativo| SpinOffsetSignoNeg([Realizar el giro -10])
+
+
+    
+  

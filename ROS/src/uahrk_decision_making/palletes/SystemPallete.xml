@@ -1,0 +1,15 @@
+<root>
+    <TreeNodesModel>
+        <Action ID="Reset_params"/>
+        <Action ID="Run_Loaded_Tree">
+            <input_port name="ally_tree"/>
+            <input_port name="tree"/>
+        </Action>
+        <Action ID="Update_init_state">
+            <output_port name="ally_tree"/>
+            <output_port name="tree"/>
+        </Action>
+        <Action ID="Wait_start_signal"/>
+    </TreeNodesModel>
+</root>
+

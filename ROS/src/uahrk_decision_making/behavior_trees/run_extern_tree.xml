@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Action ID="RunExternBT" tree="hello_tree"/>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="RunExternBT">
+            <input_port name="tree"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

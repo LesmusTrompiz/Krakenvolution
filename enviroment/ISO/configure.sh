@@ -29,6 +29,15 @@ apt install -y python3-colcon-common-extensions ros-foxy-rclcpp-action ros-foxy-
 # Create ROS WS
 mkdir -p ~/ros_ws/src
 
+# Copy udev rules 
+cp /root/Krakenvolution/enviroment/ISO/10-uahrkudev.rules /etc/udev/rules.d/
+cp /root/Krakenvolution/enviroment/ISO/mount_pendrive.sh /usr/local/bin/
+cp /root/Krakenvolution/enviroment/ISO/mount_pendrive.service /etc/systemd/system/
+cp /root/Krakenvolution/enviroment/ISO/pendrive_disconnect.sh /usr/local/bin/
+chmod +x /usr/local/bin/mount_pendrive.sh
+chmod +x /usr/local/bin/pendrive_disconnect.sh
+
+
 # Create start service
 cp ./roboot.service /etc/systemd/system 
 mkdir /etc/eurobot
@@ -39,12 +48,22 @@ systemctl enable roboot.service
 systemctl start roboot.service
 
 # Enable root user
-echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
+#echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
 
 # Enables root login in ssh 
-sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Enables ssh conection
-sudo apt install openssh-server
-sudo systemctl enable ssh
-sudo systemctl start ssh
+apt install -y openssh-server
+systemctl enable ssh
+systemctl start ssh
+
+# Install things
+apt install -y kitty
+apt install -y python3-pip
+
+# Install extern ROS PACKAGES
+apt install ros-$ROS_DISTRO-behaviortree-cpp-v3
+git clone https://github.com/ldrobotSensorTeam/ldlidar_stl_ros2.git /root/Krakenvolution/ROS/src/
+
+

@@ -22,6 +22,11 @@ find_package(uahrk_navigation_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+
+#find_package(rcl_interfaces_msgs REQUIRED)
+#find_package(rcl_interfaces_srvs REQUIRED)
+
 find_package(ament_index_cpp REQUIRED)
 find_package(ZMQ)
 if(ZMQ_FOUND)
@@ -39,19 +44,25 @@ set(dependencies
   ament_index_cpp
   uahrk_navigation_msgs
   rclcpp_action
+  std_srvs
+  #rcl_interfaces_msgs
+  #rcl_interfaces_srvs
 )
 include_directories(include ${ZMQ_INCLUDE_DIRS})
-add_library(hello_bt_node SHARED src/uahrk_decision_making/HelloNode.cpp)
-add_library(gotopose_bt_node SHARED src/uahrk_decision_making/GoToPoseBTNode.cpp)
-
+add_library(hello_bt_node       SHARED src/uahrk_decision_making/HelloNode.cpp)
+add_library(gotopose_bt_node    SHARED src/uahrk_decision_making/GoToPoseBTNode.cpp)
+add_library(waitstart_bt_node   SHARED src/uahrk_decision_making/WaitStartBTNode.cpp)
+add_library(runexternbt_bt_node SHARED src/uahrk_decision_making/RunExternBT_BTNode.cpp)
+add_library(resetparams_bt_node SHARED src/uahrk_decision_making/ResetParamsBTNode.cpp)
 
 list(APPEND plugin_libs
   hello_bt_node
   gotopose_bt_node
-  #br2_back_bt_node
-  #br2_turn_bt_node
-  #br2_is_obstacle_bt_node
+  waitstart_bt_node
+  runexternbt_bt_node
+  resetparams_bt_node
 )
+
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)

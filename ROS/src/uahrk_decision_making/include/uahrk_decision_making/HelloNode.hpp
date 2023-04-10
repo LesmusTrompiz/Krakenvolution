@@ -20,6 +20,6 @@ class Hello : public BT::ActionNodeBase
     private:
         rclcpp::Node::SharedPtr node_;
         rclcpp::Time start_time_;
-        
+        int cnt = 0;
         rclcpp::Publisher<std_msgs::msg::String>::SharedPtr hello_pub;
 };

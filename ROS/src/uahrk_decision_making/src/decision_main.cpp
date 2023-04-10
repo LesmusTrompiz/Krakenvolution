@@ -7,41 +7,40 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include <iostream>
+#include <chrono>
+using namespace std::chrono_literals;
 
 int main(int argc, char * argv[])
 {
+    // Create a ROS NODE
     rclcpp::init(argc, argv);
-    
     auto node = rclcpp::Node::make_shared("DecisionTree");
+   
+    // Register all of the BT Nodes
     BT::BehaviorTreeFactory factory;
-    BT::SharedLibrary loader;
-
     std::string pkgpath = ament_index_cpp::get_package_share_directory("uahrk_decision_making");
-
-    //factory.registerFromPlugin(loader.getOSName("hello_bt_node"));
     factory.registerFromPlugin(pkgpath + "/../../lib/libhello_bt_node.so");
     factory.registerFromPlugin(pkgpath + "/../../lib/libgotopose_bt_node.so");
+    factory.registerFromPlugin(pkgpath + "/../../lib/libwaitstart_bt_node.so");
+    factory.registerFromPlugin(pkgpath + "/../../lib/librunexternbt_bt_node.so");
+    factory.registerFromPlugin(pkgpath + "/../../lib/libresetparams_bt_node.so");
 
+    // Create the tree
+    // Get the tree file
+    std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
 
-    //factory.registerFromPlugin("/home/trompiz/ws/Krakenvolution/ROS/install/uahrk_decision_making/lib/libhello_bt_node.so");
-    
-    //factory.registerFromPlugin(loader.getOSName("br2_back_bt_node"));
-    //factory.registerFromPlugin(loader.getOSName("br2_turn_bt_node"));
-    //factory.registerFromPlugin(loader.getOSName("br2_is_obstacle_bt_node"));
-    std::string xml_file = pkgpath + "/behavior_trees/square_tree.xml";
-
+    // Create a blackboard and store the ROS Node in a parameter
     auto blackboard = BT::Blackboard::create();
     blackboard->set("node", node);
-
     BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
-    
-    auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
-    
-    rclcpp::Rate rate(10);
-    bool finish = false;
 
-    while (!finish && rclcpp::ok()){
-        finish = tree.rootNode()->executeTick() != BT::NodeStatus::RUNNING;
+    // Create a publisher to debug the tree with Groot    
+    auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
+
+    // Run the tree until ros dies with a rate of 10 Hz
+    rclcpp::Rate rate(10);
+    while (rclcpp::ok()){
+        tree.rootNode()->executeTick();
         rclcpp::spin_some(node);
         rate.sleep();
     }

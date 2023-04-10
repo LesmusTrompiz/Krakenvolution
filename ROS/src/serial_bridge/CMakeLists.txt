@@ -12,7 +12,7 @@ if(NOT CMAKE_CXX_STANDARD)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -fPIC)
 endif()
 
 
@@ -38,10 +38,14 @@ set(dependencies
 
 
 
-set(PROTOCOL_PATH "./include/SharedKrakenUART")
-FILE(GLOB PROTOCOL_SRC 
-  "${PROTOCOL_PATH}/sources/*.cpp"
-)
+# set(PROTOCOL_PATH "include/SharedKrakenUART")
+# FILE(GLOB PROTOCOL_SRC 
+#   "${PROTOCOL_PATH}/sources/*.cpp"
+# )
+
+# add_subdirectory("/ros_ws/serial_bridge/include/SharedKrakenUART")
+add_subdirectory(include/SharedKrakenUART)
+set(PROTOCOL_DEPS protocol)
 
 include_directories(include)
 
@@ -49,15 +53,18 @@ add_library(${PROJECT_NAME} SHARED
   src/serial_bridge/SerialBridgeNode.cpp
   src/serial_bridge/DummySerialNode.cpp
   src/serial_bridge/simulate_orders.cpp
-  ${PROTOCOL_SRC}
+  src/serial_bridge/geometry_utils.cpp
+  src/serial_bridge/serial_port.cpp
 )
+
+target_link_libraries(${PROJECT_NAME} ${PROTOCOL_DEPS})
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 
 add_executable(serial src/serial_bridge_main.cpp)
 ament_target_dependencies(serial ${dependencies})
-target_link_libraries(serial ${PROJECT_NAME})
+target_link_libraries(serial ${PROJECT_NAME} ${PROTOCOL_DEPS})
 
 
 add_executable(dummy_serial src/dummy_serial_main.cpp)

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Action ID="Wait_start_signal"/>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="Get_params"/>
+        <Action ID="Reset_params"/>
+        <Action ID="Run_Loaded_Tree"/>
+        <Action ID="Update_init_state"/>
+        <Action ID="Wait_start_signal"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

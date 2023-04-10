@@ -1,0 +1,8 @@
+<root>
+    <TreeNodesModel>
+        <Action ID="RunExternBT">
+            <input_port name="tree"/>
+        </Action>
+    </TreeNodesModel>
+</root>
+
