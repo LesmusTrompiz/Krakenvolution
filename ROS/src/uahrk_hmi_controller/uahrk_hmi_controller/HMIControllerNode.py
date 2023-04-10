@@ -1,0 +1,159 @@
+import rclpy
+from rclpy.node import Node
+from rcl_interfaces.srv import SetParameters
+from rcl_interfaces.msg import Parameter,  ParameterType
+from std_srvs.srv import Empty, SetBool
+from std_msgs.msg import UInt16
+import serial
+import json
+from typing import Dict
+from os import system
+
+
+def reboot():
+    system('reboot')
+
+def halt():
+    system('halt')
+
+
+
+class HMIControllerNode(Node):
+    def __init__(self, device_port : str):
+        Node.__init__(self,'hmi_controller')
+        
+        # Own Attributes:
+        self.params              = {}
+        self.pendrive_pluged     = False
+        self.points              = 0
+        self.points_update       = False
+
+        self.ros_parameters      = ['play_side',
+                                    'spawn',
+                                    'tree',
+                                    'ally_tree']
+        self.possible_actions    = {'reboot' : reboot,
+                                    'halt'   : halt}
+
+        # Initialize the serial protocol:
+        self.serial_device       = serial.Serial(device_port, 112500) 
+
+    
+        # ROS Interface:
+        self.set_params_client   = self.create_client(SetParameters, "/DecisionTree/set_parameters")
+        self.srv_reset_params    = self.create_service(Empty, '/reset_params', self.cb_reset_params)
+        self.srv_pendrive_state  = self.create_service(SetBool, '/pendrive_status', self.cb_pendrive_state)
+        self.points_subscriber   = self.create_subscription(UInt16, '/points', self.cb_points)
+
+        # ROS Timer to execute the tick function:
+        timer_period = 0.1
+        self.timer   = self.create_timer(timer_period, self.tick_node)
+
+
+
+    def cb_reset_params(self, request : Empty.Request, response : Empty.Response):
+        '''
+            This function will be called when a request 
+            is received throught '/reset_params' service.
+
+            This function may reset all the stored 
+            parameters.
+        '''
+        # To restore the parameters just assing an empty
+        # dictionary
+        self.params = {}
+        return response
+
+    def cb_pendrive_state(self,request : SetBool.Request, response):
+        '''
+            This function will be called when a request 
+            is received throught '/pendrive_status' service.
+
+            This function may assing the request value
+            to the pendrive state attribute.
+        '''
+
+        self.pendrive_pluged = request.data
+        return response
+
+    def cb_points(self, points : UInt16):
+        '''
+        
+        
+        '''
+        self.points = points.data
+        
+
+    def update_params(self, params : Dict[str : str]):
+        '''
+        
+        
+        '''
+        # Create the Request msg that will be set 
+        # all the parameters of the other node
+        parameters_msg = SetParameters.Request()
+
+        # For every parameter create a paramerter_msg
+        # that will store the parameter value as a 
+        # string
+        for key in params.keys():
+            param_msg = Parameter()
+            param_msg.name = key
+            param_msg.value.string_value = params[key]
+            param_msg.value.type = ParameterType.PARAMETER_STRING
+            parameters_msg.parameters.append(param_msg)
+        
+        # Send the request msg
+        self.set_params_client.call_async(parameters_msg)
+
+    def read_port(self):
+        return
+    
+    def send_msg(self):
+        return
+
+    def analize_msg(self, msg : Dict[str, str]):
+        
+        parameters = {}
+        actions    = []
+        for id in msg.keys():
+            
+            # If the msg is one of the needed params
+            # store the value in params
+            if id in self.ros_parameters: 
+                parameters[id] = msg[id]
+            
+            if id in self.possible_actions.keys():
+                actions += [self.possible_actions[id]]
+
+        return parameters, actions
+
+    def tick_node(self):
+        msg = self.read_port()
+        if msg:
+            decode_json     = json.load(msg)
+            params, actions = self.analize_msg(decode_json)
+            self.update_params(params)
+            for action in actions:
+                action()
+
+        if self.points_update:
+            point_msg = json.dumps({'poins' : self.points})
+            self.send_msg(point_msg)
+
+def main(args=None):
+    rclpy.init(args=args)
+    hmi_controller_node = HMIControllerNode()
+    rclpy.spin(hmi_controller_node)
+
+    # Destroy the node explicitly
+    hmi_controller_node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
