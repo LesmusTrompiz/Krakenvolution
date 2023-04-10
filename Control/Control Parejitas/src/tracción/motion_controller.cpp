@@ -255,9 +255,6 @@ void motion_controller::move_control()
   {
     if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_init_frenada - cal_trapecio.ajuste_distancia_recto)*(param_mecanicos.diam_rueda/2))
     {
-      // Velocidad de crucero
-      // Actualizamos la velocidad
-      // Serial.println("Vc");
       motores.rmotor_vel = param_mecanicos.vel_max;
       motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_max;

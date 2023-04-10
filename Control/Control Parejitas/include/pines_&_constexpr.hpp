@@ -18,14 +18,14 @@
 #define Enc_D 		53
 
 // Parámetros mecánicos
-constexpr float parejitas_reductora = 26*26/39;	// Engranajes
+constexpr float parejitas_reductora = 26.0*26.0/39.0;	// Engranajes
 constexpr float parejitas_diametro = 52.3; 			// Tactico: 72; //67;
 constexpr float parejitas_vel_eje_max = 8100 / parejitas_reductora;
 constexpr float parejitas_vel_max = parejitas_vel_eje_max * PI / 30;
-constexpr float parejitas_pulsos_por_rev = 256;
-constexpr float parejitas_L = 248;
-constexpr float parejitas_acel = 	4000; // 4500;
-constexpr float parejitas_decel = 4000; // 4500;
+constexpr float parejitas_pulsos_por_rev = 256.0;
+constexpr float parejitas_L = 248.0;
+constexpr float parejitas_acel = 	4000.0; // 4500;
+constexpr float parejitas_decel = 4000.0; // 4500;
 
 // Constantes para el perfil de velocidades
 constexpr float vel_freno_parejitas         = 0.8;

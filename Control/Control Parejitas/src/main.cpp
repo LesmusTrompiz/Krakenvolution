@@ -1,4 +1,5 @@
 // #define debug_mode
+
 #include <RobotServos.hpp>
 #include <Adafruit_PWMServoDriver.h>
 #include <Arduino.h>
@@ -13,8 +14,8 @@ uahruart::parser::Protocol protocol;
 
 /* Servos */
 Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
-auto servo_brazo_derecha 		= RobotServo(brazo_derecho, ServoHandlerMaster);
-auto servo_brazo_izquierda	= RobotServo(brazo_izquierdo, ServoHandlerMaster);
+auto servo_brazo_derecha 				= RobotServo(brazo_derecho, ServoHandlerMaster);
+auto servo_brazo_izquierda	    = RobotServo(brazo_izquierdo, ServoHandlerMaster);
 //... auto servo_
 
 /* Definición completa de la mecánica del robot */
@@ -85,32 +86,31 @@ void setup_serial_protocol()
     });
 
     // Register methods
-    protocol.register_method("traction", "turn", [](int32_t arg)
+    protocol.register_method("traction", "turn", [](int32_t arg) 
 		{
         controlador_parejitas.ref_ang = static_cast<float>(arg);
         controlador_parejitas.prev_move_calculus(0);
+        return uahruart::messages::ActionFinished::TRACTION;
     });
 
     protocol.register_method("traction", "advance", [](int32_t arg)
 		{
         controlador_parejitas.ref_distancia = static_cast<float>(arg);
         controlador_parejitas.prev_move_calculus(1);
+        return uahruart::messages::ActionFinished::TRACTION;
     });
 
     protocol.register_method("admin", "reset", [](int32_t arg) 
 		{
         rstc_start_software_reset(RSTC);
-    });
-
-    protocol.register_method("actuadores", "servo_brazo_derecha", [](int32_t arg) 
-		{
-        servo_brazo_derecha.set_angle(arg);
+        return uahruart::messages::ActionFinished::NONE;
     });
 
     on_finished([]() 
 		{
-        uahruart::primitives::Bool test = true;
-        protocol.send(test);
+			uahruart::messages::ActionFinished action;
+			action.action = uahruart::messages::ActionFinished::TRACTION;
+      protocol.send(action);
     });
 }
 
