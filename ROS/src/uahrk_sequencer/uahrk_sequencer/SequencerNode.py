@@ -77,7 +77,7 @@ class SequencerNode(Node):
 
     def get_result_callback(self, future):
         result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.ret))
+        self.get_logger().info('GOAL FINISHED Result: {0}'.format(result.ret))
         self.action_in_progress = False
 
 
