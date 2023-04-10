@@ -19,6 +19,8 @@
 #include "serial_bridge_actions/action/order.hpp"
 #include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "std_srvs/srv/empty.hpp"
+
 
 // Own Libraries
 #include "serial_bridge/pose2d.hpp"
@@ -48,6 +50,9 @@ class SerialBridgeNode : public rclcpp::Node
     // Service Callback
     void set_pose(const std::shared_ptr<uahrk_navigation_msgs::srv::SetPose2d::Request> request,
              std::shared_ptr<uahrk_navigation_msgs::srv::SetPose2d::Response> response);
+
+    void stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+          std::shared_ptr<std_srvs::srv::Empty::Response> response);
     
     // Action server interface
     rclcpp_action::GoalResponse     handle_goal(const rclcpp_action::GoalUUID & uuid,
@@ -63,6 +68,8 @@ class SerialBridgeNode : public rclcpp::Node
     rclcpp_action::Server<serial_bridge_actions::action::Order>::SharedPtr order_server;
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr publisher_;
     rclcpp::Service<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr reset_service;
+    rclcpp::Service<std_srvs::srv::Empty>::SharedPtr stop_service;
+
 
     // Protocol utility attributes
     std::array<std::shared_ptr<GoalOrder>, uahruart::messages::ActionFinished::SIZE> m_handles;

@@ -15,6 +15,9 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
   // Es util llamarlo cuando se inicializa el spawn y ese tipo de cosas.
   reset_service = this->create_service<uahrk_navigation_msgs::srv::SetPose2d>("set_pose", 
       std::bind(&SerialBridgeNode::set_pose, this, _1 ,_2));
+
+  stop_service = this->create_service<std_srvs::srv::Empty>("stop", 
+      std::bind(&SerialBridgeNode::stop, this, _1 ,_2));
   
   // servidor de acción que se encarga de recibir las peticiones que se quieren
   // hacer a través del RMI. Utiliza un mensaje de tipo serial_bridge_actions::action::Orderr
@@ -149,6 +152,16 @@ void SerialBridgeNode::set_pose(
   , request->y, request->a);
 }
 
+void stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+  std::shared_ptr<std_srvs::srv::Empty::Response> response){
+      
+  // Mandar mensaje stop
+  uahruart::messages::RPCCall call;
+  call.function_hash = uahruart::utils::hash_string("stop") ^ uahruart::utils::hash_string("traction");
+  call.call_uuid = 0;
+  call.arg = 0;
+  while(!protocol.send(call)) {usleep(1000);}
+}
 
 rclcpp_action::GoalResponse SerialBridgeNode::handle_goal(
   const rclcpp_action::GoalUUID & uuid,
