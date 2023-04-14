@@ -8,7 +8,7 @@
 			<ProfileSource>maxon motor ag</ProfileSource>
 			<ProfileClassID>Device</ProfileClassID>
 		</ProfileHeader>
-		<ProfileBody type="ProfileBody_Device_Escon" formatName="ESCON" formatVersion="1.0" supportedLanguages="en" fileVersion="1.0" fileCreator="Navil" fileName="escon_rueda_derecha.edc" fileCreationDate="06.04.2023">
+		<ProfileBody type="ProfileBody_Device_Escon" formatName="ESCON" formatVersion="1.0" supportedLanguages="en" fileVersion="1.0" fileCreator="Navil" fileName="escon_rueda_derecha.edc" fileCreationDate="11.04.2023">
 			<DeviceIdentity>
 				<vendorName readOnly="true">maxon motor ag</vendorName>
 				<deviceFamily readOnly="true">
@@ -5448,7 +5448,7 @@
 							<label lang="ja">rpm/s</label>
 							<label lang="zh-CN">rpm/s</label>
 						</unit>
-						<actualValue>40000</actualValue>
+						<actualValue>30000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedRampDeceleration" persistent="true" variableName="REG_dSpeedRampDeceleration">
 						<index>0x4110</index>
@@ -5477,7 +5477,7 @@
 							<label lang="ja">rpm/s</label>
 							<label lang="zh-CN">rpm/s</label>
 						</unit>
-						<actualValue>40000</actualValue>
+						<actualValue>30000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_SpeedRampDecelerationStop" persistent="true" variableName="REG_dSpeedRampDecelerationStop">
 						<index>0x4110</index>
@@ -5546,7 +5546,7 @@
 						<dataTypeIDRef uniqueIDRef="SDigitalIOConfiguration"/>
 						<access>readWrite</access>
 						<defaultValue>0x00004444</defaultValue>
-						<actualValue>0x00004444</actualValue>
+						<actualValue>0x00004644</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_DigitalInputsConfiguration" persistent="true" variableName="IOH_ndDigInputsConfiguration" callbackName="IOH_SetDigitalInputConfig" callbackType="single">
 						<index>0x4121</index>
@@ -8295,7 +8295,7 @@
 						</dataType>
 						<access>readWrite</access>
 						<defaultValue>0</defaultValue>
-						<actualValue>0x30040000</actualValue>
+						<actualValue>0x30060000</actualValue>
 					</parameter>
 					<parameter uniqueID="PARAM_DataRecorderVariable2Idx" persistent="true" variableName="REC_aspObjRecVar[1].d" callbackName="REC_SetRecorderVariable">
 						<index>0x5010</index>
