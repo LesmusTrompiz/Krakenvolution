@@ -151,7 +151,7 @@ struct Odom
   // Pose del robot
   Pose pose_actual;
   // Métodos para toma de medidas
-  void act_odom(Param_mecanicos mecanica);
+  void act_odom(Param_mecanicos mecanica, bool inverse);
   void check_mov();
   void reset_odom();
   // Constructor

@@ -89,44 +89,43 @@ void setup_serial_protocol()
     // Register methods
     protocol.register_method("traction", "turn", [](int32_t arg) 
 		{
-        controlador_parejitas.ref_ang = static_cast<float>(arg);
-        controlador_parejitas.prev_move_calculus(0);
-        return uahruart::messages::ActionFinished::TRACTION;
+			controlador_parejitas.ref_ang = static_cast<float>(arg);
+			controlador_parejitas.prev_move_calculus(0);
+			return uahruart::messages::ActionFinished::TRACTION;
     });
 
     protocol.register_method("traction", "advance", [](int32_t arg)
 		{
-        controlador_parejitas.ref_distancia = static_cast<float>(arg);
-        controlador_parejitas.prev_move_calculus(1);
-        return uahruart::messages::ActionFinished::TRACTION;
+			controlador_parejitas.ref_distancia = static_cast<float>(arg);
+			controlador_parejitas.prev_move_calculus(1);
+			return uahruart::messages::ActionFinished::TRACTION;
     });
 
     protocol.register_method("admin", "reset", [](int32_t arg) 
 		{
-        rstc_start_software_reset(RSTC);
-        return uahruart::messages::ActionFinished::NONE;
-<<<<<<< HEAD
-=======
+			rstc_start_software_reset(RSTC);
+			return uahruart::messages::ActionFinished::NONE;
     });
 
     protocol.register_method("actuadores", "servo_brazo_derecha", [](int32_t arg) 
 		{
-        servo_brazo_derecha.set_angle(arg);
-        return uahruart::messages::ActionFinished::SERVO;
->>>>>>> 41c9a5c55735327b35d0a9b420e79e4a5aac7126
+			servo_brazo_derecha.set_angle(arg);
+			return uahruart::messages::ActionFinished::SERVO;
     });
 
     on_finished([]() 
 		{
-			uahruart::messages::ActionFinished action;
-			action.action = uahruart::messages::ActionFinished::TRACTION;
-      protocol.send(action);
-<<<<<<< HEAD
-=======
+			// uahruart::messages::ActionFinished action;
+			// action.action = uahruart::messages::ActionFinished::TRACTION;
+			uahruart::messages::Odometry odom;
+			odom.x = controlador_parejitas.odom.pose_actual.x;
+			odom.y = controlador_parejitas.odom.pose_actual.y;
+			odom.o = controlador_parejitas.odom.pose_actual.alfa;
+			protocol.send(odom);
       odom_parejitas = controlador_parejitas.odom;
       pending_last_odom = true;
->>>>>>> 41c9a5c55735327b35d0a9b420e79e4a5aac7126
     });
+
 }
 
 /* Configuraciones y bucle de control */
@@ -149,7 +148,7 @@ void setup()
 	pinMode(PCInt_I,INPUT);	
 	pinMode(Enc_I,INPUT);
 
-	attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
+	// attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
 	attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
 
 	// PWMs and Timer (50Hz)
@@ -170,23 +169,23 @@ constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
 void loop() 
 {
 	serialEvent();
-	if (pending_last_odom) {
-		uahruart::messages::Odometry odom;
-		odom.x = odom_parejitas.pose_actual.x;
-		odom.y = odom_parejitas.pose_actual.y;
-		odom.o = odom_parejitas.pose_actual.alfa;
-		if (protocol.send(odom))
-			pending_last_odom = false;
-	}
-	unsigned long long current_time = millis();
-	if (current_time > (last_odom_update + ODOM_UPDATE_TIME)) {
-		last_odom_update = current_time;
-		uahruart::messages::Odometry odom;
-		odom.x = controlador_parejitas.odom.pose_actual.x;
-		odom.y = controlador_parejitas.odom.pose_actual.y;
-		odom.o = controlador_parejitas.odom.pose_actual.alfa;
-		protocol.send(odom);
-	}
+	// if (pending_last_odom) {
+	// 	uahruart::messages::Odometry odom;
+	// 	odom.x = odom_parejitas.pose_actual.x;
+	// 	odom.y = odom_parejitas.pose_actual.y;
+	// 	odom.o = odom_parejitas.pose_actual.alfa;
+	// 	if (protocol.send(odom))
+	// 		pending_last_odom = false;
+	// }
+	// unsigned long long current_time = millis();
+	// if (current_time > (last_odom_update + ODOM_UPDATE_TIME)) {
+	// 	last_odom_update = current_time;
+	// 	uahruart::messages::Odometry odom;
+	// 	odom.x = controlador_parejitas.odom.pose_actual.x;
+	// 	odom.y = controlador_parejitas.odom.pose_actual.y;
+	// 	odom.o = controlador_parejitas.odom.pose_actual.alfa;
+	// 	protocol.send(odom);
+	// }
 
 }
 

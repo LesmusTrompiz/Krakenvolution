@@ -15,14 +15,16 @@ void on_finished(functor<void ()> callback) {
 }
 
 /* Odom */
-void Odom::act_odom(Param_mecanicos mecanica)
+void Odom::act_odom(Param_mecanicos mecanica, bool inverse)
 {
   /**
    * @brief Medida de variación de cuentas en los encoders. 
    * Se transforma de cuentas a coordenadas cartesianas.
    * 
   */
-
+  // Encoder derecho no funcional...
+  cuentas_izquierda = cuentas_derecha;
+  if(inverse) cuentas_derecha = -cuentas_izquierda;
   // Para pasar de pulsos a revoluciones usamos una variable estática
   float pulsos2mm = mecanica.diam_rueda*PI/(mecanica.pulsos_rev*mecanica.reductora);
   // Variaciones de las coordenadas cartesianas y avance
@@ -188,18 +190,23 @@ void PerfilVelocidad::calculo_giro(float grados_giro, float velocidad_giro)
 void motion_controller::prev_move_calculus(bool movimiento)
 {
 
+  // Serial.println(ref_distancia);
+
   if(movimiento)
   {
+    // Serial.println("MI PILILA1");
     if(ref_distancia > 0)
-    {
-      digitalWriteDirect(I_DIR, LOW);
-      digitalWriteDirect(D_DIR, LOW);
-    }
-    else
     {
       digitalWriteDirect(I_DIR, HIGH);
       digitalWriteDirect(D_DIR, HIGH);
-      ref_distancia = -ref_distancia;
+      // Serial.println("MI PILILA2");
+    }
+    else
+    {
+      digitalWriteDirect(I_DIR, LOW);
+      digitalWriteDirect(D_DIR, LOW);
+      // Serial.println("MI PILILA3");
+      // ref_distancia = -ref_distancia;
     }
     cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max);
     motores.encender_motores();
@@ -219,14 +226,14 @@ void motion_controller::prev_move_calculus(bool movimiento)
   {
     if(ref_ang > 0)
     {
-      digitalWriteDirect(I_DIR, HIGH);
-      digitalWriteDirect(D_DIR, LOW);
+      digitalWriteDirect(I_DIR, LOW);
+      digitalWriteDirect(D_DIR, HIGH);
     }
     else
     {
-      digitalWriteDirect(I_DIR, LOW);
-      digitalWriteDirect(D_DIR, HIGH);
-      ref_ang = -ref_ang;
+      digitalWriteDirect(I_DIR, HIGH);
+      digitalWriteDirect(D_DIR, LOW);
+      // ref_ang = -ref_ang;
     }
     cal_trapecio.calculo_giro(ref_ang, param_mecanicos.vel_giro);
     motores.encender_motores();
@@ -246,8 +253,9 @@ void motion_controller::prev_move_calculus(bool movimiento)
 
 void motion_controller::move_control()
 {
+  bool inverse = giro_en_curso && (ref_ang > 0);
   /* Toma de medidas */
-	odom.act_odom(this->param_mecanicos);
+	odom.act_odom(this->param_mecanicos, inverse);
   /* Check parado */
   odom.check_mov();
   /* Control */ 
@@ -255,27 +263,26 @@ void motion_controller::move_control()
   {
     if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_init_frenada - cal_trapecio.ajuste_distancia_recto)*(param_mecanicos.diam_rueda/2))
     {
+      // Velocidad de crucero
       motores.rmotor_vel = param_mecanicos.vel_max;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_max;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad)*(param_mecanicos.diam_rueda/2))
     {
-      // Serial.println("F");
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_freno;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else
     {    
       // Parar los motores
-      // Serial.println("P");
       motores.rmotor_vel = 0;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = 0;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();      
       }
   }
@@ -284,26 +291,25 @@ void motion_controller::move_control()
     if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_init_frenada - cal_trapecio.ajuste_distancia_giro))
     {
       // Velocidad de crucero
-      // Actualizamos la velocidad
       motores.rmotor_vel = param_mecanicos.vel_giro;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_giro;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_total_rad))
     {
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_freno;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else
     {
       // Parar los motores
       motores.rmotor_vel = 0;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = 0;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
   }
