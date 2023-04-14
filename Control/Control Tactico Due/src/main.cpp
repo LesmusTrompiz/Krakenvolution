@@ -82,7 +82,7 @@ void setup_serial_protocol()
 {
     protocol.on_write([](const char* msg) 
 		{
-        Serial.println(msg);
+        SerialUSB.println(msg);
     });
 
     // Register methods
@@ -129,7 +129,7 @@ void setup()
 	ServoHandlerMaster.begin();
 	ServoHandlerMaster.setPWMFreq(50);
 	// Serial conf
-	Serial.begin(115200);
+	SerialUSB.begin(115200);
   setup_serial_protocol();
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
