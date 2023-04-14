@@ -44,8 +44,8 @@ mkdir /etc/eurobot
 cp ./startup.sh /etc/eurobot
 
 systemctl daemon-reload
-systemctl enable roboot.service
-systemctl start roboot.service
+systemctl enable --now roboot.service
+# systemctl start roboot.service
 
 # Enable root user
 #echo -e "krakenvolution\nkrakenvolution" | sudo passwd root
@@ -55,8 +55,7 @@ sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd
 
 # Enables ssh conection
 apt install -y openssh-server
-systemctl enable ssh
-systemctl start ssh
+systemctl enable --now ssh
 
 # Install things
 apt install -y kitty

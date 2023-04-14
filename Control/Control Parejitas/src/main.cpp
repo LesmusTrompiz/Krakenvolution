@@ -105,15 +105,12 @@ void setup_serial_protocol()
 		{
         rstc_start_software_reset(RSTC);
         return uahruart::messages::ActionFinished::NONE;
-<<<<<<< HEAD
-=======
     });
 
     protocol.register_method("actuadores", "servo_brazo_derecha", [](int32_t arg) 
 		{
         servo_brazo_derecha.set_angle(arg);
         return uahruart::messages::ActionFinished::SERVO;
->>>>>>> 41c9a5c55735327b35d0a9b420e79e4a5aac7126
     });
 
     on_finished([]() 
@@ -121,11 +118,8 @@ void setup_serial_protocol()
 			uahruart::messages::ActionFinished action;
 			action.action = uahruart::messages::ActionFinished::TRACTION;
       protocol.send(action);
-<<<<<<< HEAD
-=======
       odom_parejitas = controlador_parejitas.odom;
       pending_last_odom = true;
->>>>>>> 41c9a5c55735327b35d0a9b420e79e4a5aac7126
     });
 }
 

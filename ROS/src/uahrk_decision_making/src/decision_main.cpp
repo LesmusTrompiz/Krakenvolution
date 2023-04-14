@@ -19,15 +19,18 @@ int main(int argc, char * argv[])
     // Register all of the BT Nodes
     BT::BehaviorTreeFactory factory;
     std::string pkgpath = ament_index_cpp::get_package_share_directory("uahrk_decision_making");
-    factory.registerFromPlugin(pkgpath + "/../../lib/libhello_bt_node.so");
-    factory.registerFromPlugin(pkgpath + "/../../lib/libgotopose_bt_node.so");
-    factory.registerFromPlugin(pkgpath + "/../../lib/libwaitstart_bt_node.so");
-    factory.registerFromPlugin(pkgpath + "/../../lib/librunexternbt_bt_node.so");
-    factory.registerFromPlugin(pkgpath + "/../../lib/libresetparams_bt_node.so");
+    // factory.registerFromPlugin(pkgpath + "/../../lib/libhello_bt_node.so");
+    // factory.registerFromPlugin(pkgpath + "/../../lib/libgotopose_bt_node.so");
+    // factory.registerFromPlugin(pkgpath + "/../../lib/libwaitstart_bt_node.so");
+    // factory.registerFromPlugin(pkgpath + "/../../lib/librunexternbt_bt_node.so");
+    // factory.registerFromPlugin(pkgpath + "/../../lib/libresetparams_bt_node.so");
+    
+    factory.registerFromPlugin(pkgpath + "/../../lib/libcaller_bt_node.so");
 
     // Create the tree
     // Get the tree file
-    std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
+    // std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
+    std::string xml_file = pkgpath + "/behavior_trees/sequences_tree.xml";
 
     // Create a blackboard and store the ROS Node in a parameter
     auto blackboard = BT::Blackboard::create();

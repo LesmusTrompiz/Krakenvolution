@@ -1,0 +1,96 @@
+--- stderr: uahrk_decision_making
+In file included from [01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/GoToPoseBTNode.cpp:3[m[K:
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/include/uahrk_decision_making/GoToPoseBTNode.hpp:10:15:[m[K [01;31m[Kerror: [m[K‘[01m[Kserial_bridge_actions[m[K’ does not name a type
+   10 | using Order = [01;31m[Kserial_bridge_actions[m[K::action::Order;
+      |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:[m[K In member function ‘[01m[Kvirtual BT::NodeStatus Caller::tick()[m[K’:
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:34:14:[m[K [01;35m[Kwarning: [m[Kenumeration value ‘[01m[KUNKNOWN[m[K’ not handled in switch [[01;35m[K-Wswitch[m[K]
+   34 |       switch [01;35m[K([m[Korder_result){
+      |              [01;35m[K^[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:53:5:[m[K [01;31m[Kerror: [m[K‘[01m[Ksend_goal_options[m[K’ was not declared in this scope
+   53 |     [01;31m[Ksend_goal_options[m[K.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
+      |     [01;31m[K^~~~~~~~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:53:52:[m[K [01;31m[Kerror: [m[K‘[01m[KMoveToPoseNode[m[K’ has not been declared
+   53 |     send_goal_options.result_callback = std::bind(&[01;31m[KMoveToPoseNode[m[K::result_callback, this, std::placeholders::_1);
+      |                                                    [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:54:59:[m[K [01;31m[Kerror: [m[K‘[01m[KMoveToPoseNode[m[K’ has not been declared
+   54 |     send_goal_options.goal_response_callback = std::bind(&[01;31m[KMoveToPoseNode[m[K::goal_response_callback, this, std::placeholders::_1);
+      |                                                           [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:55:5:[m[K [01;31m[Kerror: [m[K‘[01m[Kgoal_msg[m[K’ was not declared in this scope
+   55 |     [01;31m[Kgoal_msg[m[K.id  = id;
+      |     [01;31m[K^~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:55:20:[m[K [01;31m[Kerror: [m[K‘[01m[Kid[m[K’ was not declared in this scope; did you mean ‘[01m[Kuid_[m[K’?
+   55 |     goal_msg.id  = [01;31m[Kid[m[K;
+      |                    [01;31m[K^~[m[K
+      |                    [32m[Kuid_[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:56:20:[m[K [01;31m[Kerror: [m[K‘[01m[Karg[m[K’ was not declared in this scope
+   56 |     goal_msg.arg = [01;31m[Karg[m[K;
+      |                    [01;31m[K^~~[m[K
+In file included from [01m[K/opt/ros/foxy/include/rclcpp/service.hpp:34[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/callback_group.hpp:25[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/memory_strategy.hpp:24[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executor.hpp:33[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executors/multi_threaded_executor.hpp:26[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/rclcpp.hpp:146[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/include/uahrk_decision_making/CallerBTNode.hpp:4[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:3[m[K:
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+   57 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "Sending msg %s %i", id.c_str(), arg);
+      |                       [01;31m[K^~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   57 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   57 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   57 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);
+      |     [01;31m[K^~~~~~~~~~~[m[K
+In file included from [01m[K/opt/ros/foxy/include/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/callback_group.hpp:23[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/memory_strategy.hpp:24[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executor.hpp:33[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executors/multi_threaded_executor.hpp:26[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/foxy/include/rclcpp/rclcpp.hpp:146[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/include/uahrk_decision_making/CallerBTNode.hpp:4[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:3[m[K:
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+   57 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "Sending msg %s %i", id.c_str(), arg);
+      |                       [01;31m[K^~~~~~~~~~[m[K
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:57:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+   57 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "Sending msg %s %i", id.c_str(), arg);
+      |                       [01;31m[K^~~~~~~~~~[m[K
+In file included from [01m[K/opt/ros/foxy/include/rclcpp_action/rclcpp_action.hpp:38[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/include/uahrk_decision_making/CallerBTNode.hpp:5[m[K,
+                 from [01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:3[m[K:
+/opt/ros/foxy/include/rclcpp_action/create_client.hpp: In instantiation of ‘[01m[Ktypename rclcpp_action::Client<ActionT>::SharedPtr rclcpp_action::create_client(NodeT, const string&, rclcpp::CallbackGroup::SharedPtr) [with ActionT = serial_bridge_actions::action::Order; NodeT = Caller*; typename rclcpp_action::Client<ActionT>::SharedPtr = std::shared_ptr<rclcpp_action::Client<serial_bridge_actions::action::Order> >; std::string = std::__cxx11::basic_string<char>; rclcpp::CallbackGroup::SharedPtr = std::shared_ptr<rclcpp::CallbackGroup>][m[K’:
+[01m[K/ros_ws/ROS/src/uahrk_decision_making/src/uahrk_decision_making/CallerBTNode.cpp:12:84:[m[K   required from here
+[01m[K/opt/ros/foxy/include/rclcpp_action/create_client.hpp:107:11:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_node_base_interface[m[K’
+  107 |     [01;31m[Knode->get_node_base_interface[m[K(),
+      |     [01;31m[K~~~~~~^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/foxy/include/rclcpp_action/create_client.hpp:108:11:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_node_graph_interface[m[K’
+  108 |     [01;31m[Knode->get_node_graph_interface[m[K(),
+      |     [01;31m[K~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/foxy/include/rclcpp_action/create_client.hpp:109:11:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_node_logging_interface[m[K’
+  109 |     [01;31m[Knode->get_node_logging_interface[m[K(),
+      |     [01;31m[K~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/foxy/include/rclcpp_action/create_client.hpp:110:11:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass Caller[m[K’ has no member named ‘[01m[Kget_node_waitables_interface[m[K’
+  110 |     [01;31m[Knode->get_node_waitables_interface[m[K(),
+      |     [01;31m[K~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+make[2]: *** [CMakeFiles/caller_bt_node.dir/build.make:63: CMakeFiles/caller_bt_node.dir/src/uahrk_decision_making/CallerBTNode.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:252: CMakeFiles/caller_bt_node.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[2]: *** [CMakeFiles/gotopose_bt_node.dir/build.make:63: CMakeFiles/gotopose_bt_node.dir/src/uahrk_decision_making/GoToPoseBTNode.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:306: CMakeFiles/gotopose_bt_node.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2
+---
+Failed   <<< uahrk_decision_making [2.90s, exited with code 2]
