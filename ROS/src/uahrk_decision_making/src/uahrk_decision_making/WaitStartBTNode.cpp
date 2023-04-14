@@ -1,7 +1,6 @@
 #include "uahrk_decision_making/WaitStartBTNode.hpp"
 
 
-
 WaitStartBTNode::WaitStartBTNode(
     const std::string & xml_tag_name, 
     const BT::NodeConfiguration & conf)
@@ -63,9 +62,12 @@ BT::NodeStatus WaitStartBTNode::tick(){
     if(play_side == "blue"){
         auto pose = blue_spawns[key_pose];
         auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
-        request->x = pose.x;
-        request->y = pose.y;
-        request->a = pose.a;
+        request->pose.x = pose.x;
+        request->pose.y = pose.y;
+        request->pose.theta = pose.a;
+        request->header.frame_id = "map";
+        request->header.stamp = node_->get_clock()->now();
+
         auto result = set_pose_client->async_send_request(request);
         if (rclcpp::spin_until_future_complete(node_, result) != rclcpp::FutureReturnCode::SUCCESS)
         {
@@ -75,9 +77,9 @@ BT::NodeStatus WaitStartBTNode::tick(){
     else if(play_side == "green"){
         auto pose = green_spawns[key_pose];
         auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
-        request->x = pose.x;
-        request->y = pose.y;
-        request->a = pose.a;
+        request->pose.x = pose.x;
+        request->pose.y = pose.y;
+        request->pose.theta = pose.a;
         auto result = set_pose_client->async_send_request(request);
         if (rclcpp::spin_until_future_complete(node_, result, 300ms) != rclcpp::FutureReturnCode::SUCCESS)
         {
