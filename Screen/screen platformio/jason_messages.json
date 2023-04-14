@@ -1,0 +1,18 @@
+// Configuración del partido
+
+{
+  "play_side": "blue/green",
+  "spawn": 14,
+  "tree": "textico",
+  "allytree": "textaco"
+}
+
+// Spawn empezamos desde la torre
+// En zig zag desde la torre (siempre por color)
+
+{
+  "action": "reboot/halt"
+}
+
+
+

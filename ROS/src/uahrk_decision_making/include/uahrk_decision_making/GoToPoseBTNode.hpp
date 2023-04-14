@@ -7,6 +7,7 @@
 
 using GoToPose  = uahrk_navigation_msgs::action::GoToPose;
 using GoalHandleGoToPose = rclcpp_action::ClientGoalHandle<GoToPose>;
+using Order = serial_bridge_actions::action::Order;
 
 
 enum state {IDLE, RUNNING};

@@ -17,7 +17,8 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
+# find_package(rclcpp REQUIRED)
+include_directories(/opt/ros/foxy/include)
 find_package(uahrk_navigation_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
@@ -26,6 +27,8 @@ find_package(std_srvs REQUIRED)
 
 #find_package(rcl_interfaces_msgs REQUIRED)
 #find_package(rcl_interfaces_srvs REQUIRED)
+
+find_package(serial_bridge_actions REQUIRED)
 
 find_package(ament_index_cpp REQUIRED)
 find_package(ZMQ)
@@ -45,6 +48,7 @@ set(dependencies
   uahrk_navigation_msgs
   rclcpp_action
   std_srvs
+  serial_bridge_actions
   #rcl_interfaces_msgs
   #rcl_interfaces_srvs
 )
@@ -55,12 +59,16 @@ add_library(waitstart_bt_node   SHARED src/uahrk_decision_making/WaitStartBTNode
 add_library(runexternbt_bt_node SHARED src/uahrk_decision_making/RunExternBT_BTNode.cpp)
 add_library(resetparams_bt_node SHARED src/uahrk_decision_making/ResetParamsBTNode.cpp)
 
+# Serialization and other endeavours
+add_library(caller_bt_node SHARED src/uahrk_decision_making/CallerBTNode.cpp)
+
 list(APPEND plugin_libs
   hello_bt_node
   gotopose_bt_node
   waitstart_bt_node
   runexternbt_bt_node
   resetparams_bt_node
+  caller_bt_node
 )
 
 foreach(bt_plugin ${plugin_libs})

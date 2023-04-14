@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Sequence>
+            <Action ID="Caller" arg="500" device="traction" id="advance"/>
+            <Action ID="Caller" arg="90" device="traction" id="turn"/>
+            <Action ID="Caller" arg="250" device="traction" id="advance"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="Caller">
+            <input_port default="{arg}" name="arg"/>
+            <input_port default="{device}" name="device"/>
+            <input_port default="{id}" name="id"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

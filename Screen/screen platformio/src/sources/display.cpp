@@ -1,19 +1,20 @@
-#include "LCDWIKI_KBV.h"
-#include "LCDWIKI_GUI.h"
 #include "display.hpp"
-#include "checkButtons.hpp"
 
-//Colores
-#define BLACK       0x0000
-#define DARKBLUE    0x000F
-#define DARKGREEN   0x00E0
-#define WHITE       0xFFFF
+// Style
+constexpr auto STATISTICS_ICON_COLOR    = display::rgb_to_565(108,203,110);
+constexpr auto STRATEGY_ICON_COLOR      = display::rgb_to_565(76,185,214);
+constexpr auto DEBUG_ICON_COLOR         = display::rgb_to_565(251, 236, 119);
+constexpr auto LIDAR_ICON_COLOR         = display::rgb_to_565(249,45,114);
+constexpr auto POWER_ICON_COLOR         = display::WHITE;
+
+constexpr auto GREEN_FIELD_COLOR        = display::rgb_to_565(0, 170, 18);
+constexpr auto BLUE_FIELD_COLOR         = display::rgb_to_565(0, 92, 230);
+
+constexpr auto GRAY                     = display::rgb_to_565(64, 64, 64);
 
 namespace display {
     //Segun los atributos un fondo de un icono en blanco (seleccionado) y resto en negro
-    void pintarIconos(LCDWIKI_KBV mylcd, uint16_t estadistica_c1, uint16_t estadistica_c2,
-    uint16_t caballo_c1, uint16_t caballo_c2, uint16_t bicho_c1, uint16_t bicho_c2,
-    uint16_t lidar_c1, uint16_t lidar_c2, uint16_t apagar_c1, uint16_t apagar_c2) {
+    void pintarIconos(LCDWIKI_KBV& mylcd, uint8_t selected) {
         //Limpiar zona de escritura
         mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
 
@@ -23,102 +24,102 @@ namespace display {
         mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
 
+        mylcd.Fill_Rect(432,  selected * 56, 48, 49, GRAY);
         //Fondo estadistica
-        mylcd.Fill_Rect(432, 0, 48, 49, estadistica_c1);
         //Icono estadistica
-        mylcd.Fill_Rect(436, 33, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(440, 25, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(444, 17, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(448,  9, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(456, 17, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(460, 25, 8, 8, estadistica_c2);
-        mylcd.Fill_Rect(468, 21, 8, 8, estadistica_c2);
+        mylcd.Fill_Rect(436, 33, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(440, 25, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(444, 17, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(448,  9, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(456, 17, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(460, 25, 8, 8, STATISTICS_ICON_COLOR);
+        mylcd.Fill_Rect(468, 21, 8, 8, STATISTICS_ICON_COLOR);
 
         //Fondo caballo
-        mylcd.Fill_Rect(432, 57, 48, 48, caballo_c1);
+        // mylcd.Fill_Rect(432, 57, 48, 48, caballo_c1);
         //Icono caballo
-        mylcd.Fill_Rect(440, 93, 32, 8, caballo_c2);
-        mylcd.Fill_Rect(444, 89, 24, 4, caballo_c2);
-        mylcd.Fill_Rect(448, 85, 24, 4, caballo_c2);
-        mylcd.Fill_Rect(452, 81, 24, 4, caballo_c2);
-        mylcd.Fill_Rect(436, 73, 40, 8, caballo_c2);
-        mylcd.Fill_Rect(440, 69, 12, 4, caballo_c2);
-        mylcd.Fill_Rect(456, 69, 16, 4, caballo_c2);
-        mylcd.Fill_Rect(448, 65, 20, 4, caballo_c2);
-        mylcd.Fill_Rect(452, 61,  8, 4, caballo_c2);
+        mylcd.Fill_Rect(440, 93, 32, 8, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(444, 89, 24, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(448, 85, 24, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(452, 81, 24, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(436, 73, 40, 8, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(440, 69, 12, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(456, 69, 16, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(448, 65, 20, 4, STRATEGY_ICON_COLOR);
+        mylcd.Fill_Rect(452, 61,  8, 4, STRATEGY_ICON_COLOR);
 
         //Fondo bicho
-        mylcd.Fill_Rect(432, 113, 48, 48, bicho_c1);
+        // mylcd.Fill_Rect(432, 113, 48, 48, bicho_c1);
         //Icono bicho
-        mylcd.Fill_Rect(444, 153,  4, 4, bicho_c2);
-        mylcd.Fill_Rect(452, 153, 12, 4, bicho_c2);
-        mylcd.Fill_Rect(444, 149, 28, 4, bicho_c2);
-        mylcd.Fill_Rect(436, 145,  4, 4, bicho_c2);
-        mylcd.Fill_Rect(444, 145,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(464, 145,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(436, 141, 12, 4, bicho_c2);
-        mylcd.Fill_Rect(460, 141,  4, 4, bicho_c2);
-        mylcd.Fill_Rect(468, 141,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(440, 137,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(456, 137,  4, 4, bicho_c2);
-        mylcd.Fill_Rect(468, 137,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(440, 133,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(452, 133,  4, 4, bicho_c2);
-        mylcd.Fill_Rect(468, 133,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(436, 129, 16, 4, bicho_c2);
-        mylcd.Fill_Rect(464, 129,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(436, 125, 40, 4, bicho_c2);
-        mylcd.Fill_Rect(440, 121, 24, 4, bicho_c2);
-        mylcd.Fill_Rect(444, 117,  8, 4, bicho_c2);
-        mylcd.Fill_Rect(460, 117,  8, 4, bicho_c2);
+        mylcd.Fill_Rect(444, 153,  4, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(452, 153, 12, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(444, 149, 28, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(436, 145,  4, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(444, 145,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(464, 145,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(436, 141, 12, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(460, 141,  4, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(468, 141,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(440, 137,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(456, 137,  4, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(468, 137,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(440, 133,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(452, 133,  4, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(468, 133,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(436, 129, 16, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(464, 129,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(436, 125, 40, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(440, 121, 24, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(444, 117,  8, 4, DEBUG_ICON_COLOR);
+        mylcd.Fill_Rect(460, 117,  8, 4, DEBUG_ICON_COLOR);
 
         //Fondo lidar
-        mylcd.Fill_Rect(432, 169, 48, 48, lidar_c1);
+        // mylcd.Fill_Rect(432, 169, 48, 48, lidar_c1);
         //Icono lidar
-        mylcd.Fill_Rect(436, 205, 40, 8, lidar_c2);
-        mylcd.Fill_Rect(436, 201,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(472, 201,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(436, 197,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(444, 197, 24, 4, lidar_c2);
-        mylcd.Fill_Rect(472, 197,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(436, 189,  8, 8, lidar_c2);
-        mylcd.Fill_Rect(452, 189,  8, 8, lidar_c2);
-        mylcd.Fill_Rect(468, 189,  8, 8, lidar_c2);
-        mylcd.Fill_Rect(436, 185,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(444, 185, 24, 4, lidar_c2);
-        mylcd.Fill_Rect(472, 185,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(440, 181,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(468, 181,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(444, 177,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(464, 177,  4, 4, lidar_c2);
-        mylcd.Fill_Rect(448, 173, 16, 4, lidar_c2);
+        mylcd.Fill_Rect(436, 205, 40, 8, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(436, 201,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(472, 201,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(436, 197,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(444, 197, 24, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(472, 197,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(436, 189,  8, 8, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(452, 189,  8, 8, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(468, 189,  8, 8, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(436, 185,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(444, 185, 24, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(472, 185,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(440, 181,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(468, 181,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(444, 177,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(464, 177,  4, 4, LIDAR_ICON_COLOR);
+        mylcd.Fill_Rect(448, 173, 16, 4, LIDAR_ICON_COLOR);
 
         //Fondo apagar
-        mylcd.Fill_Rect(432, 225, 48, 48, apagar_c1);
+        // mylcd.Fill_Rect(432, 225, 48, 48, apagar_c1);
         //Icono apagar
-        mylcd.Fill_Rect(444, 265, 24, 4, apagar_c2);
-        mylcd.Fill_Rect(440, 261,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(464, 261,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(436, 257,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(468, 257,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(436, 253,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(472, 253,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(436, 249,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(472, 249,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(436, 245,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(452, 245,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(472, 245,  4, 4, apagar_c2);
-        mylcd.Fill_Rect(436, 241,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(452, 241,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(468, 241,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(440, 237,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(452, 237,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(464, 237,  8, 4, apagar_c2);
-        mylcd.Fill_Rect(444, 233, 24, 4, apagar_c2);
-        mylcd.Fill_Rect(452, 229,  8, 4, apagar_c2);
+        mylcd.Fill_Rect(444, 265, 24, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(440, 261,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(464, 261,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(436, 257,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(468, 257,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(436, 253,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(472, 253,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(436, 249,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(472, 249,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(436, 245,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(452, 245,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(472, 245,  4, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(436, 241,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(452, 241,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(468, 241,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(440, 237,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(452, 237,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(464, 237,  8, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(444, 233, 24, 4, POWER_ICON_COLOR);
+        mylcd.Fill_Rect(452, 229,  8, 4, POWER_ICON_COLOR);
     }
 
-    void marcoMenuPrincipal(LCDWIKI_KBV mylcd) {
+    void marcoMenuPrincipal(LCDWIKI_KBV& mylcd) {
         //Verticales menu principal
         mylcd.Fill_Rect(424,   0, 8, 280, WHITE);
         mylcd.Fill_Rect(113, 273, 8,  56, WHITE);
@@ -133,7 +134,7 @@ namespace display {
         mylcd.Fill_Rect(  0, 273, 480, 8, WHITE);
     }
 
-    void pintarCampo(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+    void pintarCampo(LCDWIKI_KBV& mylcd, boolean campo, int spawn) {
         mylcd.Fill_Rect(  8, 8, 416, 233, BLACK);
 
         //Marco del campo
@@ -142,10 +143,10 @@ namespace display {
         mylcd.Draw_Rectangle(8, 121, 416, 233);
 
         if(campo) {
-            mylcd.Set_Draw_color(DARKGREEN);
+            mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
             mylcd.Fill_Rectangle(9, 9, 415, 119);
         } else {
-            mylcd.Set_Draw_color(DARKBLUE);
+            mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
             mylcd.Fill_Rectangle(9, 122, 415, 232);
         }
         mylcd.Set_Draw_color(WHITE);
@@ -207,7 +208,7 @@ namespace display {
         }
     }
 
-    void pintarSpawn(LCDWIKI_KBV mylcd, boolean campo, int spawn) {
+    void pintarSpawn(LCDWIKI_KBV& mylcd, boolean campo, int spawn) {
         mylcd.Set_Draw_color(WHITE);
 
         switch(spawn) {
@@ -219,7 +220,7 @@ namespace display {
                     mylcd.Fill_Rectangle(  9, 187,  54, 232);
                     mylcd.Fill_Rectangle(129, 187, 182, 232);
                 } else {
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(  9, 187,  54, 232);
                     mylcd.Fill_Rectangle(129, 187, 182, 232);
                 }
@@ -230,14 +231,14 @@ namespace display {
                 mylcd.Fill_Rectangle(128,   8, 183,  55);
 
                 if(campo) {
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(  9,   9,  54,  54);
                     mylcd.Set_Draw_color(BLACK);
                     mylcd.Fill_Rectangle(  9, 187,  54, 232);
                 } else {
                     mylcd.Set_Draw_color(BLACK);
                     mylcd.Fill_Rectangle(  9,   9,  54,  54);
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(  9, 187,  54, 232);
                 }
 
@@ -247,7 +248,7 @@ namespace display {
                 mylcd.Fill_Rectangle(248,   8, 303,  55);
 
                 if(campo) {
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
                     mylcd.Fill_Rectangle(129,   9, 182,  54);
                     mylcd.Fill_Rectangle(  9,   9,  54,  54);
                 } else {
@@ -262,7 +263,7 @@ namespace display {
                 mylcd.Fill_Rectangle(369,   8, 416,  55);
 
                 if(campo) {
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
                     mylcd.Fill_Rectangle(249,   9, 302,  54);
                     mylcd.Fill_Rectangle(129,   9, 182,  54);
                 } else {
@@ -277,7 +278,7 @@ namespace display {
                 mylcd.Fill_Rectangle(369,  65, 416, 112);
 
                 if(campo) {
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
                     mylcd.Fill_Rectangle(370,   9, 415,  54);
                     mylcd.Fill_Rectangle(249,   9, 302,  54);
                 } else {
@@ -292,7 +293,7 @@ namespace display {
                 mylcd.Fill_Rectangle(369, 129, 416, 177);
 
                 if(campo) {
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
                     mylcd.Fill_Rectangle(370,  66, 415, 111);
                     mylcd.Fill_Rectangle(370,   9, 415,  54);
                 } else {
@@ -309,10 +310,10 @@ namespace display {
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
                     mylcd.Fill_Rectangle(370, 130, 415, 176);
-                    mylcd.Set_Draw_color(DARKGREEN);
+                    mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
                     mylcd.Fill_Rectangle(370,  66, 415, 111);
                 } else {
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(370, 130, 415, 176);
                     mylcd.Set_Draw_color(BLACK);
                     mylcd.Fill_Rectangle(370,  66, 415, 111);
@@ -328,7 +329,7 @@ namespace display {
                     mylcd.Fill_Rectangle(370, 187, 415, 232);
                     mylcd.Fill_Rectangle(370, 130, 415, 176);
                 } else {
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(370, 187, 415, 232);
                     mylcd.Fill_Rectangle(370, 130, 415, 176);
                 }
@@ -343,7 +344,7 @@ namespace display {
                     mylcd.Fill_Rectangle(249, 187, 302, 232);
                     mylcd.Fill_Rectangle(370, 187, 415, 232);
                 } else {
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(249, 187, 302, 232);
                     mylcd.Fill_Rectangle(370, 187, 415, 232);
                 }
@@ -358,7 +359,7 @@ namespace display {
                     mylcd.Fill_Rectangle(129, 187, 182, 232);
                     mylcd.Fill_Rectangle(249, 187, 302, 232);
                 } else {
-                    mylcd.Set_Draw_color(DARKBLUE);
+                    mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
                     mylcd.Fill_Rectangle(129, 187, 182, 232);
                     mylcd.Fill_Rectangle(249, 187, 302, 232);
                 }
@@ -367,115 +368,10 @@ namespace display {
         }
     }
 
-    void pintarPlan(LCDWIKI_KBV mylcd, int plan) {
-        mylcd.Set_Draw_color(BLACK);
-        mylcd.Fill_Rectangle(8, 241, 420, 265);
-        mylcd.Set_Draw_color(WHITE);
-
-        switch(plan) {
-            case 1:
-                escribirTexto(mylcd, WHITE, 3, "Plan agresivo", 8, 241);
-                break;
-            case 2:
-                escribirTexto(mylcd, WHITE, 3, "Plan defensivo", 8, 241);
-                break;
-            case 3:
-                escribirTexto(mylcd, WHITE, 3, "Plan a medio campo", 8, 241);
-                break;
-            case 4:
-                escribirTexto(mylcd, WHITE, 3, "Plan cuarto de campo", 8, 241);
-                break;
-            case 5:
-                escribirTexto(mylcd, WHITE, 3, "Explotar robot", 8, 241);
-                break;
-        }
-    }
-    
-    void escribirTexto(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String texto,
-    int coordenada_X, int coordenada_Y) {
+    void escribirTexto(LCDWIKI_KBV &mylcd, uint16_t color, uint8_t tamanno, String texto, int coordenada_X, int coordenada_Y) {
         mylcd.Set_Text_colour(color);
         mylcd.Set_Text_Size(tamanno);
         mylcd.Print_String(texto, coordenada_X, coordenada_Y);
     }
-
-    void ordenarErrores(String errores[13], String error) {
-        String linea;
-        int longitudLinea = 32;
-
-        while(error.length() > 0) {
-            linea = "";
-
-            //Ultima linea
-            if(error.length() < longitudLinea) {
-                linea += error.substring(0, error.length());
-                error.remove(0, error.length());
-            //Resto de lineas
-            } else {
-                //Mientras la suma de la longitud de la varible linea mas la longitud de la seccion del texto
-                //hasta el primer espacio en blanco sea menor que la linea maxima permitida hacer
-                while(linea.length() + error.indexOf(" ") < longitudLinea && !(error.indexOf(" ") == -1)) {
-                    //Insertar la seccion del texto hasta el primer espacio en blanco en linea y borrarla de texto
-                    linea += error.substring(0, error.indexOf(" ") + 1);
-                    error.remove(0, error.indexOf(" ") + 1);
-                }
-            }
-
-            //Recolocación de las lineas para insertar nuevas, todas se desplazan una posicion
-            //hacia la izquierda en el array, si el array no esta lleno tan solo se insertan
-            for(int i = 0; i < 13; i++) {
-                if(errores[i] == "") {
-                    errores[i] = linea;
-                    i = 13;
-                } else if(i == 12) {
-                    for(int j = 0; j < 13; j++) {
-                        if(j != 12)
-                            errores[j] = errores[j + 1];
-                        else
-                            errores[j] = linea;
-                    }
-                }
-            }
-        }
-    }
-
-    //Si no hay interrupciones devuelve 0, si las hay devuelve el codigo del menu que hay que ejecutar
-    int escribirErrores(LCDWIKI_KBV mylcd, uint16_t color, uint8_t tamanno, String errores[13],
-    uint8_t coordenada_X, uint8_t coordenada_Y, int menuActual, int secundario_b1) {
-        boolean pausa = false;
-        boolean estadoSecundario_1 = false;
-        //Variables para el parrafo
-        int interlineado = 20;
-        int menuDevuelto;
-        mylcd.Set_Text_colour(color);
-        mylcd.Set_Text_Size(tamanno);
-
-        //Limpiar zona de escritura
-        mylcd.Fill_Rect(  0, 0, 423, 272, BLACK);
-
-        for(int i = 0; i < 13; i++) {
-            //Ventana de medio segundo antes de pintar cada linea para comprobar botones principales
-            for(uint32_t inicio = millis(); millis() - inicio < 500;) {
-                if((menuDevuelto = checkButtons::mirarBotonesPrincipal(menuActual)) != 0)
-                    return menuDevuelto;
-
-                if(digitalRead(secundario_b1))
-                    estadoSecundario_1 = false;
-
-                //Control de las dobles pulsaciones
-                if(!digitalRead(secundario_b1) && !pausa && !estadoSecundario_1) {
-                    pausa = true;
-                    estadoSecundario_1 = true;
-                } else if(!digitalRead(secundario_b1) && pausa && !estadoSecundario_1) {
-                    pausa = false;
-                    estadoSecundario_1 = true;
-                }
-
-                //Control de la pausa
-                if(pausa)
-                    inicio = millis();
-            }
-            mylcd.Print_String(errores[i], coordenada_X, coordenada_Y + i * interlineado);
-        }
-        return 0;
-    }
 }
+

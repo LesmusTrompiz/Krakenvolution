@@ -66,7 +66,6 @@ BT::NodeStatus GoToPoseBTNode::tick()
             return BT::NodeStatus::RUNNING;
             break;
         case RUNNING:
-            
             if(order_result == rclcpp_action::ResultCode::SUCCEEDED){
                 std::cout << "SUCCEED";
                 request_state = IDLE;
