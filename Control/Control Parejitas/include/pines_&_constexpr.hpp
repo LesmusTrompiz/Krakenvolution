@@ -2,14 +2,12 @@
 
 // Pines de control de la tracción
 // PWMH5
-#define I_PWM 		44
-#define I_EN 			46
-#define I_DIR  		42
-#define I_STOP 		50
+#define I_DIR  		46
+#define I_EN 		44
+#define I_PWM 		42
 // PWMH6
-#define D_STOP 		51
 #define D_DIR  		43
-#define D_EN 			47
+#define D_EN 		47
 #define D_PWM 		45
 // Pines de encoder de motores
 #define Enc_D 		25

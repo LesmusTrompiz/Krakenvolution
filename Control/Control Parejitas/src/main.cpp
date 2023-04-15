@@ -13,9 +13,9 @@
 uahruart::parser::Protocol protocol;
 
 /* Servos */
-Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
-auto servo_brazo_derecha 				= RobotServo(brazo_derecho, ServoHandlerMaster);
-auto servo_brazo_izquierda	    = RobotServo(brazo_izquierdo, ServoHandlerMaster);
+Adafruit_PWMServoDriver ServoHandlerMaster 	= Adafruit_PWMServoDriver(0x40);
+auto servo_brazo_derecha 					= RobotServo(brazo_derecho, ServoHandlerMaster);
+auto servo_brazo_izquierda	    			= RobotServo(brazo_izquierdo, ServoHandlerMaster);
 //... auto servo_
 
 /* Definición completa de la mecánica del robot */
