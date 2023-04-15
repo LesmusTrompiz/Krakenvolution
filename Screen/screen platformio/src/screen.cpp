@@ -103,13 +103,17 @@ void loop() {
     String arg = "";
     bool reading_cmd = true;
     for (char c : unparsed) {
-      if (c == '\n' || c == '\0')
+      if (c == ':')
         reading_cmd = false;
       else if (reading_cmd)
-        cmd += c;
+        cmd.concat(c);
       else
-        arg += c;
+        arg.concat(c);
     }
+
+    cmd.trim();
+    arg.trim();
+
     // Interpret message
     if (cmd.equals("score")) {
       context.score = arg.toInt();
