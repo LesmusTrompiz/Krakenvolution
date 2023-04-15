@@ -14,7 +14,7 @@ uahruart::parser::Protocol protocol;
 /* Servos */
 Adafruit_PWMServoDriver ServoHandlerMaster = Adafruit_PWMServoDriver(0x40);
 auto servo_disparador = RobotServo(pwm_disparador, ServoHandlerMaster);
-//auto servo_...
+// auto servo_...
 
 /* Definición completa de la mecánica del robot */
 
@@ -82,7 +82,7 @@ void setup_serial_protocol()
 {
     protocol.on_write([](const char* msg) 
 		{
-        SerialUSB.println(msg);
+        Serial.println(msg);
     });
 
     // Register methods
@@ -129,7 +129,7 @@ void setup()
 	ServoHandlerMaster.begin();
 	ServoHandlerMaster.setPWMFreq(50);
 	// Serial conf
-	SerialUSB.begin(115200);
+	Serial.begin(115200);
   setup_serial_protocol();
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);

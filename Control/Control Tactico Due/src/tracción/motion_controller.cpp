@@ -257,26 +257,26 @@ void motion_controller::move_control()
     {
       // Velocidad de crucero
       // Actualizamos la velocidad
-      // Serial.println("Vc");
+      Serial.println("Vc");
       motores.rmotor_vel = param_mecanicos.vel_max;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_max;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad)*(param_mecanicos.diam_rueda/2))
     {
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = param_mecanicos.vel_freno;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else
     {    
       // Parar los motores
       motores.rmotor_vel = 0;
-      motores.set_vel_rmotor();
       motores.lmotor_vel = 0;
+      motores.set_vel_rmotor();
       motores.set_vel_lmotor();      
       }
   }
