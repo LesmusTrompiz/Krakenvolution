@@ -1,7 +1,9 @@
+#include "display.hpp"
 #include "menus.hpp"
 
 void menus::strat_menu_start(menus::ApplicationContext& ctx) {
-
+  ctx.playzone.trigger();
+  ctx.starting_position.trigger();
 }
 
 void menus::strat_menu_update(ApplicationContext& ctx) {
@@ -12,11 +14,28 @@ void menus::strat_menu_update(ApplicationContext& ctx) {
         display::rgb_to_565(255, 0, 0) : display::rgb_to_565(0, 255, 0));
     colored = !colored;
   }
+
+  if (reactive::CHECK || ctx.playzone || ctx.starting_position) {
+    display::pintarCampo(ctx.lcd, ctx.playzone, ctx.starting_position);
+  }
+}
+
+// Context callbacks
+void change_field(menus::ApplicationContext& ctx) {
+  ctx.playzone = !ctx.playzone;
+}
+
+void change_starting_position(menus::ApplicationContext& ctx) {
+  int pos = ctx.starting_position;
+  ++pos %= 5;
+  ctx.starting_position = pos;
 }
 
 menus::ContextMenuEntry strat_menus[4] = {
-  menus::ContextMenuEntry("")
+  menus::ContextMenuEntry("Campo", &change_field),
+  menus::ContextMenuEntry("Start", &change_starting_position)
 };
+
 
 menus::ContextMenuEntry* menus::strat_ctx_menus() {
   return strat_menus;

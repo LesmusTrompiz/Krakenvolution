@@ -8,6 +8,7 @@ void menus::lidar_menu_update(ApplicationContext &) {
 
 }
 
+
 menus::ContextMenuEntry lidar_menus[4] = {
   menus::ContextMenuEntry("")
 };

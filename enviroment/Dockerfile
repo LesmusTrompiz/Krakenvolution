@@ -44,6 +44,13 @@ RUN mv /Groot /usr/bin/groot
 WORKDIR /
 RUN rm -rvf /Groot
 
+# Install editor
+RUN apt install -y software-properties-common
+RUN add-apt-repository -y ppa:neovim-ppa/unstable
+RUN apt update
+RUN apt install -y neovim
+RUN git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+RUN git clone https://github.com/DiegoMoralesRoman/AstroNVIMConfig ~/.config/nvim/lua/user
 
 # Display configuration
 ENV DISPLAY=:0

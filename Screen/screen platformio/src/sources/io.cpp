@@ -10,7 +10,7 @@ struct Button {
 };
 
 Button PRIMARY_MENU_BUTTONS[] = {43, 41, 39, 37, 35};
-Button CONTEXT_MENU_BUTTONS[] = {53, 51, 49, 47};
+Button CONTEXT_MENU_BUTTONS[] = {47, 49, 51, 53};
 constexpr size_t NUMBER_PRIMARY_BUTTONS = sizeof(PRIMARY_MENU_BUTTONS) / sizeof(Button);
 constexpr size_t NUMBER_CONTEXT_BUTTONS = sizeof(CONTEXT_MENU_BUTTONS) / sizeof(Button);
 
