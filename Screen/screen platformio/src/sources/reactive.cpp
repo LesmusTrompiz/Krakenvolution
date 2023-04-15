@@ -25,6 +25,11 @@ void ReactiveValue<T>::trigger() {
   m_changed = true;
 }
 
+template<typename T>
+bool ReactiveValue<T>::check() const {
+  return m_changed;
+}
+
 // OrCombinator
 
 ___impl::OrCombinator::OrCombinator(const bool starting_value)

@@ -9,7 +9,8 @@ void menus::stats_menu_update(ApplicationContext & ctx) {
   if (reactive::CHECK || ctx.score) {
     String formatted = "Score: ";
     formatted += ctx.score;
-    ctx.lcd.Fill_Rect(0, 0, 100, 30, display::BLACK);
+    ctx.lcd.Set_Text_Back_colour(display::BLACK);
+    ctx.lcd.Set_Text_Mode(display::DRAW_BG); 
     display::escribirTexto(ctx.lcd, display::WHITE, 2, formatted, 0, 0);
   }
 }

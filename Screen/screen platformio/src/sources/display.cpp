@@ -375,3 +375,67 @@ namespace display {
     }
 }
 
+// Segmented text
+using namespace display;
+
+SegmentedText::SegmentedText(const char *txt, size_t x, size_t y, size_t width, size_t height) 
+    : m_txt(txt), x(x), y(y), width(width), height(height) {
+    reset();
+}
+
+SegmentedText::SegmentedText(const char* txt, size_t x, size_t y) 
+    : m_txt(txt), x(x), y(y), width(-1), height(-1) {
+    reset();
+}
+
+void SegmentedText::reset() {
+    m_index = 0;
+    m_writing = true;
+    last_x = x;
+    last_y = y;
+}
+
+void SegmentedText::update(LCDWIKI_KBV& lcd) {
+    if (!m_writing)
+        return;
+    // Get text dimensions
+    size_t CHAR_WIDTH = 6 * lcd.Get_Text_Size() - 1;
+    size_t CHAR_HEIGHT = 8 * lcd.Get_Text_Size() - 1;
+    char CURRENT_CHAR = m_txt[m_index];
+    m_index++;
+
+    auto newline = [=, &lcd, this]() {
+        last_y += CHAR_HEIGHT;
+        last_x = x;
+    };
+
+    // Print character
+    switch (CURRENT_CHAR) {
+        case '\0':
+            m_writing = false;
+            break;
+        case '\n':
+            newline();
+            break;
+        default:
+            // Check boundaries
+            if ((last_x + CHAR_WIDTH * 2) >= (x + width)) {
+                newline();
+            } else {
+                last_x += CHAR_WIDTH;
+            }
+            if ((last_y - y) >= (height)) {
+                m_writing = false;
+                break;
+            }
+
+            // Write character to LCD 
+            // lcd.Set_Text_Cousur(last_x, last_y);
+            auto color = lcd.Get_Text_colour();
+            auto bg = lcd.Get_Text_Back_colour();
+            auto size = lcd.Get_Text_Size();
+            auto mode = lcd.Get_Text_Mode();
+
+            lcd.Draw_Char(last_x, last_y, CURRENT_CHAR, color, bg, size, mode);
+    }
+}

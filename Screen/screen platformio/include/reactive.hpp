@@ -16,6 +16,7 @@ class ReactiveValue {
   operator T() const;
 
   void trigger();
+  bool check() const;
 
   // ___impl::OrCombinator changed() const;
 
