@@ -6,8 +6,13 @@
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
 
-/* Definición completa del robot */
+/* Iniciamos el protocolo */
+uahruart::parser::Protocol protocol;
 
+/* Servos */
+// Adafruit_PWMServoDriver ServoHandlerMaster = ...
+
+/* Definición completa del robot */
 Param_mecanicos mecanica_tactico(
  tactico_acel,
  tactico_decel,
@@ -66,6 +71,50 @@ void int_odom_izquierda()
 		controlador_tactico.odom.cuentas_izquierda--;
 }
 
+/* Odom updates */
+unsigned long long last_odom_update = millis();
+constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
+bool pending_last_odom = true;
+
+/* Registro de métodos en el protocolo de comunicación */
+void setup_serial_protocol() 
+{
+    protocol.on_write([](const char* msg) 
+		{
+        Serial.println(msg);
+    });
+
+    // Register methods
+    protocol.register_method("traction", "turn", [](int32_t arg) 
+		{
+        controlador_tactico.ref_ang = static_cast<float>(arg);
+        controlador_tactico.prev_move_calculus(0);
+        return uahruart::messages::ActionFinished::TRACTION;
+    });
+
+    protocol.register_method("traction", "advance", [](int32_t arg)
+		{
+        controlador_tactico.ref_distancia = static_cast<float>(arg);
+        controlador_tactico.prev_move_calculus(1);
+        return uahruart::messages::ActionFinished::TRACTION;
+    });
+
+    protocol.register_method("admin", "reset", [](int32_t arg) 
+		{
+        rstc_start_software_reset(RSTC);
+        return uahruart::messages::ActionFinished::NONE;
+    });
+
+    on_finished([]() 
+		{
+			uahruart::messages::ActionFinished action;
+			action.action = uahruart::messages::ActionFinished::TRACTION;
+      protocol.send(action);
+      odom_tactico = controlador_tactico.odom;
+      pending_last_odom = true;
+    });
+}
+
 /* Configuraciones y bucle de control */
 void setup() 
 {
@@ -103,6 +152,24 @@ void setup()
 void loop() 
 {
 	serialEvent();
+	// Update odometry
+	if (pending_last_odom) {
+		uahruart::messages::Odometry odom;
+		odom.x = odom_tactico.pose_actual.x;
+		odom.y = odom_tactico.pose_actual.y;
+		odom.o = odom_tactico.pose_actual.alfa;
+		if (protocol.send(odom))
+			pending_last_odom = false;
+	}
+	unsigned long long current_time = millis();
+	if (current_time > (last_odom_update + ODOM_UPDATE_TIME)) {
+		last_odom_update = current_time;
+		uahruart::messages::Odometry odom;
+		odom.x = controlador_tactico.odom.pose_actual.x;
+		odom.y = controlador_tactico.odom.pose_actual.y;
+		odom.o = controlador_tactico.odom.pose_actual.alfa;
+		protocol.send(odom);
+	}
 }
 
 /* Bucle de control -> TC2 Handler*/
