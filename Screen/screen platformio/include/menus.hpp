@@ -44,8 +44,10 @@ namespace menus {
 
     // Reactive variables
     reactive::Int score;
-    reactive::Bool playzone;
+    reactive::Bool playzone = true;
     reactive::Int starting_position = 1;
+    reactive::Int plan = 1;
+    reactive::Bool lidar = true;
     reactive::Bool pendrive_plugged = false;
     reactive::Bool config_confirmed = false;
   };

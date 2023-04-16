@@ -25,7 +25,7 @@ namespace display {
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
 
         mylcd.Fill_Rect(432,  selected * 56, 48, 49, GRAY);
-        //Fondo estadistica
+
         //Icono estadistica
         mylcd.Fill_Rect(436, 33, 8, 8, STATISTICS_ICON_COLOR);
         mylcd.Fill_Rect(440, 25, 8, 8, STATISTICS_ICON_COLOR);
@@ -35,8 +35,6 @@ namespace display {
         mylcd.Fill_Rect(460, 25, 8, 8, STATISTICS_ICON_COLOR);
         mylcd.Fill_Rect(468, 21, 8, 8, STATISTICS_ICON_COLOR);
 
-        //Fondo caballo
-        // mylcd.Fill_Rect(432, 57, 48, 48, caballo_c1);
         //Icono caballo
         mylcd.Fill_Rect(440, 93, 32, 8, STRATEGY_ICON_COLOR);
         mylcd.Fill_Rect(444, 89, 24, 4, STRATEGY_ICON_COLOR);
@@ -48,8 +46,6 @@ namespace display {
         mylcd.Fill_Rect(448, 65, 20, 4, STRATEGY_ICON_COLOR);
         mylcd.Fill_Rect(452, 61,  8, 4, STRATEGY_ICON_COLOR);
 
-        //Fondo bicho
-        // mylcd.Fill_Rect(432, 113, 48, 48, bicho_c1);
         //Icono bicho
         mylcd.Fill_Rect(444, 153,  4, 4, DEBUG_ICON_COLOR);
         mylcd.Fill_Rect(452, 153, 12, 4, DEBUG_ICON_COLOR);
@@ -73,8 +69,6 @@ namespace display {
         mylcd.Fill_Rect(444, 117,  8, 4, DEBUG_ICON_COLOR);
         mylcd.Fill_Rect(460, 117,  8, 4, DEBUG_ICON_COLOR);
 
-        //Fondo lidar
-        // mylcd.Fill_Rect(432, 169, 48, 48, lidar_c1);
         //Icono lidar
         mylcd.Fill_Rect(436, 205, 40, 8, LIDAR_ICON_COLOR);
         mylcd.Fill_Rect(436, 201,  4, 4, LIDAR_ICON_COLOR);
@@ -94,8 +88,6 @@ namespace display {
         mylcd.Fill_Rect(464, 177,  4, 4, LIDAR_ICON_COLOR);
         mylcd.Fill_Rect(448, 173, 16, 4, LIDAR_ICON_COLOR);
 
-        //Fondo apagar
-        // mylcd.Fill_Rect(432, 225, 48, 48, apagar_c1);
         //Icono apagar
         mylcd.Fill_Rect(444, 265, 24, 4, POWER_ICON_COLOR);
         mylcd.Fill_Rect(440, 261,  8, 4, POWER_ICON_COLOR);
@@ -404,7 +396,7 @@ void SegmentedText::update(LCDWIKI_KBV& lcd) {
     char CURRENT_CHAR = m_txt[m_index];
     m_index++;
 
-    auto newline = [=, &lcd, this]() {
+    auto newline = [=, &lcd]() {
         last_y += CHAR_HEIGHT;
         last_x = x;
     };

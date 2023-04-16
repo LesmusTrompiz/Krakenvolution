@@ -4,6 +4,7 @@
 void menus::strat_menu_start(menus::ApplicationContext& ctx) {
   ctx.playzone.trigger();
   ctx.starting_position.trigger();
+  ctx.plan.trigger();
   ctx.config_confirmed.trigger();
 }
 
@@ -25,16 +26,27 @@ void menus::strat_menu_update(ApplicationContext& ctx) {
 
 // Context callbacks
 void change_field(menus::ApplicationContext& ctx) {
+  int pos = ctx.starting_position;
+  pos %= 10;
+  ++pos;
+
   ctx.playzone = !ctx.playzone;
+  ctx.starting_position = pos;
   ctx.config_confirmed = false;
 }
 
 void change_starting_position(menus::ApplicationContext& ctx) {
   int pos = ctx.starting_position;
-  ++pos %= 5;
+
+  if(pos != 0)
+    ++pos;
+  pos %= 10;
+  ++pos;
   ctx.starting_position = pos;
   ctx.config_confirmed = false;
 }
+
+void plan(menus::ApplicationContext& ctx) {}
 
 void validate_config(menus::ApplicationContext& ctx) {
   if (ctx.pendrive_plugged) {
@@ -45,8 +57,8 @@ void validate_config(menus::ApplicationContext& ctx) {
 menus::ContextMenuEntry strat_menus[4] = {
   menus::ContextMenuEntry("Campo", &change_field),
   menus::ContextMenuEntry("Start", &change_starting_position),
-  menus::ContextMenuEntry(),
-  menus::ContextMenuEntry("Valid", &validate_config)
+  menus::ContextMenuEntry("Plan"),
+  menus::ContextMenuEntry(" Valid", &validate_config)
 };
 
 
