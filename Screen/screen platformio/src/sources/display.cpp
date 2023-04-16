@@ -146,7 +146,7 @@ namespace display {
             mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
             mylcd.Fill_Rectangle(9, 9, 415, 119);
         } else {
-            mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
+            mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
             mylcd.Fill_Rectangle(9, 122, 415, 232);
         }
         mylcd.Set_Draw_color(WHITE);

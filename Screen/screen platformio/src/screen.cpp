@@ -66,8 +66,6 @@ void loop() {
     if (e.unwrap() != last_pressed) {
       // Change menu
       context.current_menu = &context.primary_menus[e.unwrap()];
-      Serial.print("Se ha cambiado al menú ");
-      Serial.println(e.unwrap());
       
       context.lcd.Fill_Screen(display::BLACK);
       display::marcoMenuPrincipal(context.lcd);
@@ -117,6 +115,18 @@ void loop() {
     // Interpret message
     if (cmd.equals("score")) {
       context.score = arg.toInt();
+    } else if (cmd.equals("pendrive")) {
+      context.pendrive_plugged = arg.equals("true");
+      if (!context.pendrive_plugged && context.config_confirmed) {
+        // Send configuration to robot uwu
+        String formatted = "{play_site:\""; // tree play_site spawn
+        formatted += context.playzone ? "green":"blue";
+        formatted += "\",spawn:";
+        formatted += context.starting_position;
+        formatted += "}";
+        Serial.println(formatted);
+        context.config_confirmed = false;
+      }
     }
   }
 

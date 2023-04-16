@@ -46,6 +46,8 @@ namespace menus {
     reactive::Int score;
     reactive::Bool playzone;
     reactive::Int starting_position = 1;
+    reactive::Bool pendrive_plugged = false;
+    reactive::Bool config_confirmed = false;
   };
 
   ContextMenuEntry* stats_ctx_menus();
