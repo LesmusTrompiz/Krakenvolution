@@ -3,6 +3,7 @@
 #include <thread>
 #include <unistd.h>
 #include "rclcpp/rclcpp.hpp"
+#include "tf2_ros/transform_broadcaster.h"
 
 uahruart::parser::Protocol protocol;
 
@@ -13,8 +14,6 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
 
   // Servicio que permite modificar el valor de la odometria, desde otros nodos.
   // Es util llamarlo cuando se inicializa el spawn y ese tipo de cosas.
-  reset_service = this->create_service<uahrk_navigation_msgs::srv::SetPose2d>("set_pose", 
-      std::bind(&SerialBridgeNode::set_pose, this, _1 ,_2));
 
   stop_service = this->create_service<std_srvs::srv::Empty>("stop", 
       std::bind(&SerialBridgeNode::stop, this, _1 ,_2));
@@ -98,7 +97,9 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
     if ((m_handles[uahruart::messages::ActionFinished::TRACTION] != nullptr) && m_pending_last_odom) {
       m_pending_last_odom = false;
       auto result   = std::make_shared<Order::Result>();
-      std::cout << "SUCCED \n";
+      result->last_odom.x = pose.x;
+      result->last_odom.y = pose.y;
+      result->last_odom.theta = pose.a;
       m_handles[uahruart::messages::ActionFinished::TRACTION]->succeed(result);
       m_handles[uahruart::messages::ActionFinished::TRACTION] = nullptr;
     }
@@ -144,15 +145,15 @@ void SerialBridgeNode::set_pose(
     
     Simplemente asigna el valor de la petición al de la odometría.
   */
-  odom.x = request->x;
-  odom.y = request->y;
-  odom.a = request->a;
+  //odom.x = request->x;
+  //odom.y = request->y;
+  //odom.a = request->a;
 
-  RCLCPP_INFO(this->get_logger(), "Setting pose by service to: x: %f y: %f a: %f", request->x
-  , request->y, request->a);
+  //RCLCPP_INFO(this->get_logger(), "Setting pose by service to: x: %f y: %f a: %f", request->x
+  //, request->y, request->a);
 }
 
-void stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+void SerialBridgeNode::stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
   std::shared_ptr<std_srvs::srv::Empty::Response> response){
       
   // Mandar mensaje stop

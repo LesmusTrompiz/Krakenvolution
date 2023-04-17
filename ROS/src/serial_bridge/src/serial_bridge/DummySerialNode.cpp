@@ -56,6 +56,7 @@ void DummySerialBridgeNode::control_cycle(){
   // Variables auxiliares.
   int n = 0;                                                    // n sirve para llevar la cuenta en el bucle
   std::vector<int> succeed_fns;                                 // almacena el indice de las funciones que ya han acabado
+  std::cout << "Tick \n" << std::endl;
   
   // Recorremos todas las funciones de simulación
   // y en caso de que hallan acabado almacenamos 
@@ -152,12 +153,15 @@ void DummySerialBridgeNode::handle_accepted(const std::shared_ptr<GoalOrder> goa
     // de indicarle al cliente que la petición ha finalizado.
     auto f = [request =std::move(goal_handle), sim_fn](Pose2d &odom, int16_t &arg) { 
       auto result   = std::make_shared<Order::Result>();
-      
+      std::cout << "Tick lambda\n" << std::endl;
       // Simular la acción
       auto succeed  = sim_fn->second(odom,arg);
       
       // Si acaba notificar al cliente
-      if (succeed) request->succeed(result);
+      if (succeed){
+        request->succeed(result);
+        std::cout << "SUCCED" << std::endl;
+      } 
       return succeed;
     };
 
@@ -187,11 +191,11 @@ void DummySerialBridgeNode::set_pose(
     
     Simplemente asigna el valor de la petición al de la odometría.
   */
-  odom.x = request->x;
-  odom.y = request->y;
-  odom.a = request->a;
-
-  RCLCPP_INFO(this->get_logger(), "Setting pose by service to: x: %f y: %f a: %f", request->x
-  , request->y, request->a);
+ // odom.x = request->x;
+ // odom.y = request->y;
+ // odom.a = request->a;
+//
+// // RCLCPP_INFO(this->get_logger(), "Setting pose by service to: x: %f y: %f a: %f", request->x
+ // , request->y, request->a);
 }
 

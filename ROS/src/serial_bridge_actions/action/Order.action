@@ -3,5 +3,6 @@ string  id
 int16   arg
 ---
 int16   ret
+geometry_msgs/Pose2D last_odom
 ---
 bool    sent
