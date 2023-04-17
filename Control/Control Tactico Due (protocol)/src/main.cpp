@@ -1,5 +1,3 @@
-#define debug_mode
-
 #include <Arduino.h>
 #include <eurouart.hpp>
 #include <motion_controller.hpp>
@@ -73,8 +71,8 @@ void int_odom_izquierda()
 
 /* Odom updates */
 unsigned long long last_odom_update = millis();
-constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
-bool pending_last_odom = true;
+constexpr unsigned long long ODOM_UPDATE_TIME = 100;
+bool pending_last_odom = false;
 
 /* Registro de métodos en el protocolo de comunicación */
 void setup_serial_protocol() 
@@ -146,7 +144,7 @@ void setup()
 	controlador_tactico.motores.encender_motores();
 
 	// Check...
-	Serial.println("Configuration done...");
+	setup_serial_protocol();
 }
 
 void loop() 

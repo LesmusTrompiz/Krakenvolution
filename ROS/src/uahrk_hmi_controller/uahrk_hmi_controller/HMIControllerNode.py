@@ -11,7 +11,6 @@ from os import system
 from sys import argv
 import threading
 
-
 def reboot():
     system('reboot')
 
@@ -22,7 +21,7 @@ def halt():
 
 class HMIControllerNode(Node):
     def __init__(self, device_port : str):
-        Node.__init__(self,'hmi_controller')
+        super().__init__('hmi_controller')
         
         # Own Attributes:
         self.params              = {}
@@ -46,7 +45,7 @@ class HMIControllerNode(Node):
         self.set_params_client   = self.create_client(SetParameters, "/DecisionTree/set_parameters")
         self.srv_reset_params    = self.create_service(Empty, '/reset_params', self.cb_reset_params)
         self.srv_pendrive_state  = self.create_service(SetBool, '/pendrive_status', self.cb_pendrive_state)
-        self.points_subscriber   = self.create_subscription(UInt16, '/points', self.cb_points)
+        self.points_subscriber   = self.create_subscription(UInt16, '/points', self.cb_points, 10)
 
         # ROS Timer to execute the tick function:
         timer_period = 0.1
@@ -79,6 +78,7 @@ class HMIControllerNode(Node):
             to the pendrive state attribute.
         '''
 
+        self.send_msg('pendrive', str(request.data).lower())
         self.pendrive_pluged = request.data
         return response
 
@@ -89,10 +89,10 @@ class HMIControllerNode(Node):
         '''
         self.points = points.data
         self.points_update = True
-        self.send_msg('points', str(self.points))
+        self.send_msg('score', str(self.points))
         
 
-    def update_params(self, params : Dict[str : str]):
+    def update_params(self, params : Dict[str, str]):
         '''
         
         
@@ -119,6 +119,7 @@ class HMIControllerNode(Node):
         read = ''
         while not self.get_node().is_shutdown():
             msg = self.serial_device.read().decode('ascii')
+            print(f'msg: {msg}')
             if msg == '\n' or msg == '\0':
                 try:
                     decoded = json.loads(read)
@@ -154,6 +155,7 @@ class HMIControllerNode(Node):
         return parameters, actions
 
     def tick_node(self):
+        pass
         # msg = self.read_port()
         # if msg:
         #     decode_json     = json.load(msg)

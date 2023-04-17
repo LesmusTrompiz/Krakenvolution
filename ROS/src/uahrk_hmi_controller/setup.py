@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'hmi_controller = uahrk_hmi_controller.SequencerNode:main',
+            'hmi_controller = uahrk_hmi_controller.HMIControllerNode:main',
         ],
     },
 )
