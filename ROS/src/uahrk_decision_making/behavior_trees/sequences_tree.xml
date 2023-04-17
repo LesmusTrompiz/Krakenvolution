@@ -4,7 +4,7 @@
     <BehaviorTree ID="BehaviorTree">
         <Sequence>
             <Action ID="Caller" arg="500" device="traction" id="advance"/>
-            <Action ID="Caller" arg="90" device="traction" id="turn"/>
+            <Action ID="Caller" arg="90" device="traction" id="spin"/>
             <Action ID="Caller" arg="250" device="traction" id="advance"/>
         </Sequence>
     </BehaviorTree>

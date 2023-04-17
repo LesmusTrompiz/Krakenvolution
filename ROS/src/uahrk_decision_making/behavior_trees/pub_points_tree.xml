@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Sequence>
+            <Action ID="PubPoints" points="10"/>
+            <Action ID="PubPoints" points="20"/>
+            <Action ID="PubPoints" points="30"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="PubPoints">
+            <input_port default="0" name="points"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

@@ -17,8 +17,8 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# find_package(rclcpp REQUIRED)
-include_directories(/opt/ros/foxy/include)
+find_package(rclcpp REQUIRED)
+#include_directories(/opt/ros/foxy/include)
 find_package(uahrk_navigation_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
@@ -58,6 +58,7 @@ add_library(gotopose_bt_node    SHARED src/uahrk_decision_making/GoToPoseBTNode.
 add_library(waitstart_bt_node   SHARED src/uahrk_decision_making/WaitStartBTNode.cpp)
 add_library(runexternbt_bt_node SHARED src/uahrk_decision_making/RunExternBT_BTNode.cpp)
 add_library(resetparams_bt_node SHARED src/uahrk_decision_making/ResetParamsBTNode.cpp)
+add_library(pub_points_bt_node SHARED src/uahrk_decision_making/PubPointsBTNode.cpp)
 
 # Serialization and other endeavours
 add_library(caller_bt_node SHARED src/uahrk_decision_making/CallerBTNode.cpp)
@@ -69,6 +70,7 @@ list(APPEND plugin_libs
   runexternbt_bt_node
   resetparams_bt_node
   caller_bt_node
+  pub_points_bt_node
 )
 
 foreach(bt_plugin ${plugin_libs})

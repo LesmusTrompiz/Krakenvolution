@@ -5,8 +5,8 @@
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "serial_bridge_actions/action/order.hpp"
 
-#define Order serial_bridge_actions::action::Order
-// using Order = serial_bridge_actions::action::Order;
+//#define Order serial_bridge_actions::action::Order
+using Order = serial_bridge_actions::action::Order;
 // using Order = serial_bridge_actions::action::Order;
 using RequestHandleOrder = rclcpp_action::ClientGoalHandle<Order>;
 
@@ -19,7 +19,7 @@ class Caller : public BT::ActionNodeBase
         BT::NodeStatus tick();
         static BT::PortsList providedPorts()
         {
-            return BT::PortsList({});
+            return BT::PortsList({BT::InputPort<std::string>("device"), BT::InputPort<std::string>("id"), BT::InputPort<int>("arg") });
         }
         void halt();
 

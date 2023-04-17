@@ -9,7 +9,9 @@ using namespace std::chrono_literals;
 Caller::Caller( const std::string & xml_tag_name, const BT::NodeConfiguration & conf)
     : BT::ActionNodeBase(xml_tag_name, conf){
     config().blackboard->get("node", node_);
-    order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
+    current_state = SENDING_COMMAND;
+
+    order_client = rclcpp_action::create_client<Order>(node_, "serial_bridge_server");
 }
 
 BT::NodeStatus Caller::tick(){
@@ -25,18 +27,30 @@ BT::NodeStatus Caller::tick(){
         auto send_goal_options = rclcpp_action::Client<Order>::SendGoalOptions();
         auto goal_msg = Order::Goal();
         order_result = rclcpp_action::ResultCode::UNKNOWN;
-        
+        send_goal_options.result_callback = std::bind(&Caller::invoke_callback, this, std::placeholders::_1);
+        // send_goal_options.goal_response_callback = std::bind(&Caller::goal_response_callback, this, std::placeholders::_1);
+        goal_msg.device  = device;
+        goal_msg.id  = id;
+        goal_msg.arg = arg;
+        if (!order_client->wait_for_action_server(300ms)){
+          throw std::logic_error("Could not contact the Serial Bridge Server. Throwing an exception");
+        }
+        RCLCPP_INFO(node_->get_logger(), "Sending msg %s %i", id.c_str(), arg);
+        order_client->async_send_goal(goal_msg, send_goal_options);
         current_state = WAITING_RESPONSE;
         break;
       }
       case WAITING_RESPONSE: {
 
       switch (order_result){
+        std::cout << "Order result " << (int)order_result << std::endl;
         case rclcpp_action::ResultCode::SUCCEEDED:
+          current_state = SENDING_COMMAND;
           return BT::NodeStatus::SUCCESS;
           break;
         case rclcpp_action::ResultCode::ABORTED:
         case rclcpp_action::ResultCode::CANCELED:
+          current_state = SENDING_COMMAND;
           return BT::NodeStatus::FAILURE;
           break;
       }
@@ -45,18 +59,11 @@ BT::NodeStatus Caller::tick(){
         break;
       }
     }
+    return BT::NodeStatus::RUNNING;        
 
-    // if (!order_client->wait_for_action_server(300ms)){
-    //   throw std::logic_error("Could not contact the Serial Bridge Server. Throwing an exception");
-    // }
 
-    send_goal_options.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
-    send_goal_options.goal_response_callback = std::bind(&MoveToPoseNode::goal_response_callback, this, std::placeholders::_1);
-    goal_msg.id  = id;
-    goal_msg.arg = arg;
-    RCLCPP_INFO(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);
-    order_client->async_send_goal(goal_msg, send_goal_options);
-    return BT::NodeStatus::RUNNING;
+
+
 }
 
 void Caller::halt(){
@@ -64,6 +71,7 @@ void Caller::halt(){
 }
 
 void Caller::invoke_callback(const RequestHandleOrder::WrappedResult & result) {
+  std::cout << "Result" << std::endl;
   order_result = result.code;
 }
  // namespace br2_bt_bumpgo
