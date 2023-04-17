@@ -26,7 +26,7 @@ class SimuladorTab(QWidget):
         self.SimLayout = QVBoxLayout()
         params = [("play_side",     ["default","blue", "green"]), 
                   ("spawn",         ["default", "1", "2", "3", "4", "5"]),
-                  ("tree",          ["default", "hello_tree"]),
+                  ("tree",          ["default", "hello_tree", "sequences_tree"]),
                   ("ally_tree",     ["default", "1", "2", "3", "4", "5"]),
                   ("start",         ["default", "true"])                  ]
         
