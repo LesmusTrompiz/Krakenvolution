@@ -106,6 +106,7 @@ std::tuple<std::string, int> calculate_move(
 
   auto dist = advance_to_goal(robot_pose, goal_pose);
   auto spin = spin_to_goal(robot_pose.a, goal_pose.a);
+
   if(dist < (dist_precision * 1000)){
     //if(abs(spin) < angle_precision){
     //  std::stringstream error_msg;
@@ -115,7 +116,7 @@ std::tuple<std::string, int> calculate_move(
     //  throw std::invalid_argument(error_msg.str());
     //}
     //else{
-    return {"spin",spin};
+    return {"turn",spin};
     //}
   }
   else{
@@ -124,7 +125,7 @@ std::tuple<std::string, int> calculate_move(
       return {"advance",dist};
     }
     else{
-      return {"spin",spin};
+      return {"turn",spin};
     }
   }
 }

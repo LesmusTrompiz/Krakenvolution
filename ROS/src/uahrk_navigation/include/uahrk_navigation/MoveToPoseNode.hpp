@@ -4,6 +4,8 @@
 #include <string>
 #include "uahrk_navigation/move_utils.hpp"
 #include "geometry_msgs/msg/pose_array.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
+
 
 
 #include "rclcpp/rclcpp.hpp"
@@ -11,6 +13,8 @@
 #include "std_msgs/msg/string.hpp"
 #include "serial_bridge_actions/action/order.hpp"
 #include "uahrk_navigation_msgs/action/path.hpp"
+#include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
+
 #include "tf2/exceptions.h"
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/buffer.h"
@@ -45,7 +49,10 @@ class MoveToPoseNode : public rclcpp::Node
 //    std::shared_ptr<const std::shared_ptr<GoalHandlePath>> actual_handle;
     std::shared_ptr<GoalHandlePath> actual_handle;
     std::shared_ptr<geometry_msgs::msg::PoseArray> path_goal;
+    rclcpp::Client<uahrk_navigation_msgs::srv::SetPose2d>::SharedPtr set_odom_tf_client;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr pub_vel;
 
+    geometry_msgs::msg::TwistStamped actual_vel;
 
 
     rclcpp_action::GoalResponse handle_goal(
@@ -65,6 +72,7 @@ class MoveToPoseNode : public rclcpp::Node
     void goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future);
 
     void send_order(std::string id, int16_t arg);
+
     Pose2d get_robot_pose();
 };
 

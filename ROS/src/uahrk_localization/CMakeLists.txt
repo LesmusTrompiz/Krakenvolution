@@ -14,6 +14,21 @@ find_package(rclcpp REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
+
+set(dependencies
+  rclcpp
+  geometry_msgs
+  Eigen3
+  eigen3_cmake_module
+  tf2 
+  tf2_ros
+  tf2_geometry_msgs
+)
+
 
 
 include_directories(
@@ -31,7 +46,7 @@ target_include_directories(localization_main PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(localization_main rclcpp geometry_msgs)
+ament_target_dependencies(localization_main ${dependencies})
 
 install(TARGETS localization_main
 DESTINATION lib/${PROJECT_NAME})

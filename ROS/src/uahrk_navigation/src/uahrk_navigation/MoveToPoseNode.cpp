@@ -33,11 +33,12 @@ MoveToPoseNode::MoveToPoseNode()
   : Node("move_to_pose_node")
   {
     using namespace std::placeholders;
+    pub_vel = this->create_publisher<geometry_msgs::msg::TwistStamped>("robot_vel", 10);
 
     tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     order_client = rclcpp_action::create_client<Order>(this, "serial_bridge_server");
-    
+    set_odom_tf_client = create_client<uahrk_navigation_msgs::srv::SetPose2d>("reset_odom");
     go_to_pose_server = rclcpp_action::create_server<Path>(
       this,
       "move_server",
@@ -50,11 +51,17 @@ MoveToPoseNode::MoveToPoseNode()
     timer_ = create_wall_timer(
       100ms, std::bind(&MoveToPoseNode::control_cycle, this));  
     RCLCPP_INFO(this->get_logger(), "CONSTRUCTOR -> IDLE STATE");
-    
+    actual_vel.header.frame_id = "odom";
+    actual_vel.header.stamp = this->get_clock()->now();
+
   }
 
 void MoveToPoseNode::control_cycle(){
   auto result = std::make_shared<Path::Result>();
+
+  // Publish Actual Vel
+  pub_vel->publish(actual_vel);
+
 
   switch(state)
   {
@@ -78,7 +85,28 @@ void MoveToPoseNode::control_cycle(){
           goal_pose = {path_goal->poses[actual_wp]};
         }
         auto move = calculate_move(robot_pose, goal_pose, dist_precision, angle_precision);
-        send_order(std::get<0>(move),std::get<1>(move));
+        auto id = std::get<0>(move);
+        auto arg = std::get<1>(move);
+
+        // Update actual vel
+        actual_vel.twist = geometry_msgs::msg::Twist();
+
+        if(id == "turn"){
+          if(arg > 0){
+            actual_vel.twist.angular.z = 1;
+          }else{
+            actual_vel.twist.angular.z = -1;
+          }
+        }
+        else if(id == "advance"){
+          if(arg > 0){
+            actual_vel.twist.linear.x = 1;
+          }else{
+            actual_vel.twist.linear.x = -1;
+          }
+        }
+
+        send_order(id,arg);
         state = WAITING_RESULT;
         return;
       }
@@ -123,9 +151,13 @@ void MoveToPoseNode::control_cycle(){
 void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrder::SharedPtr> future)
 {
   auto goal_handle = future.get();
+
   if (!goal_handle) {
+    actual_vel.header.stamp = this->get_clock()->now();
     RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
   } else {
+    actual_vel.twist = geometry_msgs::msg::Twist();
+
     RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
   }
 }
@@ -149,7 +181,13 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
 }
 
 void MoveToPoseNode::result_callback(const RequestHandleOrder::WrappedResult & result){
+  auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
+  
   order_result = result.code;
+  request->pose = result.result->last_odom;
+  request->header.frame_id = "odom";
+  request->header.stamp = this->get_clock()->now();
+  set_odom_tf_client->async_send_request(request);
 }
 
 
