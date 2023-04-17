@@ -17,7 +17,7 @@
 
 // Parámetros mecánicos
 constexpr float enzima_reductora = 26*26/39; 
-constexpr float enzima_diametro = 52.3; // 72; //67; 
+constexpr float enzima_diametro = 53; // 72; //67; 
 constexpr float enzima_vel_eje_max = 8100 / enzima_reductora;																										
 constexpr float enzima_vel_max = enzima_vel_eje_max * PI / 30;
 constexpr float enzima_pulsos_por_rev = 256;
@@ -30,3 +30,4 @@ constexpr float vel_freno_enzima         = 0.8;
 constexpr float vel_giro_enzima          = 8;
 constexpr float ajuste_dist_recta_enzima = 0.25;
 constexpr float ajuste_dist_giro_enzima  = 0.1;
+constexpr float ajuste_error_enzima      = 0.02;

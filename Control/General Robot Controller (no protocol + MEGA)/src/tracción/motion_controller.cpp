@@ -171,7 +171,7 @@ void PerfilVelocidad::calculo_giro(float grados_giro, float velocidad_giro)
   // Obtenenemos distancia de frenado
   calculo_frenada(velocidad_giro);
 	// Distancia a la que comienza el frenado
-  distancia_init_frenada    = distancia_total_rad - distancia_frenada;// Si la distancia es muy corta computamos un perfil triangular
+  distancia_init_frenada    = distancia_total_rad - distancia_frenada;
 	// Si la distancia es muy corta computamos un perfil triangular
   if(perfil_triangular)
   {
@@ -199,7 +199,7 @@ void motion_controller::prev_move_calculus(bool movimiento)
       digitalWrite(D_DIR, LOW);
       ref_distancia = -ref_distancia;
     }
-    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max);
+    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max/4);
     motores.encender_motores();
     recta_en_curso = 1;
     giro_en_curso = 0; 
@@ -246,25 +246,26 @@ void motion_controller::move_control()
 {
   bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
   /* Toma de medidas */
-	odom.act_odom(this->param_mecanicos, sentido_inverso);
+	if(recta_en_curso || giro_en_curso)odom.act_odom(this->param_mecanicos, sentido_inverso);
+  else odom.reset_odom();
   /* Check parado */
   odom.check_mov();
   /* Control */ 
   if(recta_en_curso)
   {
-    if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_init_frenada - cal_trapecio.ajuste_distancia_recto)*(param_mecanicos.diam_rueda/2))
+    if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_init_frenada - fabs(cal_trapecio.ajuste_distancia_recto))*(param_mecanicos.diam_rueda/2))
     {
       // Velocidad de crucero
       // Actualizamos la velocidad
       // Serial.println("Vc");
-      motores.rmotor_vel = param_mecanicos.vel_max;
-      motores.lmotor_vel = param_mecanicos.vel_max;
+      motores.rmotor_vel = param_mecanicos.vel_max/4;
+      motores.lmotor_vel = param_mecanicos.vel_max/4;
       motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
-    else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad)*(param_mecanicos.diam_rueda/2))
+    else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad - fabs(ajuste_error_enzima))*(param_mecanicos.diam_rueda/2))
     {
-      Serial.println("F");
+      // Serial.println("F");
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
       motores.lmotor_vel = param_mecanicos.vel_freno;
@@ -274,7 +275,7 @@ void motion_controller::move_control()
     else
     {    
       // Parar los motores
-      Serial.println("P");
+      // Serial.println("P");
       motores.rmotor_vel = 0;
       motores.lmotor_vel = 0;
       motores.set_vel_rmotor();
@@ -283,7 +284,7 @@ void motion_controller::move_control()
   }
   else if(giro_en_curso)
   {
-    if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_init_frenada - cal_trapecio.ajuste_distancia_giro))
+    if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_init_frenada - fabs(cal_trapecio.ajuste_distancia_giro)))
     {
       // Velocidad de crucero
       // Actualizamos la velocidad
@@ -317,6 +318,7 @@ void motion_controller::move_control()
     Serial.print("X: ");Serial.println(odom.pose_actual.x);
     Serial.print("Y: ");Serial.println(odom.pose_actual.y);
     Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    motores.apagar_motores();
     parado = true;
     odom.parado = true;
     odom.parado_absoluto = true;
@@ -325,5 +327,8 @@ void motion_controller::move_control()
     ref_ang = 0;
     ref_distancia = 0;
     odom.reset_odom();
+    Serial.print("X: ");Serial.println(odom.pose_actual.x);
+    Serial.print("Y: ");Serial.println(odom.pose_actual.y);
+    Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
   }
 }

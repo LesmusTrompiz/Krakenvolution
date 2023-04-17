@@ -5,7 +5,7 @@
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
-#include <PinChangeInterrupt.h>
+
 /* Definición completa del robot */
 
 Param_mecanicos mecanica_enzima(
@@ -27,10 +27,10 @@ Motores motores_enzima(
 	enzima_vel_max,
 	D_EN,
 	D_DIR,
-	PWMA_SetDuty,
+	PWM6_SetDuty,
 	I_EN,
 	I_DIR,
-	PWMB_SetDuty
+	PWM5_SetDuty
 );
 
 PerfilVelocidad perfilador_enzima(
@@ -51,7 +51,7 @@ void int_odom_derecha()
 {
 	// controlador_enzima.odom.cuentas_derecha_total++;
 
-	if(digitalRead(Enc_D))
+	if(digitalReadDirect(Enc_D))
 		controlador_enzima.odom.cuentas_derecha++;
 	else
 		controlador_enzima.odom.cuentas_derecha--;
@@ -60,7 +60,7 @@ void int_odom_izquierda()
 {
 	// controlador_enzima.odom.cuentas_izquierda_total++;
 
-	if(digitalRead(Enc_I))
+	if(digitalReadDirect(Enc_I))
 		controlador_enzima.odom.cuentas_izquierda++;
 	else
 		controlador_enzima.odom.cuentas_izquierda--;
@@ -77,8 +77,6 @@ void setup()
 	pinMode(I_EN, OUTPUT);
 	pinMode(D_DIR, OUTPUT);
 	pinMode(I_DIR, OUTPUT);
-	pinMode(D_PWM, OUTPUT);
-	pinMode(I_PWM, OUTPUT);
 	// Int conf
 	pinMode(PCInt_D,INPUT);
 	pinMode(Enc_D,INPUT);
@@ -86,19 +84,18 @@ void setup()
 	pinMode(Enc_I,INPUT);
 
 	// attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
-	attachPCINT(digitalPinToPCINT(PCInt_D), int_odom_derecha, RISING); 
+	attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
 
 	// PWMs and Timer (50Hz)
 	config_pwms();
-	config_control_timer();
+	config_timer(TC0, 2, TC2_IRQn, 50);
 
 	// Reset de odometría para empezar
 	controlador_enzima.odom.reset_odom();
 
 	// Habilitar las controladoras
-	// controlador_enzima.motores.encender_motores();
-	Serial.print("Registro PWM A: ");Serial.println(OCR0A);
-	Serial.print("Registro PWM A: ");Serial.println(OCR0B);
+	controlador_enzima.motores.encender_motores();
+
 	// Check...
 	Serial.println("Configuration done...");
 }
@@ -109,8 +106,10 @@ void loop()
 }
 
 /* Bucle de control -> TC2 Handler*/
-ISR(TIMER1_COMPA_vect)
+void TC2_Handler(void)
 {
+  TC_GetStatus(TC0, 2);
+
 	#ifdef debug_mode	
 		static int debugger = 0;
 		if(debugger >= 1*(50))
@@ -123,11 +122,9 @@ ISR(TIMER1_COMPA_vect)
 			// Serial.println("Giro en curso...");
 			// if(controlador_enzima.parado)
 			// Serial.println("Robot parado...")
-			// Serial.print("X: ");Serial.println(controlador_enzima.odom.pose_actual.x);
-			// Serial.print("Y: ");Serial.println(controlador_enzima.odom.pose_actual.y);
-			// Serial.print("O: ");Serial.println(controlador_enzima.odom.pose_actual.alfa);
-			// Serial.print("RB: ");Serial.println(OCR0A);
-			// Serial.print("RA: ");Serial.println(OCR0B);
+			Serial.print("X: ");Serial.println(controlador_enzima.odom.pose_actual.x);
+			Serial.print("Y: ");Serial.println(controlador_enzima.odom.pose_actual.y);
+			Serial.print("O: ");Serial.println(controlador_enzima.odom.pose_actual.alfa);
 			debugger = 0;
 		}
 		debugger++;
