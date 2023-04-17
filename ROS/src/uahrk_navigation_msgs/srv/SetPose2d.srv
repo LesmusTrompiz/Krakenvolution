@@ -1,4 +1,4 @@
-float32 x
-float32 y
-float32 a
+geometry_msgs/Pose2D pose
+std_msgs/Header header
 ---
+

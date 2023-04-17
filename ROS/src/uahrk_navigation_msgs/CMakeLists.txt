@@ -19,11 +19,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/GoToPose.action"
   "action/Path.action"
   "srv/SetPose2d.srv"
-  DEPENDENCIES geometry_msgs
+  DEPENDENCIES geometry_msgs std_msgs
 )
 
 
