@@ -130,8 +130,8 @@ void setup()
 	pinMode(PCInt_I,INPUT);	
 	pinMode(Enc_I,INPUT);
 
-	// attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
-	attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
+	attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
+	// attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
 
 	// PWMs and Timer (50Hz)
 	config_pwms();

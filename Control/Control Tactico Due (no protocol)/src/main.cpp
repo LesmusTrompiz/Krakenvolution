@@ -52,9 +52,9 @@ void int_odom_derecha()
 	// controlador_tactico.odom.cuentas_derecha_total++;
 
 	if(digitalReadDirect(Enc_D))
-		controlador_tactico.odom.cuentas_derecha++;
-	else
 		controlador_tactico.odom.cuentas_derecha--;
+	else
+		controlador_tactico.odom.cuentas_derecha++;
 }
 void int_odom_izquierda()
 {
@@ -83,8 +83,8 @@ void setup()
 	pinMode(PCInt_I,INPUT);	
 	pinMode(Enc_I,INPUT);
 
-	// attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
-	attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
+	attachInterrupt(digitalPinToInterrupt(PCInt_I), int_odom_izquierda, RISING);
+	// attachInterrupt(digitalPinToInterrupt(PCInt_D), int_odom_derecha, RISING); 
 
 	// PWMs and Timer (50Hz)
 	config_pwms();

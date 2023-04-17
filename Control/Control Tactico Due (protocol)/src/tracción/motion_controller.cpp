@@ -21,8 +21,8 @@ void Odom::act_odom(Param_mecanicos mecanica, bool inverse)
    * 
   */
   // Solo medimos un encoder
-  cuentas_izquierda = cuentas_derecha;
-  if(inverse) cuentas_izquierda = -cuentas_derecha;
+  cuentas_derecha = cuentas_izquierda;
+  if(inverse) cuentas_derecha = -cuentas_izquierda;
   // Para pasar de pulsos a revoluciones usamos una variable estática
   float pulsos2mm = mecanica.diam_rueda*PI/(mecanica.pulsos_rev*mecanica.reductora);
   // Variaciones de las coordenadas cartesianas y avance
@@ -316,7 +316,7 @@ void motion_controller::move_control()
     // Serial.println("Parada..."); 
     // Serial.print("X: ");Serial.println(odom.pose_actual.x);
     // Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);
     on_finished_callback();
     parado = true;
     odom.parado = true;
