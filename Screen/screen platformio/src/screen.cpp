@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "io.hpp"
 #include "menus.hpp"
+#include "reactive.hpp"
 #include "utils.hpp"
 #include "display.hpp"
 
@@ -65,8 +66,6 @@ void loop() {
     if (e.unwrap() != last_pressed) {
       // Change menu
       context.current_menu = &context.primary_menus[e.unwrap()];
-      Serial.print("Se ha cambiado al menú ");
-      Serial.println(e.unwrap());
       
       context.lcd.Fill_Screen(display::BLACK);
       display::marcoMenuPrincipal(context.lcd);
@@ -87,10 +86,49 @@ void loop() {
   }
 
   if (auto e = io::pressed_context_index()) {
-    Serial.print("Se ha pulsado el contextual ");
-    Serial.println(e.unwrap());
+    // Run contextual command
+    auto& ctx_menu = context.current_menu->context_menus[e.unwrap()];
+    // Check if the callback and the contextual menu are present
+    if (ctx_menu.present && (ctx_menu.callback != nullptr)) { 
+      ctx_menu.callback(context);
+    }
   }
 
+  // Check if commands are available
+  if (Serial.available()) {
+    String unparsed = Serial.readStringUntil('\n');
+    String cmd = "";
+    String arg = "";
+    bool reading_cmd = true;
+    for (char c : unparsed) {
+      if (c == ':')
+        reading_cmd = false;
+      else if (reading_cmd)
+        cmd.concat(c);
+      else
+        arg.concat(c);
+    }
+
+    cmd.trim();
+    arg.trim();
+
+    // Interpret message
+    if (cmd.equals("score")) {
+      context.score = arg.toInt();
+    } else if (cmd.equals("pendrive")) {
+      context.pendrive_plugged = arg.equals("true");
+      if (!context.pendrive_plugged && context.config_confirmed) {
+        // Send configuration to robot uwu
+        String formatted = "{play_site:\""; // tree play_site spawn
+        formatted += context.playzone ? "green":"blue";
+        formatted += "\",spawn:";
+        formatted += context.starting_position;
+        formatted += "}";
+        Serial.println(formatted);
+        context.config_confirmed = false;
+      }
+    }
+  }
 
   context.current_menu->update(context);
 }

@@ -2,6 +2,7 @@
 
 #include "display.hpp"
 #include "io.hpp"
+#include "reactive.hpp"
 #include "utils.hpp"
 
 namespace menus {
@@ -20,13 +21,13 @@ namespace menus {
   void power_menu_update(ApplicationContext&);
 
   struct ContextMenuEntry {
-    void(*callback)();
+    void(*callback)(ApplicationContext&);
     const char* display_name;
     bool present = false;
     ContextMenuEntry() = default;
     ContextMenuEntry(const char* display_name)
       : callback(nullptr), display_name(display_name), present(true) {}
-    ContextMenuEntry(const char* display_name, void(*callback)())
+    ContextMenuEntry(const char* display_name, void(*callback)(ApplicationContext&))
       : callback(callback), display_name(display_name), present(true) {}
   };
 
@@ -40,6 +41,15 @@ namespace menus {
     LCDWIKI_KBV lcd;
     PrimaryMenuEntry primary_menus[5];
     PrimaryMenuEntry* current_menu;
+
+    // Reactive variables
+    reactive::Int score;
+    reactive::Bool playzone = true;
+    reactive::Int starting_position = 1;
+    reactive::Int plan = 1;
+    reactive::Bool lidar = true;
+    reactive::Bool pendrive_plugged = false;
+    reactive::Bool config_confirmed = false;
   };
 
   ContextMenuEntry* stats_ctx_menus();

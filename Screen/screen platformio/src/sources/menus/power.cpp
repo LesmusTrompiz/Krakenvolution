@@ -8,6 +8,7 @@ void menus::power_menu_update(ApplicationContext &) {
 
 }
 
+
 menus::ContextMenuEntry power_menus[4] = {
   menus::ContextMenuEntry("")
 };
