@@ -5,7 +5,7 @@
  * de control de tracción del robot.
 */
 
-#define debug_controller
+// #define debug_controller
 
 #include <motion_controller.hpp>
 
