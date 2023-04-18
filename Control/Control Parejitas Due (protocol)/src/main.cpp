@@ -5,12 +5,20 @@
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
+#include <Adafruit_PWMServoDriver.h>
+#include <RobotServos.hpp>
 
 /* Iniciamos el protocolo */
 uahruart::parser::Protocol protocol;
 
 /* Servos */
-// Adafruit_PWMServoDriver ServoHandlerMaster = ...
+Adafruit_PWMServoDriver servos = Adafruit_PWMServoDriver(0x40);
+constexpr uint8_t BRAZO_DER = 0;
+constexpr uint8_t BRAZO_CEN = 10;
+constexpr uint8_t BRAZO_IZQ = 11;
+auto Servo_brazo_der = RobotServo(BRAZO_DER, servos);
+auto Servo_brazo_cen = RobotServo(BRAZO_CEN, servos);
+auto Servo_brazo_izq = RobotServo(BRAZO_IZQ, servos);
 
 /* Definición completa del robot */
 Param_mecanicos mecanica_tactico(
@@ -104,6 +112,22 @@ void setup_serial_protocol()
         rstc_start_software_reset(RSTC);
         return uahruart::messages::ActionFinished::NONE;
     });
+
+		protocol.register_method("servos", "active", [](int32_t arg)
+		{
+			Servo_brazo_cen.set_angle(60);
+			Servo_brazo_izq.set_angle(15);
+			Servo_brazo_der.set_angle(140);
+      return uahruart::messages::ActionFinished::NONE;
+		}); 
+
+		protocol.register_method("servos", "active", [](int32_t arg)
+		{
+			Servo_brazo_cen.set_angle(15);
+			Servo_brazo_izq.set_angle(35);
+			Servo_brazo_der.set_angle(80);
+      return uahruart::messages::ActionFinished::NONE;
+		}); 
 
     on_finished([]() 
 		{

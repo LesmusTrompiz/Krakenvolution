@@ -1,13 +1,24 @@
-#define debug_mode
+// #define debug_mode
+#define servo_debug
 
 #include <Arduino.h>
 #include <eurouart.hpp>
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
+#include <Adafruit_PWMServoDriver.h>
+#include <RobotServos.hpp>
 
-/* Definición completa del robot */
+/* Servos */
+Adafruit_PWMServoDriver servos = Adafruit_PWMServoDriver(0x40);
+constexpr uint8_t BRAZO_DER = 0;
+auto Servo_brazo_der = RobotServo(BRAZO_DER, servos);
+constexpr uint8_t BRAZO_CEN = 10;
+auto Servo_brazo_cen = RobotServo(BRAZO_CEN, servos);
+constexpr uint8_t BRAZO_IZQ = 11;
+auto Servo_brazo_izq = RobotServo(BRAZO_IZQ, servos);
 
+/* Definición mecánica del robot */
 Param_mecanicos mecanica_enzima(
  enzima_acel,
  enzima_decel,
@@ -95,6 +106,16 @@ void setup()
 
 	// Habilitar las controladoras
 	controlador_enzima.motores.encender_motores();
+
+	// Servos
+	servos.begin();
+	servos.setPWMFreq(50);
+
+	#ifdef servo_debug
+		Servo_brazo_cen.set_angle(15);
+		Servo_brazo_izq.set_angle(35);
+		Servo_brazo_der.set_angle(75);
+	#endif
 
 	// Check...
 	Serial.println("Configuration done...");

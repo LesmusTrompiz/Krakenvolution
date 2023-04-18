@@ -64,9 +64,9 @@ void int_odom_izquierda()
 	// controlador_tactico.odom.cuentas_izquierda_total++;
 
 	if(digitalReadDirect(Enc_I))
-		controlador_tactico.odom.cuentas_izquierda--;
-	else
 		controlador_tactico.odom.cuentas_izquierda++;
+	else
+		controlador_tactico.odom.cuentas_izquierda--;
 }
 
 /* Odom updates */
@@ -145,7 +145,7 @@ void setup()
 	controlador_tactico.motores.encender_motores();
 
 	// Check...
-	setup_serial_protocol();
+	// setup_serial_protocol();
 }
 
 void loop() 
