@@ -194,13 +194,13 @@ void motion_controller::prev_move_calculus(bool movimiento)
   {
     if(ref_distancia > 0)
     {
-      digitalWriteDirect(I_DIR, LOW);
-      digitalWriteDirect(D_DIR, HIGH);
+      digitalWriteDirect(I_DIR, HIGH);
+      digitalWriteDirect(D_DIR, LOW);
     }
     else
     {
-      digitalWriteDirect(I_DIR, HIGH);
-      digitalWriteDirect(D_DIR, LOW);
+      digitalWriteDirect(I_DIR, LOW);
+      digitalWriteDirect(D_DIR, HIGH);
       ref_distancia = -ref_distancia;
     }
     cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max*0.6);
@@ -248,9 +248,10 @@ void motion_controller::prev_move_calculus(bool movimiento)
 
 void motion_controller::move_control()
 {
-  bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
+  // bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
+  bool sentido = giro_en_curso;
   /* Toma de medidas en movimiento */
-	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido_inverso);
+	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
   /* Check parado */
   odom.check_mov();

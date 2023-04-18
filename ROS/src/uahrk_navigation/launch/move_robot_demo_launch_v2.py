@@ -87,17 +87,17 @@ def generate_launch_description():
 
 
     ld = LaunchDescription()
-    ld.add_action(dummy_serial)
-    ld.add_action(robot_tf)
+    #ld.add_action(dummy_serial)
+    #ld.add_action(robot_tf)
     ld.add_action(move_to_pose)
     ld.add_action(path_finding)
     ld.add_action(rviz_obstacles_markers)
     ld.add_action(rviz_robot_markers)
     ld.add_action(rviz2_interface)
     ld.add_action(rviz_map_markers)
-    ld.add_action(rviz2)
+    #ld.add_action(rviz2)
     ld.add_action(grid)
-    ld.add_action(decision_making)
+    #ld.add_action(decision_making)
 
 
 

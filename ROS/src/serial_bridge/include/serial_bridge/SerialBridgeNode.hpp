@@ -16,6 +16,8 @@
 
 // MSGs Libraries
 #include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose.hpp"
+
 #include "serial_bridge_actions/action/order.hpp"
 #include "uahrk_navigation_msgs/srv/set_pose2d.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"

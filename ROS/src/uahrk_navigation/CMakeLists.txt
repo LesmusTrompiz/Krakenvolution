@@ -57,9 +57,9 @@ add_executable(robot_tf_main src/robot_tf_main.cpp)
 ament_target_dependencies(robot_tf_main ${dependencies})
 target_link_libraries(robot_tf_main ${PROJECT_NAME})
 
-add_executable(rviz_interface src/RvizInterfaceNode.cpp)
-ament_target_dependencies(rviz_interface ${dependencies})
-target_link_libraries(rviz_interface ${PROJECT_NAME})
+#add_executable(rviz_interface src/RvizInterfaceNode.cpp)
+#ament_target_dependencies(rviz_interface ${dependencies})
+#target_link_libraries(rviz_interface ${PROJECT_NAME})
 
 add_executable(grid_main src/grid_main.cpp)
 ament_target_dependencies(grid_main ${dependencies})
@@ -76,7 +76,6 @@ install(TARGETS
   robot_tf_main
   grid_main
   path_finding_main
-  rviz_interface
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

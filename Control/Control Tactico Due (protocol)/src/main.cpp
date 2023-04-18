@@ -118,7 +118,6 @@ void setup()
 {
 	// Serial conf
 	Serial.begin(115200);
-	setup_serial_protocol();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
