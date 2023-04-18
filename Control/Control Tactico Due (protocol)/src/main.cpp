@@ -64,9 +64,9 @@ void int_odom_izquierda()
 	// controlador_tactico.odom.cuentas_izquierda_total++;
 
 	if(digitalReadDirect(Enc_I))
-		controlador_tactico.odom.cuentas_izquierda--;
-	else
 		controlador_tactico.odom.cuentas_izquierda++;
+	else
+		controlador_tactico.odom.cuentas_izquierda--;
 }
 
 /* Odom updates */
@@ -118,7 +118,6 @@ void setup()
 {
 	// Serial conf
 	Serial.begin(115200);
-	setup_serial_protocol();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);

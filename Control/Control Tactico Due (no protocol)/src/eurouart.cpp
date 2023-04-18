@@ -1,4 +1,4 @@
-#include "Eurouart.hpp"
+#include "eurouart.hpp"
 #include <Arduino.h>
 #include "motion_controller.hpp"
 
