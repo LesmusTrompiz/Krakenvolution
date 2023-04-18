@@ -12,9 +12,7 @@ void menus::lidar_menu_update(menus::ApplicationContext& ctx) {
 
   if(ctx.lidar) {
     txt_turn_off.update(ctx.lcd);
-    txt_turn_off.update(ctx.lcd);
   } else {
-    txt_turn_on.update(ctx.lcd);
     txt_turn_on.update(ctx.lcd);
   }
 }

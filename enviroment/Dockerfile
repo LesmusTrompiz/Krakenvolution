@@ -45,12 +45,31 @@ WORKDIR /
 RUN rm -rvf /Groot
 
 # Install editor
-RUN apt install -y software-properties-common
+RUN apt install -y            \
+  software-properties-common  \
+  wget                        \
+  unzip                       \
+  curl                        \
+  npm
+
+  # Prepara node for latest version
+RUN apt update
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - 
+RUN apt install -y            \
+  nodejs                      
+
 RUN add-apt-repository -y ppa:neovim-ppa/unstable
 RUN apt update
 RUN apt install -y neovim
 RUN git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 RUN git clone https://github.com/DiegoMoralesRoman/AstroNVIMConfig ~/.config/nvim/lua/user
+
+  # Install dependencies for editor LSP
+
+# Install python dependencies
+RUN apt install -y python3-pip
+RUN python3 -m pip install \
+  serial
 
 # Display configuration
 ENV DISPLAY=:0
