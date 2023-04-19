@@ -58,6 +58,10 @@ namespace menus {
     String ___bt_list_arr[10];
     Vector<String> bt_list = Vector<String>(___bt_list_arr);
     reactive::Int selected_bt = 0;
+
+    //Circular array
+    String errors[11];
+    int errorsPos = 0;
   };
 
   ContextMenuEntry* stats_ctx_menus();
@@ -65,4 +69,6 @@ namespace menus {
   ContextMenuEntry* debug_ctx_menus();
   ContextMenuEntry* lidar_ctx_menus();
   ContextMenuEntry* power_ctx_menus();
+
+  void insertError(ApplicationContext&, String error);
 }

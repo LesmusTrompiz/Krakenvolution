@@ -180,6 +180,8 @@ void loop() {
       context.bt_list.push_back(arg);
       if (context.bt_list.size() == 1)
         context.selected_bt.trigger();
+    } else if (cmd.equals("error")) {
+        menus::insertError(context, cmd);
     } else if (cmd.equals("clear_plans")) {
       context.bt_list.clear();
       context.selected_bt.trigger();
