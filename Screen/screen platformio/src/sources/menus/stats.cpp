@@ -15,13 +15,19 @@ void menus::stats_menu_update(ApplicationContext & ctx) {
   }
 }
 
+void validate_config(menus::ApplicationContext& ctx) {
+  ctx.config_confirmed = false;
+  if (ctx.pendrive_plugged && ctx.bt_list.size()) {
+    ctx.config_confirmed = true;
+  }
+}
 
 void test_callback();
 menus::ContextMenuEntry stats_menus[4] {
-  menus::ContextMenuEntry("UwU"),
-  menus::ContextMenuEntry("Nya"),
-  menus::ContextMenuEntry("Chetos"),
-  menus::ContextMenuEntry(":)"),
+  menus::ContextMenuEntry("Valid", &validate_config),
+  menus::ContextMenuEntry(""),
+  menus::ContextMenuEntry(""),
+  menus::ContextMenuEntry(""),
 };
 
 menus::ContextMenuEntry* menus::stats_ctx_menus() {

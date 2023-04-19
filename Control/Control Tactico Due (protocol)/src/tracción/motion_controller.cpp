@@ -70,9 +70,9 @@ void Odom::check_mov()
   */
 
  // Parada absoluta
- parado_absoluto = cuentas_derecha <= 1 || cuentas_izquierda <= 1;
+ parado_absoluto = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
  // Parada estimada
- parado = cuentas_derecha <= 15 || cuentas_izquierda <= 15;
+ parado = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
 
 }
 
@@ -261,11 +261,11 @@ void motion_controller::move_control()
 {
   // bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
   bool sentido = giro_en_curso;
+  /* Check parado */
+  odom.check_mov();
   /* Toma de medidas en movimiento */
 	if(giro_en_curso || recta_en_curso || parada_emergencia) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
-  /* Check parado */
-  odom.check_mov();
   /* Control */ 
   if(recta_en_curso)
   {

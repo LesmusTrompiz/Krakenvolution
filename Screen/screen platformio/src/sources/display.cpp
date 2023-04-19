@@ -9,6 +9,7 @@ constexpr auto POWER_ICON_COLOR         = display::WHITE;
 
 constexpr auto GREEN_FIELD_COLOR        = display::rgb_to_565(0, 170, 18);
 constexpr auto BLUE_FIELD_COLOR         = display::rgb_to_565(0, 92, 230);
+constexpr auto RED_FIELD_COLOR          = display::rgb_to_565(255, 0, 0);
 
 constexpr auto GRAY                     = display::rgb_to_565(64, 64, 64);
 
@@ -24,7 +25,9 @@ namespace display {
         mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
 
-        mylcd.Fill_Rect(432,  selected * 56, 48, 49, GRAY);
+        for (int i = 0; i < 5; i++) {
+            mylcd.Fill_Rect(432, i * 56, 48, 49, (i == selected) ? GRAY:BLACK);
+        }
 
         //Icono estadistica
         mylcd.Fill_Rect(436, 33, 8, 8, STATISTICS_ICON_COLOR);
@@ -200,12 +203,14 @@ namespace display {
         }
     }
 
-    void pintarSpawn(LCDWIKI_KBV& mylcd, boolean campo, int spawn) {
+    void pintarSpawn(LCDWIKI_KBV& mylcd, boolean campo, int spawn, boolean pintar) {
         mylcd.Set_Draw_color(WHITE);
 
         switch(spawn) {
             case 1:
-                mylcd.Fill_Rectangle(  8,   8,  55,  55);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(  8,   8,  55,  55);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
@@ -220,7 +225,9 @@ namespace display {
                 break;
 
             case 2:
-                mylcd.Fill_Rectangle(128,   8, 183,  55);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(128,   8, 183,  55);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLUE_FIELD_COLOR);
@@ -237,7 +244,9 @@ namespace display {
                 break;
 
             case 3:
-                mylcd.Fill_Rectangle(248,   8, 303,  55);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(248,   8, 303,  55);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
@@ -252,7 +261,9 @@ namespace display {
                 break;
 
             case 4:
-                mylcd.Fill_Rectangle(369,   8, 416,  55);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(369,   8, 416,  55);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
@@ -267,7 +278,9 @@ namespace display {
                 break;
 
             case 5:
-                mylcd.Fill_Rectangle(369,  65, 416, 112);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(369,  65, 416, 112);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
@@ -282,7 +295,9 @@ namespace display {
                 break;
 
             case 6:
-                mylcd.Fill_Rectangle(369, 129, 416, 177);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(369, 129, 416, 177);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(GREEN_FIELD_COLOR);
@@ -297,7 +312,9 @@ namespace display {
                 break;
 
             case 7:
-                mylcd.Fill_Rectangle(369, 186, 416, 233);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(369, 186, 416, 233);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
@@ -314,7 +331,9 @@ namespace display {
                 break;
 
             case 8:
-                mylcd.Fill_Rectangle(248, 186, 303, 233);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(248, 186, 303, 233);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
@@ -329,7 +348,9 @@ namespace display {
                 break;
 
             case 9:
-                mylcd.Fill_Rectangle(128, 186, 183, 233);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(128, 186, 183, 233);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
@@ -344,7 +365,9 @@ namespace display {
                 break;
 
             case 10:
-                mylcd.Fill_Rectangle(  8, 186,  55, 233);
+                if(pintar) {
+                    mylcd.Fill_Rectangle(  8, 186,  55, 233);
+                }
 
                 if(campo) {
                     mylcd.Set_Draw_color(BLACK);
@@ -360,7 +383,107 @@ namespace display {
         }
     }
 
+    void pintarParking(LCDWIKI_KBV &mylcd, int parking) {
+        switch(parking) {
+            case 1:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(128, 186, 183, 233);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(  8,   8,  55,  55);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 20, 15);
+
+                break;
+
+            case 2:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(  8, 186,  55, 233);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(128,   8, 183,  55);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 140, 15);
+
+                break;
+
+            case 3:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(  8,   8,  55,  55);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(248,   8, 303,  55);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 260, 15);
+
+                break;
+
+            case 4:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(128,   8, 183,  55);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(369,   8, 416,  55);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 381, 15);
+
+                break;
+
+            case 5:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(248,   8, 303,  55);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(369,  65, 416, 112);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 381, 72);
+
+                break;
+
+            case 6:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(369,   8, 416,  55);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(369, 129, 416, 177);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 381, 136);
+
+                break;
+
+            case 7:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(369,  65, 416, 112);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(369, 186, 416, 233);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 381, 193);
+
+                break;
+
+            case 8:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(369, 129, 416, 177);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(248, 186, 303, 233);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 260, 193);
+
+                break;
+
+            case 9:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(369, 186, 416, 233);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(128, 186, 183, 233);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 140, 193);
+
+                break;
+
+            case 10:
+                mylcd.Set_Draw_color(WHITE);
+                mylcd.Draw_Rectangle(248, 186, 303, 233);
+                mylcd.Set_Draw_color(RED_FIELD_COLOR);
+                mylcd.Draw_Rectangle(  8, 186,  55, 233);
+                escribirTexto(mylcd, RED_FIELD_COLOR, 5, "P", 20, 193);
+
+                break;
+        }
+    }
+
+    void pintarSpawnParking(LCDWIKI_KBV &mylcd, boolean campo, int spawn, boolean pintar, int parking) {
+        pintarSpawn(mylcd, campo, spawn, pintar);
+        pintarParking(mylcd, parking);
+    }
+
     void escribirTexto(LCDWIKI_KBV &mylcd, uint16_t color, uint8_t tamanno, String texto, int coordenada_X, int coordenada_Y) {
+        mylcd.Set_Text_Mode(1);
         mylcd.Set_Text_colour(color);
         mylcd.Set_Text_Size(tamanno);
         mylcd.Print_String(texto, coordenada_X, coordenada_Y);

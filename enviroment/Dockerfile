@@ -69,7 +69,7 @@ RUN git clone https://github.com/DiegoMoralesRoman/AstroNVIMConfig ~/.config/nvi
 # Install python dependencies
 RUN apt install -y python3-pip
 RUN python3 -m pip install \
-  serial
+  pyserial
 
 # Display configuration
 ENV DISPLAY=:0

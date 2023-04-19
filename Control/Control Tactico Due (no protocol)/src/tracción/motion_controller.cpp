@@ -66,9 +66,9 @@ void Odom::check_mov()
   */
 
  // Parada absoluta
- parado_absoluto = cuentas_derecha <= 1 || cuentas_izquierda <= 1;
+ parado_absoluto = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
  // Parada estimada
- parado = cuentas_derecha <= 15 || cuentas_izquierda <= 15;
+ parado = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
 
 }
 

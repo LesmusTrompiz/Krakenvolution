@@ -76,3 +76,11 @@ io::ButtonEvent io::pressed_primary_index() {
 io::ButtonEvent io::pressed_context_index() {
   return get_pressed_index(CONTEXT_MENU_BUTTONS, NUMBER_CONTEXT_BUTTONS);
 }
+
+void io::force_primary(uint8_t index) {
+  PRIMARY_MENU_BUTTONS[index].triggered = true;
+}
+
+void io::force_contextual(uint8_t index) {
+  CONTEXT_MENU_BUTTONS[index].triggered = true;
+}

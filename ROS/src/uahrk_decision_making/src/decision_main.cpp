@@ -30,8 +30,8 @@ int main(int argc, char * argv[])
 
     // Create the tree
     // Get the tree file
-    // std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
-    std::string xml_file = pkgpath + "/behavior_trees/pub_points_tree.xml";
+    std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
+    // std::string xml_file = pkgpath + "/behavior_trees/pub_points_tree.xml";
 
     // Create a blackboard and store the ROS Node in a parameter
     auto blackboard = BT::Blackboard::create();
