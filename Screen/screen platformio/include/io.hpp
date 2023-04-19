@@ -21,4 +21,7 @@ namespace io {
 
   ButtonEvent pressed_context_index();
   ButtonEvent pressed_primary_index();
+
+  void force_primary(uint8_t index);
+  void force_contextual(uint8_t index);
 }

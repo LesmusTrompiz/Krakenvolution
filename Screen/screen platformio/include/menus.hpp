@@ -5,6 +5,8 @@
 #include "reactive.hpp"
 #include "utils.hpp"
 
+#include <Vector.h>
+
 namespace menus {
   struct ApplicationContext;
 
@@ -50,6 +52,11 @@ namespace menus {
     reactive::Bool lidar = true;
     reactive::Bool pendrive_plugged = false;
     reactive::Bool config_confirmed = false;
+
+    // BT list
+    String ___bt_list_arr[10];
+    Vector<String> bt_list = Vector<String>(___bt_list_arr);
+    reactive::Int selected_bt = 0;
   };
 
   ContextMenuEntry* stats_ctx_menus();

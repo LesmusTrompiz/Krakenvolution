@@ -24,7 +24,9 @@ namespace display {
         mylcd.Fill_Rect(  243, 281, 113, 319, BLACK);
         mylcd.Fill_Rect(  365, 281, 113, 319, BLACK);
 
-        mylcd.Fill_Rect(432,  selected * 56, 48, 49, GRAY);
+        for (int i = 0; i < 5; i++) {
+            mylcd.Fill_Rect(432, i * 56, 48, 49, (i == selected) ? GRAY:BLACK);
+        }
 
         //Icono estadistica
         mylcd.Fill_Rect(436, 33, 8, 8, STATISTICS_ICON_COLOR);

@@ -105,6 +105,7 @@ void setup_serial_protocol()
 
     on_finished([]() 
 		{
+			delay(50);
 			uahruart::messages::ActionFinished action;
 			action.action = uahruart::messages::ActionFinished::TRACTION;
       protocol.send(action);

@@ -13,7 +13,7 @@ void serialEvent()
 {
   while(Serial.available()>0)
   {
-    inputString = Serial.readString();
+    inputString = Serial.readStringUntil('\n');
 
     if(inputString!="")
     {

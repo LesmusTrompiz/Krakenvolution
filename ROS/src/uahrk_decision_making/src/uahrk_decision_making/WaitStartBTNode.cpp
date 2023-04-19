@@ -1,4 +1,6 @@
 #include "uahrk_decision_making/WaitStartBTNode.hpp"
+#include <ostream>
+#include <rclcpp/logger.hpp>
 
 
 WaitStartBTNode::WaitStartBTNode(
@@ -32,8 +34,6 @@ BT::NodeStatus WaitStartBTNode::tick(){
     std::string ally_tree = 
         node_->get_parameter("ally_tree").get_parameter_value().get<std::string>();
     
-
-
 
     // Params with default value
     if(play_side == "default") return BT::NodeStatus::FAILURE;
