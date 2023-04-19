@@ -18,7 +18,11 @@ void marcoMenuPrincipal(LCDWIKI_KBV &mylcd);
 
 void pintarCampo(LCDWIKI_KBV &mylcd, boolean campo, int spawn);
 
-void pintarSpawn(LCDWIKI_KBV &mylcd, boolean campo, int spawn);
+void pintarSpawn(LCDWIKI_KBV& mylcd, boolean campo, int spawn, boolean pintar);
+
+void pintarParking(LCDWIKI_KBV &mylcd, int parking);
+
+void pintarSpawnParking(LCDWIKI_KBV &mylcd, boolean campo, int spawn, boolean pintar, int parking);
 
 void pintarPlan(LCDWIKI_KBV &mylcd, int plan);
 

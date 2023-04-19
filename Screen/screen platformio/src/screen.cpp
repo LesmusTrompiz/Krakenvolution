@@ -60,7 +60,7 @@ void setup() {
   context.lcd.Set_Text_Mode(true);
   context.lcd.Set_Text_colour(display::WHITE);
   context.lcd.Set_Text_Size(startup_font_size);
-  String startup_msg = "Waiting for node...";
+  /**String startup_msg = "Waiting for node...";
   context.lcd.Print_String(startup_msg, 
                            context.lcd.Get_Width() / 2 - (((6 * startup_font_size - 1) * startup_msg.length()) / 2),
                            context.lcd.Get_Height() / 2 - ((8 * startup_font_size - 1) / 2)
@@ -97,7 +97,7 @@ void setup() {
         node_ready = true;
     }
     delay(100);
-  }
+  }*/
 }
 
 void loop() {
@@ -168,6 +168,8 @@ void loop() {
         formatted += context.playzone ? "green":"blue";
         formatted += "\",\"spawn\":";
         formatted += context.starting_position;
+        formatted += "\",\"parking\":";
+        formatted += context.parking_position;
         formatted += ",\"tree\":\"";
         formatted += context.bt_list[context.selected_bt];
         formatted += "\"}";

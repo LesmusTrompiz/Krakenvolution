@@ -13,13 +13,23 @@ constexpr int PLAN_TEXT_Y = 243;
 display::SegmentedText plan_text("", 0, PLAN_TEXT_Y, 415, -1);
 
 void menus::strat_menu_update(ApplicationContext& ctx) {
+  int chekNext = ctx.starting_position;
+  chekNext += 2;
+  chekNext %= 10;
 
   if (reactive::CHECK || ctx.playzone) {
     display::pintarCampo(ctx.lcd, ctx.playzone, ctx.starting_position);
   }
 
   if (reactive::CHECK || ctx.starting_position) {
-    display::pintarSpawn(ctx.lcd, ctx.playzone, ctx.starting_position);
+    display::pintarSpawnParking(ctx.lcd, ctx.playzone, ctx.starting_position, true, ctx.parking_position);
+  }
+
+  if (reactive::CHECK || ctx.parking_position) {
+    display::pintarSpawnParking(ctx.lcd, ctx.playzone, ctx.parking_position, false, ctx.parking_position);
+
+    if(chekNext == ctx.parking_position)
+      display::pintarSpawnParking(ctx.lcd, ctx.playzone, ctx.starting_position, true, ctx.parking_position);
   }
 
   if (reactive::CHECK || ctx.selected_bt) {
@@ -43,11 +53,15 @@ void menus::strat_menu_update(ApplicationContext& ctx) {
 // Context callbacks
 void change_field(menus::ApplicationContext& ctx) {
   int pos = ctx.starting_position;
+  int park = ctx.parking_position;
   pos %= 10;
+  park %= 10;
   ++pos;
+  ++park;
 
   ctx.playzone = !ctx.playzone;
   ctx.starting_position = pos;
+  ctx.parking_position = park;
   ctx.config_confirmed = false;
 }
 
@@ -64,13 +78,6 @@ void change_starting_position(menus::ApplicationContext& ctx) {
 
 void plan(menus::ApplicationContext& ctx) {}
 
-void validate_config(menus::ApplicationContext& ctx) {
-  ctx.config_confirmed = false;
-  if (ctx.pendrive_plugged && ctx.bt_list.size()) {
-    ctx.config_confirmed = true;
-  }
-}
-
 void update_plan(menus::ApplicationContext& ctx) {
   if (ctx.bt_list.size()) {
     int index = ctx.selected_bt;
@@ -80,11 +87,22 @@ void update_plan(menus::ApplicationContext& ctx) {
   }
 }
 
+void change_parking(menus::ApplicationContext& ctx) {
+  int park = ctx.parking_position;
+
+  if(park != 0)
+    ++park;
+  park %= 10;
+  ++park;
+  ctx.parking_position = park;
+  ctx.config_confirmed = false;
+}
+
 menus::ContextMenuEntry strat_menus[4] = {
   menus::ContextMenuEntry("Campo", &change_field),
   menus::ContextMenuEntry("Start", &change_starting_position),
   menus::ContextMenuEntry("Plan", &update_plan),
-  menus::ContextMenuEntry("Valid", &validate_config)
+  menus::ContextMenuEntry("Park", &change_parking)
 };
 
 
