@@ -174,6 +174,7 @@ void MoveToPoseNode::send_order(std::string id, int16_t arg)
 
   send_goal_options.result_callback = std::bind(&MoveToPoseNode::result_callback, this, std::placeholders::_1);
   send_goal_options.goal_response_callback = std::bind(&MoveToPoseNode::goal_response_callback, this, std::placeholders::_1);
+  goal_msg.device  = "traction";
   goal_msg.id  = id;
   goal_msg.arg = arg;
   RCLCPP_INFO(this->get_logger(), "Sending msg %s %i", id.c_str(), arg);

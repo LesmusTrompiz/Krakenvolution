@@ -145,7 +145,7 @@ void setup()
 	controlador_tactico.motores.encender_motores();
 
 	// Check...
-	setup_serial_protocol();
+	// setup_serial_protocol();
 }
 
 void loop() 

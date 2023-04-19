@@ -19,6 +19,17 @@ def fx(x, dt, u):
     return x_prior
 
 def state_mean(sigmas, Wm):
+    x = np.zeros(5)
+    sum_sin = np.sum(np.dot(np.sin(sigmas[:, 2]), Wm))
+    sum_cos = np.sum(np.dot(np.cos(sigmas[:, 2]), Wm))
+    x[0] = np.sum(np.dot(sigmas[:, 0], Wm))
+    x[1] = np.sum(np.dot(sigmas[:, 1], Wm))
+    x[2] = atan2(sum_sin, sum_cos)
+    x[3] = np.sum(np.dot(sigmas[:, 3], Wm))
+    x[4] = np.sum(np.dot(sigmas[:, 4], Wm))
+    return x
+
+def z_mean(sigmas, Wm):
     x = np.zeros(3)
     sum_sin = np.sum(np.dot(np.sin(sigmas[:, 2]), Wm))
     sum_cos = np.sum(np.dot(np.cos(sigmas[:, 2]), Wm))
@@ -26,7 +37,6 @@ def state_mean(sigmas, Wm):
     x[1] = np.sum(np.dot(sigmas[:, 1], Wm))
     x[2] = atan2(sum_sin, sum_cos)
     return x
-
 
 def normalize_angle(x):
     x = x % (2 * np.pi)
@@ -36,11 +46,15 @@ def normalize_angle(x):
     return x
 
 def residual_state(a, b):
-    print(f"La matriz a {np.size(a)}")
-    print(f"La matriz b {np.size(b)}")
     y = a - b
     y[2] = normalize_angle(y[2])
     return y
+
+def residual_z(a, b):
+    y = a - b
+    y[2] = normalize_angle(y[2])
+    return y
+
 
 
 

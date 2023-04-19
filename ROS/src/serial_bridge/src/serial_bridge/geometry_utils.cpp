@@ -8,8 +8,8 @@ geometry_msgs::msg::Pose Pose2dtoPose(const Pose2d &p2d){
   geometry_msgs::msg::Pose p;
 
   // La transformación entre coordenadas x e y es directa
-  p.position.x = p2d.x;
-  p.position.y = p2d.y;
+  p.position.x = p2d.x / 1000;
+  p.position.y = p2d.y / 1000;
 
   // En cambio hay que transformar el ángulo en grados a quaternios
   tf2::Quaternion quat_tf;

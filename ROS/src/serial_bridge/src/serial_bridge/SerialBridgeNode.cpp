@@ -10,7 +10,7 @@ uahruart::parser::Protocol protocol;
 SerialBridgeNode::SerialBridgeNode(std::string port_name)
 : Node("serial_bridge_node"){
   // Topic donde se publica el valor de la odometría.
-  publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("robot_odom", 10);
+  publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("odom_pose", 10);
 
   // Servicio que permite modificar el valor de la odometria, desde otros nodos.
   // Es util llamarlo cuando se inicializa el spawn y ese tipo de cosas.
@@ -93,13 +93,18 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
       static_cast<float>(msg.y.to_underlying()),
       static_cast<float>(msg.o.to_underlying())
     );
-    publisher_->publish(Pose2dtoPose(odom));
+    
+    publisher_->publish(Pose2dtoPose(pose));
+
     if ((m_handles[uahruart::messages::ActionFinished::TRACTION] != nullptr) && m_pending_last_odom) {
       m_pending_last_odom = false;
       auto result   = std::make_shared<Order::Result>();
-      result->last_odom.x = pose.x;
-      result->last_odom.y = pose.y;
+      result->last_odom.x = pose.x / 1000;
+      result->last_odom.y = pose.y / 1000;
       result->last_odom.theta = pose.a;
+      std::cout << "x " << pose.x << std::endl;
+      std::cout << "a " << pose.a << std::endl;
+
       m_handles[uahruart::messages::ActionFinished::TRACTION]->succeed(result);
       m_handles[uahruart::messages::ActionFinished::TRACTION] = nullptr;
     }
@@ -107,8 +112,8 @@ SerialBridgeNode::SerialBridgeNode(std::string port_name)
   
   // Timer que ejecuta la función control_cycle cada 500ms 
   // A lo mejor te interesa crear tu propio hilo...
-  timer_ = this->create_wall_timer(
-    500ms, std::bind(&SerialBridgeNode::control_cycle, this));
+  //timer_ = this->create_wall_timer(
+  //  500ms, std::bind(&SerialBridgeNode::control_cycle, this));
 }
 
 SerialBridgeNode::~SerialBridgeNode(){}
@@ -226,7 +231,7 @@ void SerialBridgeNode::handle_accepted(const
   */
 
   const auto goal = goal_handle->get_goal();
-  RCLCPP_INFO(this->get_logger(), "RMI ORDER: Id %s, Arg %d", goal->id.c_str(), goal->arg);
+  RCLCPP_INFO(this->get_logger(), "RMI ORDER: Device %s, Id %s, Arg %d", goal->device.c_str(), goal->id.c_str(), goal->arg);
   m_pending_handles.push_back(goal_handle);
   
   // TODO Enviar la instrucción al protocolo
@@ -237,6 +242,7 @@ void SerialBridgeNode::handle_accepted(const
   call.call_uuid = 0;
   call.arg = goal->arg;
   while(!protocol.send(call)) {usleep(1000);}
+  //protocol.call(goal->device.c_str(), goal->id.c_str(), a);
 
 
   // Almacenar el goal handle en alguna estructura para
