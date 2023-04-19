@@ -5,9 +5,10 @@
  * de control de tracción del robot.
 */
 
-#define debug_controller
+// #define debug_controller
 
 #include <motion_controller.hpp>
+#include <pines_&_constexpr.hpp>
 
 functor<void()> on_finished_callback;
 void on_finished(functor<void ()> callback) {
@@ -23,8 +24,8 @@ void Odom::act_odom(Param_mecanicos mecanica, bool inverse)
    * 
   */
   // Solo medimos un encoder
-  cuentas_izquierda = cuentas_derecha;
-  if(inverse) cuentas_izquierda = -cuentas_derecha;
+  cuentas_derecha = cuentas_izquierda;
+  if(inverse) cuentas_derecha = -cuentas_izquierda;
   // Para pasar de pulsos a revoluciones usamos una variable estática
   float pulsos2mm = mecanica.diam_rueda*PI/(mecanica.pulsos_rev*mecanica.reductora);
   // Variaciones de las coordenadas cartesianas y avance
@@ -51,10 +52,10 @@ void Odom::act_odom(Param_mecanicos mecanica, bool inverse)
   pose_actual.y     += deltaY;
   pose_actual.alfa  += RAD2DEG(deltaO);
   // 6. Limitamos el valor de la orientación
-  // while(pose_actual.alfa>=180)
-  //   pose_actual.alfa -= 360;
-  // while(pose_actual.alfa<=-180)
-  //   pose_actual.alfa += 360;
+  while(pose_actual.alfa>=180)
+    pose_actual.alfa -= 360;
+  while(pose_actual.alfa<=-180)
+    pose_actual.alfa += 360;
 }
 
 void Odom::check_mov()
@@ -70,7 +71,7 @@ void Odom::check_mov()
   */
 
  // Parada absoluta
- parado_absoluto = cuentas_derecha <= 1 || cuentas_izquierda <= 1;
+ parado_absoluto = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
  // Parada estimada
  parado = cuentas_derecha <= 15 || cuentas_izquierda <= 15;
 
@@ -118,7 +119,7 @@ void Motores::apagar_motores()
 	digitalWriteDirect(R_EN, LOW);  
 }
 
-void Motores::encender_motores( )
+void Motores::encender_motores()
 {
   rmotor_vel = 0; set_vel_rmotor();
   lmotor_vel = 0; set_vel_lmotor();
@@ -203,7 +204,7 @@ void motion_controller::prev_move_calculus(bool movimiento)
       digitalWriteDirect(D_DIR, LOW);
       ref_distancia = -ref_distancia;
     }
-    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max*0.6);
+    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max);
     motores.encender_motores();
     recta_en_curso = 1;
     giro_en_curso = 0; 
@@ -246,11 +247,22 @@ void motion_controller::prev_move_calculus(bool movimiento)
     }
 }
 
+void motion_controller::stop_movement()
+{
+  giro_en_curso = false;
+  recta_en_curso = false;
+  parada_emergencia = true;
+  motores.rmotor_vel = 0;
+  motores.lmotor_vel = 0;
+  motores.set_vel_rmotor();
+  motores.set_vel_lmotor();  
+}
+
 void motion_controller::move_control()
 {
-  bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
-  /* Toma de medidas en movimiento */
-	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido_inverso);
+  bool sentido = giro_en_curso;
+  /* Toma de medidas */
+	if(giro_en_curso || recta_en_curso || parada_emergencia) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
   /* Check parado */
   odom.check_mov();
@@ -261,15 +273,15 @@ void motion_controller::move_control()
     {
       // Velocidad de crucero
       // Actualizamos la velocidad
-      Serial.println("Vc");
-      motores.rmotor_vel = param_mecanicos.vel_max*0.6;
-      motores.lmotor_vel = param_mecanicos.vel_max*0.6;
+      // Serial.println("Vc");
+      motores.rmotor_vel = param_mecanicos.vel_max;
+      motores.lmotor_vel = param_mecanicos.vel_max;
       motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
-    else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad-fabs(ajuste_error_tactico))*(param_mecanicos.diam_rueda/2))
+    else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad-fabs(ajuste_error_parejitas))*(param_mecanicos.diam_rueda/2))
     {
-      Serial.println("F");
+      // Serial.println("F");
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
       motores.lmotor_vel = param_mecanicos.vel_freno;
@@ -279,7 +291,7 @@ void motion_controller::move_control()
     else
     {    
       // Parar los motores
-      Serial.println("P");
+      // Serial.println("P");
       motores.rmotor_vel = 0;
       motores.lmotor_vel = 0;
       motores.set_vel_rmotor();
@@ -297,7 +309,7 @@ void motion_controller::move_control()
       motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
-    else if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_total_rad - fabs(ajuste_error_tactico)))
+    else if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_total_rad-fabs(ajuste_error_parejitas)))
     {
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
@@ -315,23 +327,25 @@ void motion_controller::move_control()
     }
   }
 
-  if((giro_en_curso || recta_en_curso) && odom.parado_absoluto
+  if((giro_en_curso || recta_en_curso || parada_emergencia) && odom.parado_absoluto
       && motores.lmotor_vel == 0 && motores.rmotor_vel == 0)
   {
-    Serial.println("Parada..."); 
-    Serial.print("X: ");Serial.println(odom.pose_actual.x);
-    Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    // Serial.println("Parada..."); 
+    // Serial.print("X: ");Serial.println(odom.pose_actual.x);
+    // Serial.print("Y: ");Serial.println(odom.pose_actual.y);
+    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    on_finished_callback();
     parado = true;
     odom.parado = true;
     odom.parado_absoluto = true;
     giro_en_curso = false;
     recta_en_curso = false;
+    parada_emergencia = false;
     ref_ang = 0;
     ref_distancia = 0;
     odom.reset_odom();
-    Serial.print("X: ");Serial.println(odom.pose_actual.x);
-    Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    Serial.print("O: ");Serial.println(odom.pose_actual.alfa);   
+    // Serial.print("X: ");Serial.println(odom.pose_actual.x);
+    // Serial.print("Y: ");Serial.println(odom.pose_actual.y);
+    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
   }
 }

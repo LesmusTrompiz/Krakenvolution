@@ -214,9 +214,11 @@ struct motion_controller
   bool recta_en_curso;
   bool giro_en_curso;
   bool parado;
+  bool parada_emergencia;
   void prev_move_calculus(bool movimiento, float vel_ref);
   void prev_move_calculus(bool movimiento);
   void move_control();
+  void stop_movement();
   // Constructor
   motion_controller(Param_mecanicos _param_mecanicos,
                     Odom _odom,
@@ -229,7 +231,7 @@ struct motion_controller
                     ref_distancia{0}, ref_ang{0},
                     recta_en_curso{0},
                     giro_en_curso{0},
-                    parado{1}{odom.reset_odom();};
+                    parado{1},parada_emergencia{0}{odom.reset_odom();};
 };
 
 

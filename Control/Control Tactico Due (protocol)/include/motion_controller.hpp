@@ -213,10 +213,12 @@ struct motion_controller
   // Acción de control
   bool recta_en_curso;
   bool giro_en_curso;
+  bool parada_emergencia;
   bool parado;
   void prev_move_calculus(bool movimiento, float vel_ref);
   void prev_move_calculus(bool movimiento);
   void move_control();
+  void stop_movement();
   // Constructor
   motion_controller(Param_mecanicos _param_mecanicos,
                     Odom _odom,

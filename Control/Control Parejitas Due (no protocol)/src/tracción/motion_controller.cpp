@@ -66,7 +66,7 @@ void Odom::check_mov()
   */
 
  // Parada absoluta
- parado_absoluto = cuentas_derecha == 0 || cuentas_izquierda == 0;
+ parado_absoluto = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
  // Parada estimada
  parado = cuentas_derecha <= 15 || cuentas_izquierda <= 15;
 
@@ -244,9 +244,9 @@ void motion_controller::prev_move_calculus(bool movimiento)
 
 void motion_controller::move_control()
 {
-  bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
+  bool sentido = giro_en_curso;
   /* Toma de medidas */
-	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido_inverso);
+	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
   /* Check parado */
   odom.check_mov();

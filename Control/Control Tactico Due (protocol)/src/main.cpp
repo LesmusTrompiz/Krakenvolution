@@ -83,17 +83,24 @@ void setup_serial_protocol()
     });
 
     // Register methods
-    protocol.register_method("traction", "turn", [](int32_t arg) 
+    protocol.register_method("T", "G", [](int32_t arg) 
 		{
         controlador_tactico.ref_ang = static_cast<float>(arg);
         controlador_tactico.prev_move_calculus(0);
         return uahruart::messages::ActionFinished::TRACTION;
     });
 
-    protocol.register_method("traction", "advance", [](int32_t arg)
+    protocol.register_method("T", "D", [](int32_t arg)
 		{
         controlador_tactico.ref_distancia = static_cast<float>(arg);
         controlador_tactico.prev_move_calculus(1);
+        return uahruart::messages::ActionFinished::TRACTION;
+    });
+
+
+    protocol.register_method("T", "S", [](int32_t arg)
+		{
+				controlador_tactico.stop_movement();
         return uahruart::messages::ActionFinished::TRACTION;
     });
 
@@ -118,6 +125,7 @@ void setup()
 {
 	// Serial conf
 	Serial.begin(115200);
+	setup_serial_protocol();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
@@ -143,8 +151,6 @@ void setup()
 	// Habilitar las controladoras
 	controlador_tactico.motores.encender_motores();
 
-	// Check...
-	// setup_serial_protocol();
 }
 
 void loop() 

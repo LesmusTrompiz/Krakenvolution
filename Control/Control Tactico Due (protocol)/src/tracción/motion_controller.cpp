@@ -246,12 +246,23 @@ void motion_controller::prev_move_calculus(bool movimiento)
     }
 }
 
+void motion_controller::stop_movement()
+{
+  giro_en_curso = false;
+  recta_en_curso = false;
+  parada_emergencia = true;
+  motores.rmotor_vel = 0;
+  motores.lmotor_vel = 0;
+  motores.set_vel_rmotor();
+  motores.set_vel_lmotor();  
+}
+
 void motion_controller::move_control()
 {
   // bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
   bool sentido = giro_en_curso;
   /* Toma de medidas en movimiento */
-	if(giro_en_curso || recta_en_curso) odom.act_odom(this->param_mecanicos, sentido);
+	if(giro_en_curso || recta_en_curso || parada_emergencia) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
   /* Check parado */
   odom.check_mov();
@@ -313,7 +324,7 @@ void motion_controller::move_control()
     }
   }
 
-  if((giro_en_curso || recta_en_curso) && odom.parado_absoluto
+  if((giro_en_curso || recta_en_curso || parada_emergencia) && odom.parado_absoluto
       && motores.lmotor_vel == 0 && motores.rmotor_vel == 0)
   {
     // Serial.println("Parada..."); 
@@ -326,6 +337,7 @@ void motion_controller::move_control()
     odom.parado_absoluto = true;
     giro_en_curso = false;
     recta_en_curso = false;
+    parada_emergencia = false;
     ref_ang = 0;
     ref_distancia = 0;
     odom.reset_odom();
