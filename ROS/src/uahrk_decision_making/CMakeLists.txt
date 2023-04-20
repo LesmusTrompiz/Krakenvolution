@@ -58,7 +58,8 @@ add_library(gotopose_bt_node    SHARED src/uahrk_decision_making/GoToPoseBTNode.
 add_library(waitstart_bt_node   SHARED src/uahrk_decision_making/WaitStartBTNode.cpp)
 add_library(runexternbt_bt_node SHARED src/uahrk_decision_making/RunExternBT_BTNode.cpp)
 add_library(resetparams_bt_node SHARED src/uahrk_decision_making/ResetParamsBTNode.cpp)
-add_library(pub_points_bt_node SHARED src/uahrk_decision_making/PubPointsBTNode.cpp)
+add_library(pub_points_bt_node  SHARED src/uahrk_decision_making/PubPointsBTNode.cpp)
+add_library(timer_bt_node       SHARED src/uahrk_decision_making/TimerBTNode.cpp)
 
 # Serialization and other endeavours
 add_library(caller_bt_node SHARED src/uahrk_decision_making/CallerBTNode.cpp)
@@ -71,6 +72,7 @@ list(APPEND plugin_libs
   resetparams_bt_node
   caller_bt_node
   pub_points_bt_node
+  timer_bt_node
 )
 
 foreach(bt_plugin ${plugin_libs})

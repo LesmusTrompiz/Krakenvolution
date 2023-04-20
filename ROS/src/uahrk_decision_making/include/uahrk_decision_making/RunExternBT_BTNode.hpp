@@ -35,6 +35,7 @@ class RunExternBT_BTNode : public BT::ActionNodeBase
         rclcpp::Node::SharedPtr node_;
         BT::Tree tree_;
         bool tree_loaded = false;
+        std::shared_ptr<BT::PublisherZMQ> publisher_zmq;
 };
 
 

@@ -30,16 +30,24 @@ int main(int argc, char * argv[])
 
     // Create the tree
     // Get the tree file
-    std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
-    // std::string xml_file = pkgpath + "/behavior_trees/pub_points_tree.xml";
+    // std::string xml_file = pkgpath + "/behavior_trees/system_tree.xml";
+    factory.registerFromPlugin(pkgpath + "/../../lib/libtimer_bt_node.so");
+    std::string xml_file = pkgpath + "/behavior_trees/test.xml";
 
     // Create a blackboard and store the ROS Node in a parameter
     auto blackboard = BT::Blackboard::create();
+
+    // FIXME: delete
+    auto current_time = std::chrono::high_resolution_clock::now();
+    uint64_t start_time = std::chrono::time_point_cast<std::chrono::milliseconds>(current_time).time_since_epoch().count();
+    blackboard->set("game_start_timestamp", start_time);
+
     blackboard->set("node", node);
     BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
 
+
     // Create a publisher to debug the tree with Groot    
-    auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
+    // auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
     // Run the tree until ros dies with a rate of 10 Hz
     rclcpp::Rate rate(10);

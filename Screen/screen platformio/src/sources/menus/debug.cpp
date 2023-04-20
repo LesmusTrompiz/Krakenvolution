@@ -2,6 +2,7 @@
 #include "menus.hpp"
 
 display::SegmentedText txt("", 8, 8, 416, 233);
+String errors = "";
 
         // mylcd.Fill_Rect(  8, 8, 416, 233, BLACK);
 void menus::debug_menu_start(menus::ApplicationContext& ctx) {
@@ -10,12 +11,13 @@ void menus::debug_menu_start(menus::ApplicationContext& ctx) {
 
 void menus::debug_menu_update(ApplicationContext & ctx) {
   ctx.lcd.Set_Text_Mode(display::IGNORE_BG);
+  ctx.lcd.Set_Text_colour(display::WHITE);
+  ctx.lcd.Set_Text_Size(3);
   txt.update(ctx.lcd);
 }
 
 void menus::insertError(ApplicationContext& ctx, String error) {
-  String errors = "";
-
+  errors = "";
   ctx.errors[ctx.errorsPos] = error;
   ++ctx.errorsPos %= 10;
 
@@ -24,8 +26,7 @@ void menus::insertError(ApplicationContext& ctx, String error) {
       errors += ctx.errors[i] + "\n";
   }
   
-  display::SegmentedText txtNew(errors.c_str(), 8, 8, 416, 233);
-  txt = txtNew;
+  txt = display::SegmentedText(errors.c_str(), 8, 8, 416, 233);
 }
 
 menus::ContextMenuEntry debug_menus[4] = {

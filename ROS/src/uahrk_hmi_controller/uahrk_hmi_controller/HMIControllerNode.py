@@ -220,17 +220,18 @@ class HMIControllerNode(Node):
         #     point_msg = json.dumps({'points' : self.points})
         #     self.send_msg('points', str(self.points))
     def send_data(self, data):
-        print(data)
-        tree_param =        Parameter(name='tree', value=ParameterValue(type=4, string_value=data['tree']))
-        ally_tree_param =   Parameter(name='ally_tree', value=ParameterValue(type=4, string_value=''))
-        spawn_param =       Parameter(name='spawn', value=ParameterValue(type=4, string_value=str(data['spawn'])))
-        play_side_param =   Parameter(name='play_side', value=ParameterValue(type=4, string_value=data['play_side']))
+        tree_param =            Parameter(name='tree', value=ParameterValue(type=4, string_value=data['tree']))
+        ally_tree_param =       Parameter(name='ally_tree', value=ParameterValue(type=4, string_value=''))
+        spawn_param =           Parameter(name='spawn', value=ParameterValue(type=4, string_value=str(data['spawn'])))
+        play_side_param =       Parameter(name='play_side', value=ParameterValue(type=4, string_value=data['play_side']))
+        parking_side_param =    Parameter(name='parking_site', value=ParameterValue(type=4, string_value=str(data['parking'])))
         
         params = SetParameters.Request(parameters=[
             tree_param,
             ally_tree_param,
             spawn_param,
-            play_side_param
+            play_side_param,
+            parking_side_param
         ])
         self.set_params_client.call(params)
 

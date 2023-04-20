@@ -13,16 +13,22 @@ ResetParamsBTNode::ResetParamsBTNode(
 
 BT::NodeStatus ResetParamsBTNode::tick(){
     // Servers not ready
-    if(!start_condition_client->service_is_ready())  return BT::NodeStatus::FAILURE;
+    // if(!start_condition_client->service_is_ready())  return BT::NodeStatus::FAILURE;
+    // 
+    // auto request = std::make_shared<std_srvs::srv::Empty::Request>();
+    // auto result =  start_condition_client->async_send_request(request);
+    //
+    // if (rclcpp::spin_until_future_complete(node_, result,300ms) 
+    //     != rclcpp::FutureReturnCode::SUCCESS)
+    // {
+    //     return BT::NodeStatus::RUNNING;
+    // }
     
-    auto request = std::make_shared<std_srvs::srv::Empty::Request>();
-    auto result =  start_condition_client->async_send_request(request);
+    std::cout << "Resetting parameters\n";
+    std::flush(std::cout);
+    rclcpp::Parameter tree_param("tree", "default");
+    node_->set_parameter(tree_param); // For example
 
-    if (rclcpp::spin_until_future_complete(node_, result,300ms) 
-        != rclcpp::FutureReturnCode::SUCCESS)
-    {
-        return BT::NodeStatus::RUNNING;
-    }
     return BT::NodeStatus::SUCCESS;
 }
 

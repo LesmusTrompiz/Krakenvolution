@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Fallback>
+            <KeepRunningUntilFailure>
+                <Sequence>
+                    <Condition ID="Timer" time="20000"/>
+                    <Repeat num_cycles="4">
+                        <SequenceStar>
+                            <Action ID="Caller" arg="500" device="traction" id="advance"/>
+                            <Action ID="Caller" arg="90" device="traction" id="turn"/>
+                        </SequenceStar>
+                    </Repeat>
+                </Sequence>
+            </KeepRunningUntilFailure>
+            <Inverter>
+                <KeepRunningUntilFailure>
+                    <Sequence>
+                        <Condition ID="Timer" time="40000"/>
+                        <Repeat num_cycles="6">
+                            <SequenceStar>
+                                <Action ID="Caller" arg="500" device="traction" id="advance"/>
+                                <Action ID="Caller" arg="120" device="traction" id="turn"/>
+                            </SequenceStar>
+                        </Repeat>
+                    </Sequence>
+                </KeepRunningUntilFailure>
+            </Inverter>
+        </Fallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="Caller">
+            <input_port name="arg"/>
+            <input_port name="device"/>
+            <input_port name="id"/>
+        </Action>
+        <Condition ID="Timer">
+            <input_port default="0" name="time"/>
+        </Condition>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
