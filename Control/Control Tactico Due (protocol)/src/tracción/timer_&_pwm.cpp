@@ -22,19 +22,19 @@ void config_pwms()
 	// Alimentamos el módulo PWM
 	REG_PMC_PCER1     	|= 	PMC_PCER1_PID36;
 	// Deshabilitamos los GPIO's
-	PIOC -> PIO_PDR		=	PIO_PDR_P19 | PIO_PDR_P18;
+	PIOC -> PIO_PDR		=	PIO_PDR_P21 | PIO_PDR_P19 | PIO_PDR_P18;
 	// Habilitamos periféricos tipo B
-	PIOC -> PIO_ABSR	|= 	PIO_ABSR_P19 | PIO_ABSR_P18;
+	PIOC -> PIO_ABSR	|= 	PIO_ABSR_P21 | PIO_ABSR_P19 | PIO_ABSR_P18;
 	// Configuramos CLK_A
 	REG_PWM_CLK   = PWM_CLK_PREA(0) | PWM_CLK_DIVA(10);	
 	/* Nos interesa un CPRD alto, ya que determina la precisión del ciclo de trabajo.
 	*  
-	*   1. Preescalamos -> MCK/256
+	*   1. Preescalamos -> MCK/256 
 	*   2. Calculamos el valor deseado de CPRD -> fpwm = MCK/(CPRD*X) -> Donde X es 256 (paso 1).
 	*   3. Iniciamos todos los ciclos de trabajo a 0.
 	*   4. Habilitamos acceso a las salidas al módulo PWM.
 	*/
-	for(int i=5; i<7; i++)
+	for(int i=4; i<7; i++)
 	{
 		REG_PWM_WPSR;
 		PWM -> PWM_CH_NUM[i].PWM_CMR    = PWM_CMR_CPRE_CLKA;
@@ -42,9 +42,9 @@ void config_pwms()
 		PWM -> PWM_CH_NUM[i].PWM_CDTY   = 0.9*MAX_DC; 
 	}
 	// Paso 4
-	REG_PWM_ENA   = PWM_ENA_CHID5 | PWM_ENA_CHID6; 
+	REG_PWM_ENA   = PWM_ENA_CHID4 | PWM_ENA_CHID5 | PWM_ENA_CHID6; 
 	// Deshabilitar interrupciones -> No estrictamente necesario
-	PWM->PWM_IDR2 = PWM_IDR2_CMPM5 | PWM_IDR2_CMPM6;
+	PWM->PWM_IDR2 = PWM_IDR2_CMPM4 | PWM_IDR2_CMPM5 | PWM_IDR2_CMPM6;
 	NVIC_DisableIRQ(PWM_IRQn);
 
 }
@@ -81,6 +81,12 @@ void config_timer( Tc *tc,
 }
 
 /* Modificación de ciclo de trabajo PWMs */
+void PWM4_SetDuty(float ciclo)
+{
+	PWM -> PWM_CH_NUM[4].PWM_CDTY =  MAX_DC*ciclo;
+	return;
+}
+
 void PWM5_SetDuty(float ciclo)
 {
  /**

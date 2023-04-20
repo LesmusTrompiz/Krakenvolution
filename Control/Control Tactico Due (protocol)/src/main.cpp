@@ -13,10 +13,11 @@ uahruart::parser::Protocol protocol;
 auto subir_toldo 				= RobotServo(0);
 auto apertura_toldo_der = RobotServo(1);
 auto apertura_toldo_izq = RobotServo(2);
-auto carter_der					= RobotServo(5);
-auto carter_izq					= RobotServo(6);
-auto mano_der 					= RobotServo(7);
-auto mano_izq						= RobotServo(8);
+auto carter_der					= RobotServo(4);
+auto carter_izq					= RobotServo(5);
+auto mano_der 					= RobotServo(6);
+auto mano_izq						= RobotServo(7);
+auto cargador 					= RobotServo(8);
 
 /* Definición completa del robot */
 Param_mecanicos mecanica_tactico(
@@ -56,6 +57,19 @@ motion_controller controlador_tactico(
 	motores_tactico,
 	perfilador_tactico
 );
+
+/* Interrupciones para carter */
+void int_carter_der()
+{
+	carter_der.set_angle(110);
+}
+void int_carter_izq()
+{
+	carter_izq.set_angle(98);
+}
+
+bool subiendo_carter 	= false;
+bool bajando_carter		= false;
 
 /* Interrupciones para odometría */
 void int_odom_derecha()
@@ -105,12 +119,93 @@ void setup_serial_protocol()
         return uahruart::messages::ActionFinished::TRACTION;
     });
 
-
     protocol.register_method("traction", "stop", [](int32_t arg)
 		{
 				controlador_tactico.stop_movement();
         return uahruart::messages::ActionFinished::TRACTION;
     });
+
+		protocol.register_method("servos", "subir_carter", [](int32_t arg)
+		{
+			carter_der.set_angle(70);
+			carter_izq.set_angle(140);
+			subiendo_carter = true;
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "bajar_carter", [](int32_t arg)
+		{
+			carter_der.set_angle(140);
+			carter_izq.set_angle(70);
+			bajando_carter = true;
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "abrir_toldo", [](int32_t arg)
+		{
+			apertura_toldo_der.set_angle(90);
+			apertura_toldo_izq.set_angle(180);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "cerrar_toldo", [](int32_t arg)
+		{
+			apertura_toldo_der.set_angle(110);
+			apertura_toldo_izq.set_angle(165);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "subir_toldo", [](int32_t arg)
+		{
+			subir_toldo.set_angle(200);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "bajar_toldo", [](int32_t arg)
+		{
+			subir_toldo.set_angle(60);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "bajar_mano_der", [](int32_t arg)
+		{
+			mano_der.set_angle(190);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "subir_mano_izq", [](int32_t arg)
+		{
+			mano_der.set_angle(120);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "bajar_mano_der", [](int32_t arg)
+		{
+			mano_der.set_angle(190);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "subir_mano_der", [](int32_t arg)
+		{
+			mano_der.set_angle(120);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "disparar", [](int32_t distancia)
+		{
+			// Faltaría encender el motor de disparo...
+			PWM4_SetDuty(0.5);
+			cargador.set_angle(190);
+			return uahruart::messages::ActionFinished::NONE;
+		});
+
+		protocol.register_method("servos", "recoger_cargador", [](int32_t arg)
+		{
+			// Faltaría apagar el motor de disparo...
+			PWM4_SetDuty(0);
+			cargador.set_angle(0);
+			return uahruart::messages::ActionFinished::NONE;
+		});
 
     protocol.register_method("admin", "reset", [](int32_t arg) 
 		{
@@ -134,13 +229,28 @@ void setup()
 	// Serial conf
 	Serial.begin(115200);
 	setup_serial_protocol();
+	servos_config();
 
 	// Pines para el motor
 	pinMode(D_EN, OUTPUT);
 	pinMode(I_EN, OUTPUT);
 	pinMode(D_DIR, OUTPUT);
 	pinMode(I_DIR, OUTPUT);
-	// Int conf
+	// Finales de carrera
+	pinMode(SUBIR_DER, INPUT_PULLUP);
+	pinMode(BAJAR_DER, INPUT_PULLUP);
+	pinMode(SUBIR_IZQ, INPUT_PULLUP);
+	pinMode(BAJAR_IZQ, INPUT_PULLUP);
+
+	attachInterrupt(digitalPinToInterrupt(SUBIR_DER),int_carter_der,FALLING);
+	attachInterrupt(digitalPinToInterrupt(BAJAR_DER),int_carter_der,FALLING);
+	attachInterrupt(digitalPinToInterrupt(SUBIR_IZQ),int_carter_izq,FALLING);
+	attachInterrupt(digitalPinToInterrupt(BAJAR_IZQ),int_carter_izq,FALLING);
+
+	carter_izq.set_angle(98);
+	carter_der.set_angle(110);
+
+	// Encoders conf
 	pinMode(PCInt_D,INPUT);
 	pinMode(Enc_D,INPUT);
 	pinMode(PCInt_I,INPUT);	

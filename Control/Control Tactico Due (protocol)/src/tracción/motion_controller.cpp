@@ -10,8 +10,6 @@
 #include <motion_controller.hpp>
 #include <pines_&_constexpr.hpp>
 
-// extern uahruart::parser::Protocol protocol;
-
 functor<void()> on_finished_callback;
 void on_finished(functor<void ()> callback) {
     on_finished_callback = callback;

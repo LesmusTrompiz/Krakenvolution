@@ -1,5 +1,7 @@
 #pragma once
 
+// Disparador
+#define PWM_DISPARADOR 9
 // Pines de control de la tracción
 // PWMH5
 #define I_PWM 		44
@@ -33,3 +35,9 @@ constexpr float vel_giro_tactico          = 8;
 constexpr float ajuste_dist_recta_tactico = 0.75;
 constexpr float ajuste_dist_giro_tactico  = 0.1;
 constexpr float ajuste_error_tactico      = 0.02;
+
+// Finales de carrera carter
+#define SUBIR_DER 10
+#define BAJAR_DER 11
+#define SUBIR_IZQ 12
+#define BAJAR_IZQ 13

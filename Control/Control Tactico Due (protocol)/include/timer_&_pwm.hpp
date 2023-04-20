@@ -18,6 +18,7 @@ void config_pwms();
 void config_timer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frecuencia);
 
 /* Modificación de ciclo de trabajo PWMs */
+void PWM4_SetDuty(float ciclo);
 void PWM5_SetDuty(float ciclo);
 void PWM6_SetDuty(float ciclo);
 
