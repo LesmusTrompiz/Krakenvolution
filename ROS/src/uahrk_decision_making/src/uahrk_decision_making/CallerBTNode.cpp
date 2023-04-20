@@ -44,6 +44,7 @@ BT::NodeStatus Caller::tick(){
 
       switch (order_result){
         std::cout << "Order result " << (int)order_result << std::endl;
+        RCLCPP_INFO(node_->get_logger(), "Order result %d", (int)order_result);
         case rclcpp_action::ResultCode::SUCCEEDED:
           current_state = SENDING_COMMAND;
           return BT::NodeStatus::SUCCESS;

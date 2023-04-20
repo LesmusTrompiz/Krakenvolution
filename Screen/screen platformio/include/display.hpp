@@ -62,6 +62,9 @@ class SegmentedText
 constexpr uint16_t BLACK = display::rgb_to_565(0, 0, 0);
 constexpr uint16_t WHITE = display::rgb_to_565(255, 255, 255);
 
+constexpr uint16_t RED = rgb_to_565(249,45,114);
+constexpr uint16_t GREEN = rgb_to_565(108,203,110);
+
 constexpr bool IGNORE_BG = true;
 constexpr bool DRAW_BG = false;
 } // namespace display

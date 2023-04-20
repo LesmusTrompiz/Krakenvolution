@@ -1,0 +1,21 @@
+<root>
+    <TreeNodesModel>
+        <Action ID="Caller">
+            <input_port name="arg"/>
+            <input_port name="device"/>
+            <input_port name="id"/>
+        </Action>
+        <Action ID="GoToPose">
+            <input_port name="a" default="0"/>
+            <input_port name="x" default="0"/>
+            <input_port name="y" default="0"/>
+        </Action>
+        <Action ID="Hello">
+            <input_port name="print" default="hello"/>
+        </Action>
+        <Condition ID="Timer">
+            <input_port name="time" default="0"/>
+        </Condition>
+    </TreeNodesModel>
+</root>
+

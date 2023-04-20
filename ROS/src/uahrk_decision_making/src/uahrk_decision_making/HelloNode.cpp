@@ -14,10 +14,11 @@ Hello::Hello( const std::string & xml_tag_name, const BT::NodeConfiguration & co
 
 BT::NodeStatus Hello::tick(){
     std_msgs::msg::String msg;
-    msg.data = "hello";
+    // msg.data = "hello";
+    getInput("print", msg.data);
     hello_pub->publish(msg);
     cnt++;
-    if(cnt==10){
+    if(cnt==100){
         cnt= 0;
         return BT::NodeStatus::SUCCESS;
     }

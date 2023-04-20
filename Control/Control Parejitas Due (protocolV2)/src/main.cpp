@@ -81,8 +81,9 @@ void int_odom_izquierda()
 
 /* Odom updates */
 unsigned long long last_odom_update = millis();
-constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
+constexpr unsigned long long ODOM_UPDATE_TIME = 100;
 bool pending_last_odom = true;
+bool finished_movement = false;
 
 /* Registro de métodos en el protocolo de comunicación */
 void setup_serial_protocol() 
@@ -145,12 +146,8 @@ void setup_serial_protocol()
 
     on_finished([]() 
 		{
-			delay(50);
-			uahruart::messages::ActionFinished action;
-			action.action = uahruart::messages::ActionFinished::TRACTION;
-      protocol.send(action);
-      odom_parejitas = controlador_parejitas.odom;
-      pending_last_odom = true;
+			finished_movement = true;
+    	odom_parejitas = controlador_parejitas.odom;
     });
 }
 
@@ -200,6 +197,14 @@ void setup()
 void loop() 
 {
 	serialEvent();
+	if (finished_movement) {
+		finished_movement = false;
+		delay(50);
+		uahruart::messages::ActionFinished action;
+		action.action = uahruart::messages::ActionFinished::TRACTION;
+    protocol.send(action);
+    pending_last_odom = true;
+	}
 	// Update odometry
 	if (pending_last_odom) {
 		uahruart::messages::Odometry odom;

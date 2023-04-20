@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Fallback>
+            <Parallel failure_threshold="1" success_threshold="1">
+                <Sequence>
+                    <Action ID="Hello" print="beep"/>
+                    <Action ID="Hello" print="boop"/>
+                </Sequence>
+                <Condition ID="Timer" time="2000"/>
+            </Parallel>
+            <KeepRunningUntilFailure>
+                <AlwaysSuccess/>
+            </KeepRunningUntilFailure>
+        </Fallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="Caller">
+            <input_port name="arg"/>
+            <input_port name="device"/>
+            <input_port name="id"/>
+        </Action>
+        <Action ID="GoToPose">
+            <input_port default="0" name="a"/>
+            <input_port default="0" name="x"/>
+            <input_port default="0" name="y"/>
+        </Action>
+        <Action ID="Hello">
+            <input_port default="hello" name="print"/>
+        </Action>
+        <Condition ID="Timer">
+            <input_port default="0" name="time"/>
+        </Condition>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

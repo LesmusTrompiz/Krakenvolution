@@ -15,14 +15,15 @@ WaitStartBTNode::WaitStartBTNode(
     node_->declare_parameter("tree", "default");
     node_->declare_parameter("ally_tree", "default");
     node_->declare_parameter("start", "default");
-
+    node_->declare_parameter("parking_site", "default");
 }
 
 
 BT::NodeStatus WaitStartBTNode::tick(){
     // Servers not ready
-    if(!set_playside_param_client->service_is_ready())  return BT::NodeStatus::FAILURE;
-    if(!set_pose_client->service_is_ready())  return BT::NodeStatus::FAILURE;
+    // TODO: uncomment
+    // if(!set_playside_param_client->service_is_ready())  return BT::NodeStatus::FAILURE;
+    // if(!set_pose_client->service_is_ready())  return BT::NodeStatus::FAILURE;
 
     // Retrieve values from params
     std::string play_side =
@@ -33,60 +34,63 @@ BT::NodeStatus WaitStartBTNode::tick(){
         node_->get_parameter("tree").get_parameter_value().get<std::string>();
     std::string ally_tree = 
         node_->get_parameter("ally_tree").get_parameter_value().get<std::string>();
+    std::string parking_site =
+        node_->get_parameter("parking_site").get_parameter_value().get<std::string>();
     
 
     // Params with default value
-    if(play_side == "default") return BT::NodeStatus::FAILURE;
-    if(key_pose  == "default") return BT::NodeStatus::FAILURE;
-    if(tree      == "default") return BT::NodeStatus::FAILURE;
+    if(play_side    == "default") return BT::NodeStatus::FAILURE;
+    if(key_pose     == "default") return BT::NodeStatus::FAILURE;
+    if(tree         == "default") return BT::NodeStatus::FAILURE;
+    if(parking_site == "default") return BT::NodeStatus::FAILURE;
 
     // Set blackboard signals
     setOutput("tree", tree );
     setOutput("ally_tree", ally_tree );
 
     // Update Grid Map
-    auto play_side_request = std::make_shared<rcl_interfaces::srv::SetParameters::Request>();
-    auto param = std::make_shared<rcl_interfaces::msg::Parameter>(); 
-    param->name  = "play_side";
-    param->value.string_value = play_side;
-    param->value.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
-    play_side_request->parameters.push_back(*param);
-    auto result =  set_playside_param_client->async_send_request(play_side_request);
-
-    if (rclcpp::spin_until_future_complete(node_, result,300ms) != rclcpp::FutureReturnCode::SUCCESS)
-    {
-        return BT::NodeStatus::FAILURE;
-    }
+    // auto play_side_request = std::make_shared<rcl_interfaces::srv::SetParameters::Request>();
+    // auto param = std::make_shared<rcl_interfaces::msg::Parameter>(); 
+    // param->name  = "play_side";
+    // param->value.string_value = play_side;
+    // param->value.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+    // play_side_request->parameters.push_back(*param);
+    // auto result =  set_playside_param_client->async_send_request(play_side_request);
+    //
+    // if (rclcpp::spin_until_future_complete(node_, result,300ms) != rclcpp::FutureReturnCode::SUCCESS)
+    // {
+    //     return BT::NodeStatus::FAILURE;
+    // }
 
     // Update Pose 
-    if(play_side == "blue"){
-        auto pose = blue_spawns[key_pose];
-        auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
-        request->pose.x = pose.x;
-        request->pose.y = pose.y;
-        request->pose.theta = pose.a;
-        request->header.frame_id = "map";
-        request->header.stamp = node_->get_clock()->now();
-
-        auto result = set_pose_client->async_send_request(request);
-        if (rclcpp::spin_until_future_complete(node_, result) != rclcpp::FutureReturnCode::SUCCESS)
-        {
-            return BT::NodeStatus::FAILURE;
-        }
-    }
-    else if(play_side == "green"){
-        auto pose = green_spawns[key_pose];
-        auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
-        request->pose.x = pose.x;
-        request->pose.y = pose.y;
-        request->pose.theta = pose.a;
-        auto result = set_pose_client->async_send_request(request);
-        if (rclcpp::spin_until_future_complete(node_, result, 300ms) != rclcpp::FutureReturnCode::SUCCESS)
-        {
-            return BT::NodeStatus::FAILURE;
-        }
-    }
-    else return BT::NodeStatus::FAILURE;
+    // if(play_side == "blue"){
+    //     auto pose = blue_spawns[key_pose];
+    //     auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
+    //     request->pose.x = pose.x;
+    //     request->pose.y = pose.y;
+    //     request->pose.theta = pose.a;
+    //     request->header.frame_id = "map";
+    //     request->header.stamp = node_->get_clock()->now();
+    //
+    //     auto result = set_pose_client->async_send_request(request);
+    //     if (rclcpp::spin_until_future_complete(node_, result) != rclcpp::FutureReturnCode::SUCCESS)
+    //     {
+    //         return BT::NodeStatus::FAILURE;
+    //     }
+    // }
+    // else if(play_side == "green"){
+    //     auto pose = green_spawns[key_pose];
+    //     auto request = std::make_shared<uahrk_navigation_msgs::srv::SetPose2d::Request>();
+    //     request->pose.x = pose.x;
+    //     request->pose.y = pose.y;
+    //     request->pose.theta = pose.a;
+    //     auto result = set_pose_client->async_send_request(request);
+    //     if (rclcpp::spin_until_future_complete(node_, result, 300ms) != rclcpp::FutureReturnCode::SUCCESS)
+    //     {
+    //         return BT::NodeStatus::FAILURE;
+    //     }
+    // }
+    // else return BT::NodeStatus::FAILURE;
     return BT::NodeStatus::SUCCESS;
 }
 
