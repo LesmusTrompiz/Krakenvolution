@@ -3,12 +3,20 @@
 #include <motion_controller.hpp>
 #include <timer_&_pwm.hpp>
 #include <pines_&_constexpr.hpp>
+#include "Adafruit_PWMServoDriver.h"
+#include "RobotServos.hpp"
 
 /* Iniciamos el protocolo */
 uahruart::parser::Protocol protocol;
 
 /* Servos */
-// Adafruit_PWMServoDriver ServoHandlerMaster = ...
+auto subir_toldo 				= RobotServo(0);
+auto apertura_toldo_der = RobotServo(1);
+auto apertura_toldo_izq = RobotServo(2);
+auto carter_der					= RobotServo(5);
+auto carter_izq					= RobotServo(6);
+auto mano_der 					= RobotServo(7);
+auto mano_izq						= RobotServo(8);
 
 /* Definición completa del robot */
 Param_mecanicos mecanica_tactico(
@@ -71,8 +79,8 @@ void int_odom_izquierda()
 
 /* Odom updates */
 unsigned long long last_odom_update = millis();
-constexpr unsigned long long ODOM_UPDATE_TIME = 100;
-bool pending_last_odom = false;
+constexpr unsigned long long ODOM_UPDATE_TIME = 1000;
+bool pending_last_odom = true;
 
 /* Registro de métodos en el protocolo de comunicación */
 void setup_serial_protocol() 
@@ -83,14 +91,14 @@ void setup_serial_protocol()
     });
 
     // Register methods
-    protocol.register_method("T", "G", [](int32_t arg) 
+    protocol.register_method("traction", "turn", [](int32_t arg) 
 		{
         controlador_tactico.ref_ang = static_cast<float>(arg);
         controlador_tactico.prev_move_calculus(0);
         return uahruart::messages::ActionFinished::TRACTION;
     });
 
-    protocol.register_method("T", "D", [](int32_t arg)
+    protocol.register_method("traction", "advance", [](int32_t arg)
 		{
         controlador_tactico.ref_distancia = static_cast<float>(arg);
         controlador_tactico.prev_move_calculus(1);
@@ -98,7 +106,7 @@ void setup_serial_protocol()
     });
 
 
-    protocol.register_method("T", "S", [](int32_t arg)
+    protocol.register_method("traction", "stop", [](int32_t arg)
 		{
 				controlador_tactico.stop_movement();
         return uahruart::messages::ActionFinished::TRACTION;
@@ -112,7 +120,6 @@ void setup_serial_protocol()
 
     on_finished([]() 
 		{
-			delay(50);
 			uahruart::messages::ActionFinished action;
 			action.action = uahruart::messages::ActionFinished::TRACTION;
       protocol.send(action);
@@ -156,6 +163,7 @@ void setup()
 
 void loop() 
 {
+
 	serialEvent();
 	// Update odometry
 	if (pending_last_odom) {

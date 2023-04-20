@@ -8,6 +8,9 @@
 // #define debug_controller
 
 #include <motion_controller.hpp>
+#include <pines_&_constexpr.hpp>
+
+// extern uahruart::parser::Protocol protocol;
 
 functor<void()> on_finished_callback;
 void on_finished(functor<void ()> callback) {
@@ -51,10 +54,10 @@ void Odom::act_odom(Param_mecanicos mecanica, bool inverse)
   pose_actual.y     += deltaY;
   pose_actual.alfa  += RAD2DEG(deltaO);
   // 6. Limitamos el valor de la orientación
-  // while(pose_actual.alfa>=180)
-  //   pose_actual.alfa -= 360;
-  // while(pose_actual.alfa<=-180)
-  //   pose_actual.alfa += 360;
+  while(pose_actual.alfa>=180)
+    pose_actual.alfa -= 360;
+  while(pose_actual.alfa<=-180)
+    pose_actual.alfa += 360;
 }
 
 void Odom::check_mov()
@@ -72,7 +75,7 @@ void Odom::check_mov()
  // Parada absoluta
  parado_absoluto = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
  // Parada estimada
- parado = cuentas_derecha <= 0 || cuentas_izquierda <= 0;
+ parado = cuentas_derecha <= 15 || cuentas_izquierda <= 15;
 
 }
 
@@ -118,7 +121,7 @@ void Motores::apagar_motores()
 	digitalWriteDirect(R_EN, LOW);  
 }
 
-void Motores::encender_motores( )
+void Motores::encender_motores()
 {
   rmotor_vel = 0; set_vel_rmotor();
   lmotor_vel = 0; set_vel_lmotor();
@@ -194,16 +197,16 @@ void motion_controller::prev_move_calculus(bool movimiento)
   {
     if(ref_distancia > 0)
     {
-      digitalWriteDirect(I_DIR, HIGH);
-      digitalWriteDirect(D_DIR, LOW);
+      digitalWriteDirect(I_DIR, LOW);
+      digitalWriteDirect(D_DIR, HIGH);
     }
     else
     {
-      digitalWriteDirect(I_DIR, LOW);
-      digitalWriteDirect(D_DIR, HIGH);
+      digitalWriteDirect(I_DIR, HIGH);
+      digitalWriteDirect(D_DIR, LOW);
       ref_distancia = -ref_distancia;
     }
-    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max*0.6);
+    cal_trapecio.calculo_recta(ref_distancia, param_mecanicos.vel_max);
     motores.encender_motores();
     recta_en_curso = 1;
     giro_en_curso = 0; 
@@ -259,13 +262,12 @@ void motion_controller::stop_movement()
 
 void motion_controller::move_control()
 {
-  // bool sentido_inverso = (giro_en_curso && ref_ang > 0) || (recta_en_curso && ref_distancia < 0);
   bool sentido = giro_en_curso;
-  /* Check parado */
-  odom.check_mov();
-  /* Toma de medidas en movimiento */
+  /* Toma de medidas */
 	if(giro_en_curso || recta_en_curso || parada_emergencia) odom.act_odom(this->param_mecanicos, sentido);
   else odom.reset_odom();
+  /* Check parado */
+  odom.check_mov();
   /* Control */ 
   if(recta_en_curso)
   {
@@ -273,13 +275,15 @@ void motion_controller::move_control()
     {
       // Velocidad de crucero
       // Actualizamos la velocidad
-      motores.rmotor_vel = param_mecanicos.vel_max*0.6;
-      motores.lmotor_vel = param_mecanicos.vel_max*0.6;
+      // Serial.println("Vc");
+      motores.rmotor_vel = param_mecanicos.vel_max;
+      motores.lmotor_vel = param_mecanicos.vel_max;
       motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
     else if(fabs(odom.pose_actual.x) < fabs(cal_trapecio.distancia_total_rad-fabs(ajuste_error_tactico))*(param_mecanicos.diam_rueda/2))
     {
+      // Serial.println("F");
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
       motores.lmotor_vel = param_mecanicos.vel_freno;
@@ -289,6 +293,7 @@ void motion_controller::move_control()
     else
     {    
       // Parar los motores
+      // Serial.println("P");
       motores.rmotor_vel = 0;
       motores.lmotor_vel = 0;
       motores.set_vel_rmotor();
@@ -306,7 +311,7 @@ void motion_controller::move_control()
       motores.set_vel_rmotor();
       motores.set_vel_lmotor();
     }
-    else if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_total_rad - fabs(ajuste_error_tactico)))
+    else if(fabs(DEG2RAD(odom.pose_actual.alfa)*param_mecanicos.L_eje/(param_mecanicos.diam_rueda)) < fabs(cal_trapecio.distancia_total_rad-fabs(ajuste_error_tactico)))
     {
       // Velocidad de freno
       motores.rmotor_vel = param_mecanicos.vel_freno;
@@ -330,7 +335,9 @@ void motion_controller::move_control()
     // Serial.println("Parada..."); 
     // Serial.print("X: ");Serial.println(odom.pose_actual.x);
     // Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);
+    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
+    // uahruart::primitives::String msg = "Aqui";
+    // protocol.send(msg);    
     on_finished_callback();
     parado = true;
     odom.parado = true;
@@ -343,6 +350,6 @@ void motion_controller::move_control()
     odom.reset_odom();
     // Serial.print("X: ");Serial.println(odom.pose_actual.x);
     // Serial.print("Y: ");Serial.println(odom.pose_actual.y);
-    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);   
+    // Serial.print("O: ");Serial.println(odom.pose_actual.alfa);    
   }
 }

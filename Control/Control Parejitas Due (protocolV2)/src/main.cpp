@@ -145,6 +145,7 @@ void setup_serial_protocol()
 
     on_finished([]() 
 		{
+			delay(50);
 			uahruart::messages::ActionFinished action;
 			action.action = uahruart::messages::ActionFinished::TRACTION;
       protocol.send(action);
@@ -193,8 +194,6 @@ void setup()
 		Servo_brazo_izq.set_angle(35);
 		Servo_brazo_der.set_angle(75);
 	#endif
-
-	// Check...
 }
 
 
