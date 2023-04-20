@@ -61,6 +61,7 @@ class SegmentedText
 // constexpr uint16_t BLACK = display::rgb_to_565(27, 32, 38);
 constexpr uint16_t BLACK = display::rgb_to_565(0, 0, 0);
 constexpr uint16_t WHITE = display::rgb_to_565(255, 255, 255);
+constexpr uint16_t PURPLE = display::rgb_to_565(104, 22, 130);
 
 constexpr uint16_t RED = rgb_to_565(249,45,114);
 constexpr uint16_t GREEN = rgb_to_565(108,203,110);
