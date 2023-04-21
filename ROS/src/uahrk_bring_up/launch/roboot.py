@@ -52,7 +52,7 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(serial_brige)
     ld.add_action(ldlidar_node)
-    ld.add_action(analize_scan)
-    ld.add_action(stop_node)
+    #ld.add_action(analize_scan)
+    #ld.add_action(stop_node)
     ld.add_action(sequencer)
     return ld
