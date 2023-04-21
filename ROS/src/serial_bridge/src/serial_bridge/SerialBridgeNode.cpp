@@ -162,6 +162,8 @@ void SerialBridgeNode::stop(const std::shared_ptr<std_srvs::srv::Empty::Request>
   std::shared_ptr<std_srvs::srv::Empty::Response> response){
       
   // Mandar mensaje stop
+  std::cout << "STOP REQUEST:\n";
+
   uahruart::messages::RPCCall call;
   call.function_hash = uahruart::utils::hash_string("stop") ^ uahruart::utils::hash_string("traction");
   call.call_uuid = 0;

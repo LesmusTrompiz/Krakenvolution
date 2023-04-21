@@ -69,7 +69,7 @@ class Application(Node,	QMainWindow):
 		timer.timeout.connect(self.timer_callback)
  
         # update the timer every second
-		timer.start(50)
+		timer.start(500)
 	
 	def cb_start_condition(self, request, response : Trigger.Response):
 		print("CB START CONDITION")

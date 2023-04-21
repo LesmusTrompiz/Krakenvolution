@@ -49,7 +49,7 @@ MoveToPoseNode::MoveToPoseNode()
     // Create a timer that will call the control_cycle
     // every 100ms
     timer_ = create_wall_timer(
-      100ms, std::bind(&MoveToPoseNode::control_cycle, this));  
+      200ms, std::bind(&MoveToPoseNode::control_cycle, this));  
     RCLCPP_INFO(this->get_logger(), "CONSTRUCTOR -> IDLE STATE");
     actual_vel.header.frame_id = "odom";
     actual_vel.header.stamp = this->get_clock()->now();
@@ -60,6 +60,7 @@ void MoveToPoseNode::control_cycle(){
   auto result = std::make_shared<Path::Result>();
 
   // Publish Actual Vel
+
   pub_vel->publish(actual_vel);
 
 
@@ -90,6 +91,7 @@ void MoveToPoseNode::control_cycle(){
 
         // Update actual vel
         actual_vel.twist = geometry_msgs::msg::Twist();
+        RCLCPP_INFO(this->get_logger(), "RESET TWIST");
 
         if(id == "turn"){
           if(arg > 0){
@@ -153,11 +155,10 @@ void MoveToPoseNode::goal_response_callback(std::shared_future<RequestHandleOrde
   auto goal_handle = future.get();
 
   if (!goal_handle) {
-    actual_vel.header.stamp = this->get_clock()->now();
+    actual_vel.twist = geometry_msgs::msg::Twist();
     RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
   } else {
-    actual_vel.twist = geometry_msgs::msg::Twist();
-
+    actual_vel.header.stamp = this->get_clock()->now();
     RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
   }
 }

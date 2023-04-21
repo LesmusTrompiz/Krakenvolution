@@ -94,9 +94,9 @@ class LocalizationNode(Node):
         self.tf_map_odom.transform.rotation.z = q[2]
         self.tf_map_odom.transform.rotation.w = q[3]
 
-        self.ukf.P = np.diag([0.1**2, 0.1**2, 3**2, 0.1**2, 0.1**2])
-        self.ukf.Q = np.diag([0.3**2, 0.3**2, 6**2, 0.3**2, 0.3**2])
-        self.ukf.R = np.diag([0.2**2, 0.2**2, 1**2])
+        self.ukf.P = np.diag([0.1**2, 0.1**2, 0.1**2, 0.1**2, 0.1**2])
+        self.ukf.Q = np.diag([0.3**2, 0.3**2, 0.3**2, 0.3**2, 0.3**2])
+        self.ukf.R = np.diag([0.2**2, 0.2**2, 0.2**2])
         self.ukf.x = np.array([request.pose.x, request.pose.y, radians(request.pose.theta)])
 
         return response
@@ -195,8 +195,6 @@ class LocalizationNode(Node):
         self.ukf.predict(u = np.array([self.v, self.w]))
         self.ukf.update(z_sensor)
 
-        
-
         b = TransformStamped()
         b.header.frame_id = "map"
         b.child_frame_id = "robot"
@@ -219,9 +217,6 @@ class LocalizationNode(Node):
         self.best_pose_pub.publish(best_pose)
 
         
-
-
-
 
 def main(args=None):
     rclpy.init(args=args)
