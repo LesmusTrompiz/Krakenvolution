@@ -16,8 +16,8 @@ class PointTo  : public BT::ActionNodeBase
         static BT::PortsList providedPorts()
         {
             return BT::PortsList({
-                BT::InputPort<std::string>("x"),
-                BT::InputPort<std::string>("y")
+                BT::InputPort<double>("x"),
+                BT::InputPort<double>("y")
             });
         }
         void halt();

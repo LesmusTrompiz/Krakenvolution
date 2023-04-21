@@ -4,7 +4,10 @@
     <BehaviorTree ID="BehaviorTree">
         <Fallback>
             <Parallel failure_threshold="1" success_threshold="1">
-                <Action ID="FindBasket" theta="{theta}" x="{x}" y="{y}"/>
+                <Sequence>
+                    <Action ID="FindBasket" theta="{theta}" x="{x}" y="{y}"/>
+                    <Action ID="PointTo" x="{x}" y="{y}"/>
+                </Sequence>
                 <Condition ID="Timer" time="2000"/>
             </Parallel>
             <KeepRunningUntilFailure>
@@ -30,6 +33,7 @@
             <output_port default="{y}" name="y"/>
         </Action>
         <Action ID="FindClosestSpawn">
+            <input_port default="true" name="friendly"/>
             <output_port default="{theta}" name="theta"/>
             <output_port default="{x}" name="x"/>
             <output_port default="{y}" name="y"/>

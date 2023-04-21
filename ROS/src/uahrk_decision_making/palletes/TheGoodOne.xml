@@ -5,16 +5,36 @@
             <input_port name="device"/>
             <input_port name="id"/>
         </Action>
+        <Action ID="FindBasket">
+            <output_port default="{theta}" name="theta"/>
+            <output_port default="{x}" name="x"/>
+            <output_port default="{y}" name="y"/>
+        </Action>
+        <Action ID="FindClosestCake">
+            <input_port default="{theta}" name="theta"/>
+            <output_port default="{x}" name="x"/>
+            <output_port default="{y}" name="y"/>
+        </Action>
+        <Action ID="FindClosestSpawn">
+            <input_port default="true" name="friendly"/>
+            <output_port default="{theta}" name="theta"/>
+            <output_port default="{x}" name="x"/>
+            <output_port default="{y}" name="y"/>
+        </Action>
         <Action ID="GoToPose">
-            <input_port name="a" default="0"/>
-            <input_port name="x" default="0"/>
-            <input_port name="y" default="0"/>
+            <input_port default="{theta}" name="a"/>
+            <input_port default="{x}" name="x"/>
+            <input_port default="{y}" name="y"/>
         </Action>
         <Action ID="Hello">
-            <input_port name="print" default="hello"/>
+            <input_port default="hello" name="print"/>
+        </Action>
+        <Action ID="PointTo">
+            <input_port default="{x}" name="x"/>
+            <input_port default="{y}" name="y"/>
         </Action>
         <Condition ID="Timer">
-            <input_port name="time" default="0"/>
+            <input_port default="0" name="time"/>
         </Condition>
     </TreeNodesModel>
 </root>
