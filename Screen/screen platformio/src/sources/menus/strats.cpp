@@ -39,6 +39,7 @@ void menus::strat_menu_update(ApplicationContext& ctx) {
   }
 
   ctx.lcd.Set_Text_Size(3);
+  ctx.lcd.Set_Text_colour(display::WHITE);
   plan_text.update(ctx.lcd);
 
   if (reactive::CHECK || ctx.config_confirmed) {

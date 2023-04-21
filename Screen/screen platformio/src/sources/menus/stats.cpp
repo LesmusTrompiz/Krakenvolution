@@ -4,7 +4,6 @@
 void menus::stats_menu_start(menus::ApplicationContext& ctx) {
   ctx.score.trigger();
   ctx.config_confirmed.trigger();
-  display::escribirTexto(ctx.lcd, display::PURPLE, 6, "UAHRKrakens", 8, 223);
 }
 
 void menus::stats_menu_update(ApplicationContext & ctx) {
@@ -27,7 +26,7 @@ void menus::stats_menu_update(ApplicationContext & ctx) {
     ctx.lcd.Print_String(txt, 0, 268 - 3 * 8 - 1 );
     ctx.lcd.Set_Text_Back_colour(display::BLACK);
     ctx.lcd.Set_Text_Mode(display::DRAW_BG); 
-    display::escribirTexto(ctx.lcd, display::WHITE, 6, formatted, 8, 8);
+    display::escribirTexto(ctx.lcd, display::WHITE, 3, txt, 8, 8);
   }
 }
 

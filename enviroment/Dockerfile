@@ -19,7 +19,8 @@ RUN apt install -y                  \
   ros-foxy-tf2-tools                \
   ros-foxy-tf-transformations       \
   ros-foxy-tf2-geometry-msgs        \
-  ros-foxy-behaviortree-cpp-v3      
+  ros-foxy-behaviortree-cpp-v3      \
+  rviz
 
 # I am Groot
 RUN apt install -y  \
