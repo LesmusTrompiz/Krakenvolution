@@ -12,6 +12,10 @@ PointTo::PointTo( const std::string & xml_tag_name, const BT::NodeConfiguration 
 }
 
 BT::NodeStatus PointTo::tick(){
+    float x, y;
+    getInput("x", x);
+    getInput("y", y);
+    std::cout << "Pointing to yo mama at " << x << ' ' << y << '\n';
     return BT::NodeStatus::RUNNING;
 }
 

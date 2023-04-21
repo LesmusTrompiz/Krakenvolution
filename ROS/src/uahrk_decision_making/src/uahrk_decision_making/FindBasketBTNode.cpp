@@ -20,11 +20,13 @@ BT::NodeStatus FindBasket::tick(){
       std::cout << "Found scenario!\n";
       for (auto& val : scenario->canasta) {
         std::cout << val.x << ' ' << val.y << ' ' << val.theta << '\n';
+        setOutput("x", val.x);
+        setOutput("y", val.y);
       }
     } else {
       std::cout << "Scenario was not found\n";
     }
-    return BT::NodeStatus::RUNNING;
+    return BT::NodeStatus::SUCCESS;
 }
 
 void FindBasket::halt(){

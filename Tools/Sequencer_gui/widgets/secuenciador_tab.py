@@ -3,6 +3,7 @@ from PyQt5.QtCore	 	  import Qt
 from PyQt5.QtGui	 	  import QIntValidator
 from PyQt5.QtWidgets 	  import *
 from utils.yaml_interface import load_yaml_actions, dump_yaml_routine, load_yaml_routine
+import json
 
 
 ############################
@@ -161,17 +162,29 @@ class SecuenciadorTab(QWidget):
 	def generateBtnClicked(self):
 		routines = []
 		log_msg = "Rutina almacenada "
+
+		routes = [] 
 		for i in range(0, self.index):
-			itemRout = self.routTable.item(i, 0)
-			attrRout = self.routTable.item(i, 1)
-			routines += [self.loadedActions[itemRout.text()]["device"] ,self.loadedActions[itemRout.text()]["id_ros"] , int(attrRout.text())]
-		dump_yaml_routine("sequence_generated.yaml", routines)
-		log_msg += f"{routines}"
+			itemRout = self.routTable.item(i, 0).text()
+			attrRout = self.routTable.item(i, 1).text()
+			routes.append({
+				"command": {
+					"device": self.loadedActions[itemRout]["device"],
+					"id": self.loadedActions[itemRout]["id_ros"],
+					"arg": int(attrRout)
+				}
+			})
+		
+		with open('sequence_generated.json', 'w') as f:
+			json.dump(routes, f, indent=3)
+
+		log_msg += f"{routes}"
 		self.logToUser(log_msg)
 
 	def loadRoutineBtnClicked(self):
 		try:
-			raw_routine = load_yaml_routine("sequence_generated.yaml")
+			file = open("sequence_generated.json")
+			raw_routine = json.load(file)
 		except:
 			log_msg = "No se encuentra la última secuencia generada o ha ocurrido un error, recuerde que es necesario que exista el fichero sequence_generated.yaml en la carpeta del ejecutable"
 			self.logToUser(log_msg)
@@ -183,7 +196,9 @@ class SecuenciadorTab(QWidget):
 			self.logToUser(log_msg)
 			return
 		for routine in raw_routine:
-			device,action,arg = routine
+			device = routine["command"]["device"]
+			action = routine["command"]["id"]
+			arg = routine["command"]["arg"]
 			self.routTable.setRowCount(self.index + 1)
 			self.routTable.setItem(self.index, 0, QTableWidgetItem(self.reversedDict[action]))
 			self.routTable.setItem(self.index, 1, QTableWidgetItem(str(arg)))

@@ -4,17 +4,16 @@ from std_msgs.msg import String
 from rclpy.action import ActionClient
 from serial_bridge_actions.action import Order
 from yaml import load, SafeLoader
+import json
 from std_srvs.srv import SetBool
 
-def load_yaml_routine(file : str) -> list:
-    yaml_file = open(file, 'r')
-    yaml_content = load(yaml_file, SafeLoader)
-    routine = []
-    start = 0
-    while start < len(yaml_content):
-        routine += [(yaml_content[start], yaml_content[start+1], yaml_content[start+2])]
-        start += 3
-    yaml_file.close()
+def load_json_routine(file : str) -> list:
+    json_file = open(file, 'r')
+    json_content = json.load(json_file)
+    
+    routine = [(e["command"]["device"], e["command"]["id"], e["command"]["arg"]) for e in json_content]
+
+    json_file.close()
     return routine
 
 class SequencerNode(Node):
@@ -32,8 +31,8 @@ class SequencerNode(Node):
     def update_request(self,request : SetBool.Request, response):
         if request.data:
             try:
-                self.orders = load_yaml_routine("/root/pendrive_config/sequence_generated.yaml")
-                self.get_logger().info('Yalm loaded')
+                self.orders = load_json_routine("/root/pendrive_config/sequence_generated.json")
+                self.get_logger().info('JSON loaded')
             except:
                 self.get_logger().error('Not sequence found')
         else:

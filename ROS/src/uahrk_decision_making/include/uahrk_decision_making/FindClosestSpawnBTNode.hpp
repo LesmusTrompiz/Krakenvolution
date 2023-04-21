@@ -16,9 +16,9 @@ class FindClosestSpawn : public BT::ActionNodeBase
         static BT::PortsList providedPorts()
         {
             return BT::PortsList({
-                BT::OutputPort<std::string>("x"),
-                BT::OutputPort<std::string>("y"),
-                BT::OutputPort<std::string>("theta")
+                BT::OutputPort<double>("x"),
+                BT::OutputPort<double>("y"),
+                BT::OutputPort<double>("theta")
             });
         }
         void halt();
