@@ -1,5 +1,7 @@
 # Arduino DUE RULE
 KERNEL=="ttyACM*", MODE:="0666", SYMLINK+="arduino" 
+
+KERNEL=="ttyACM*", MODE:="0666", SYMLINK+="arduino" , ATTRS{ID_VENDOR_ID}="2341"
 # Lidar driver 
 KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", MODE:="0666", SYMLINK+="lidar" 
 # Pendrive actions 

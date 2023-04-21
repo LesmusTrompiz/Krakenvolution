@@ -15,63 +15,22 @@ def generate_launch_description():
         output      = 'screen'
     )
 
-    # Robot TF Node
-    sequencer = Node(
-        package     = 'uahrk_sequencer',
-        executable  = 'sequencer',
-        output      = 'screen'
-    )
     
     # Robot TF Node
     robot_tf = Node(
-        package     = 'uahrk_navigation',
-        executable  = 'robot_tf_main',
+        package     = 'uahrk_localization',
+        executable  = 'Localization.py',
         output      = 'screen'
     )
-    
 
-
-    ld = LaunchDescription()
-    ld.add_action(serial_brige)
-    ld.add_action(sequencer)
-    ld.add_action(robot_tf)
-    return ld
-
-'''
-def generate_launch_description():
-    
-
-    # Robot TF Node
-    robot_tf = Node(
-        package     = 'uahrk_navigation',
-        executable  = 'robot_tf_main'
-    )
-    
     # Move to pose node
     move_to_pose = Node(
         package     = 'uahrk_navigation',
-        executable  = 'move_to_pose_main'
+        executable  = 'move_to_pose_main',
+        output      = 'screen'
     )
 
-    # Grid node
-    grid = Node(
-        package     = 'uahrk_navigation',
-        executable  = 'grid_main'
-    )
-
-    # Path Finding node
-    path_finding = Node(
-        package     = 'uahrk_navigation',
-        executable  = 'path_finding_main'
-    )
-
-    # Decision making 
-    decision_making = Node(
-        package     = 'uahrk_decision_making',
-        executable  = 'decision'
-    )
-
-    # Lidar launch 
+     # Lidar launch
     ldlidar_node = Node(
         package='ldlidar_stl_ros2',
         executable='ldlidar_stl_ros2_node',
@@ -95,18 +54,43 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='robot_to_base_laser',
-        arguments=['0','0','0.18','0','0','0','robot','base_laser']
+        arguments=['0','0','0.4','0','0','0','robot','base_laser']
     )
 
+    analize_scan = Node(
+        package='uahrk_lidar',
+        executable='analize_scan',
+        name='analize_scan',
+        output="screen"
+    )
+
+    track_node = Node(
+        package='uahrk_lidar',
+        executable='track_node',
+        name='track_node',
+        output="screen"
+    )
+
+    stop_node = Node(
+        package='uahrk_lidar',
+        executable='stop_node',
+        name='stop_node',
+        output="screen"
+    )
+    
+    # Decision making 
+    decision_making = Node(
+        package     = 'uahrk_decision_making',
+        executable  = 'decision'
+    )
 
     ld = LaunchDescription()
     ld.add_action(robot_tf)
     ld.add_action(move_to_pose)
-    ld.add_action(path_finding)
-    ld.add_action(grid)
     ld.add_action(decision_making)
     ld.add_action(ldlidar_node)
+    ld.add_action(analize_scan)
+    ld.add_action(stop_node)
+    ld.add_action(track_node)
     ld.add_action(base_link_to_laser_tf_node)
-
     return ld
-'''
